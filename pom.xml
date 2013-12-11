@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>sandag</groupId>
+  <artifactId>commandcenter</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>commandcenter</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <org.springframework.version>3.2.5.RELEASE</org.springframework.version>
+  </properties>  
+  <dependencies>
+  	<!--  javamail, quartz - will probably use, wait until we do
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+      <version>${org.springframework.version}</version>
+    </dependency>
+     -->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-orm</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>	    
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-webmvc</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+    <dependency>
+      <!--  http://code.dblock.org/single-sign-on-spring-security-negotiate-filter-kerberos-ntlm-wwaffle -->
+	  <groupId>com.github.dblock.waffle</groupId>
+	  <artifactId>waffle-spring-security3</artifactId>
+	  <version>1.5</version>
+    </dependency>
+	    
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-test</artifactId>
+	  <version>${org.springframework.version}</version>
+	  <scope>test</scope>
+	</dependency>	
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>[4.0,5.0)</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>commandcenter</finalName>
+  </build>
+</project>
