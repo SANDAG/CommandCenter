@@ -11,6 +11,7 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<org.springframework.version>3.2.5.RELEASE</org.springframework.version>
+		<encoding.type>UTF-8</encoding.type> 
 	</properties>
 	<dependencies>
 		<!-- javamail, quartz - will probably use, wait until we do <dependency> 
@@ -63,8 +64,57 @@
 			<version>1.0.60</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>jenkins</id>
+			<activation>
+				<property>
+					<name>env.BUILD_NUMBER</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+						<version>2.5.1</version>
+						<configuration>
+							<formats>
+								<format>xml</format>
+							</formats>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>cobertura</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+					<encoding>${encoding.type}</encoding>
+					<failsOnError>false</failsOnError>
+					<configLocation>sun_checks.xml</configLocation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+
 	<build>
 		<finalName>commandcenter</finalName>
 	</build>
