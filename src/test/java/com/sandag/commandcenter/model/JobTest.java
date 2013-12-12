@@ -46,4 +46,10 @@ public class JobTest
         }
     }
 
+    @Test
+    public void ignoreStatusEnumForCodeCoverage()
+    {
+        Job.Status.valueOf(Job.Status.ARCHIVED.toString());
+    }
+
 }
