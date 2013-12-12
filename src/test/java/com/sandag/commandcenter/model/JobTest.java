@@ -23,6 +23,7 @@ public class JobTest {
 	
 	@Test
 	public void configWorks() {
+		// TODO transactions, setup/teardown (is db recreated for each test?)
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -32,7 +33,8 @@ public class JobTest {
 			session.save(job);
 			assertTrue(job.getId() > 0);
 	
-			Job retrievedJob = (Job) session.createCriteria(Job.class).setMaxResults(1).list().get(0);
+			//Job retrievedJob = (Job) session.createCriteria(Job.class).setMaxResults(1).list().get(0);
+			Job retrievedJob = (Job) session.get(Job.class, job.getId());
 			assertEquals(job.getId(), retrievedJob.getId());
 		} finally {
 			if (session != null) {
