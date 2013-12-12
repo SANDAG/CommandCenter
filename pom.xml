@@ -11,7 +11,8 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<org.springframework.version>3.2.5.RELEASE</org.springframework.version>
-		<encoding.type>UTF-8</encoding.type> 
+		<encoding.type>UTF-8</encoding.type>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
 		<!-- javamail, quartz - will probably use, wait until we do <dependency> 
@@ -77,13 +78,20 @@
 			<build>
 				<plugins>
 					<plugin>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>2.3</version>
+					</plugin>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>cobertura-maven-plugin</artifactId>
-						<version>2.5.1</version>
+						<version>2.6</version>
 						<configuration>
 							<formats>
 								<format>xml</format>
 							</formats>
+							<instrumentation>
+								<ignoreTrivial>true</ignoreTrivial>
+							</instrumentation>
 						</configuration>
 						<executions>
 							<execution>

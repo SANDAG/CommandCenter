@@ -9,61 +9,55 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="job")
-public class Job {
+@Table(name = "job")
+public class Job
+{
 
-	public enum Status {
-		QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED;
+    public enum Status
+    {
+        QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED;
+    }
 
-		public String toString() {
-			switch(this) {
-				case QUEUED: return "Queued";
-				case RUNNING: return "Running";
-				case COMPLETE: return "Complete";
-				case ARCHIVED: return "Archived";
-				case DELETED: return "Deleted";
-			}
-			return "Unknown";
-		}		
-	}
-	
-	@Id
-	@Column(name="id")
-	@GeneratedValue
-	private Integer id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue
+    private Integer id;
 
-	@Column(name="model")
-	private String modelName;
-	
-	private Status status;
-	
-	@Column(name="status")
-	@Enumerated(EnumType.ORDINAL)
-    public Status getStatus() {
-		return status;
-	}
+    @Column(name = "model")
+    private String modelName;
 
-	public Integer getId() {
-		return id;
-	}
+    private Status status;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    public Status getStatus()
+    {
+        return status;
+    }
 
-	public String getModelName() {
-		return modelName;
-	}
+    public Integer getId()
+    {
+        return id;
+    }
 
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
 
-	public void setStatus(Status status) {
-		this.status = status;
-	};
+    public String getModelName()
+    {
+        return modelName;
+    }
 
-	
-	
-	
+    public void setModelName(String modelName)
+    {
+        this.modelName = modelName;
+    }
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
+    };
+
 }
