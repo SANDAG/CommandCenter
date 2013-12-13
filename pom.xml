@@ -40,6 +40,11 @@
 			<version>4.2.8.Final</version>
 		</dependency>
 		<dependency>
+			<groupId>com.microsoft</groupId>
+			<artifactId>sql-jdbc-4</artifactId>
+			<version>3.0</version>
+		</dependency>
+		<dependency>
 			<!-- jsp templating for DRY -->
 			<groupId>opensymphony</groupId>
 			<artifactId>sitemesh</artifactId>
@@ -66,6 +71,19 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>mvn-repository</id>
+			<name>MVN Repository</name>
+			<url>http://mvnrepository.com</url>
+		</repository>
+		<repository>
+			<id>nexus-thirdparty</id>
+			<name>Sandag Nexus</name>
+			<url>http://svn.sandag.org:8081/nexus/content/repositories/thirdparty</url>
+		</repository>
+	</repositories>
 
 	<profiles>
 		<profile>
