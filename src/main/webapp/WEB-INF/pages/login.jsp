@@ -19,19 +19,33 @@
       <%
       	if (request.getUserPrincipal() != null) {
       %>
-      Your user principal name is <b><%=request.getUserPrincipal().getName()%></b>. <br>
+      
+      waffle.spring.WindowsAuthenticationToken).
+      
+      Your user principal name is <b><%=request.getUserPrincipal().getName()%></b> 
+      
+      All roles (including AD groups):<br>
+      <%=((waffle.spring.WindowsAuthenticationToken)(request.getUserPrincipal())).getAuthorities()%><br>
       <br>
+
+      <%
+      	if (request.isUserInRole("ROLE_I-RSG\\DEVELOPERS")) {
+      %>
+      You are an RSG dev. <br>
       <%
       	} else {
       %>
-      No user principal could be identified. <br>
-      <br>
+      Not an RSG dev.<br>
       <%
       	}
-      %>   
-          </div>
-        </div>
-      		
-      </body>
-      </html>
-      
+      	} else {
+      %>
+      No user principal could be identified. <br> <br>
+      <%
+      	}
+      %>
+    </div>
+  </div>
+
+</body>
+</html>
