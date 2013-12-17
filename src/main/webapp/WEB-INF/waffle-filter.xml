@@ -27,13 +27,14 @@
 		</constructor-arg>
 	</bean>
 
-	<!-- realm for basic auth, use if needed <bean id="basicSecurityFilterProvider" 
-		class="waffle.servlet.spi.BasicSecurityFilterProvider"> <constructor-arg 
-		ref="waffleWindowsAuthProvider" /> <property name="Realm" value="DemoRealm" 
-		/> </bean> -->
-
-	<sec:http entry-point-ref="negotiateSecurityFilterEntryPoint">
-		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+	<sec:http entry-point-ref="negotiateSecurityFilterEntryPoint"
+		use-expressions="true">
+		<!-- TODO may want to remove RSG development access -->
+		<sec:intercept-url pattern="/admin/**"
+			access="hasRole('ROLE_SANDAG\REGIONAL MODELS') or hasRole('ROLE_I-RSG\DEVELOPERS')" />
+		<!-- TODO check for roles here, too, so not everyone from attached trusted 
+			domains can get in? -->
+		<sec:intercept-url pattern="/**" access="isFullyAuthenticated()" />
 		<sec:custom-filter ref="waffleNegotiateSecurityFilter"
 			position="BASIC_AUTH_FILTER" />
 	</sec:http>

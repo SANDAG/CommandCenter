@@ -5,7 +5,7 @@
 <script>
 	// checking jquery integration
 	$(function() {
-		$("#content").addClass("well")
+		$("#content").addClass("well");
 	});
 </script>
 </head>
@@ -19,8 +19,6 @@
       <%
       	if (request.getUserPrincipal() != null) {
       %>
-      
-      waffle.spring.WindowsAuthenticationToken).
       
       Your user principal name is <b><%=request.getUserPrincipal().getName()%></b> 
       

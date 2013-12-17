@@ -12,6 +12,9 @@ import javax.persistence.Table;
 @Table(name = "job")
 public class Job
 {
+  
+//    PECAS scenario name, study name, scenario location, scenario years, and scheduling information
+//      ABM scenario name, study name, scenario location,                 and scheduling information
 
     public enum Status
     {
