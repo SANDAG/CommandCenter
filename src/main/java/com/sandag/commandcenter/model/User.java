@@ -6,10 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.Email;
-
 @Entity
-@Table(name = "user")
+@Table(name = "authenticated_user") // user is an SQL reserved word
 public class User
 {
 
@@ -18,9 +16,8 @@ public class User
     @GeneratedValue
     private Integer id;
 
-    @Email
-    @Column(name = "email", unique = true)
-    private String email;
+    @Column(name = "principal", unique = true)
+    private String principal;
 
     public Integer getId()
     {
@@ -32,14 +29,14 @@ public class User
         this.id = id;
     }
 
-    public String getEmail()
+    public String getPrincipal()
     {
-        return email;
+        return principal;
     }
 
-    public void setEmail(String email)
+    public void setPrincipal(String principal)
     {
-        this.email = email;
+        this.principal = principal;
     }
 
 }

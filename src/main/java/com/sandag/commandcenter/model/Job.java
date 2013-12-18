@@ -9,13 +9,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "job")
 public class Job
 {
-  
+
     public enum Status
     {
         QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED;
@@ -25,7 +29,7 @@ public class Job
     {
         ABM, PECAS;
     }
-    
+
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -33,10 +37,10 @@ public class Job
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;    
-    
+    private User user;
+
     private Status status;
-    
+
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
     public Status getStatus()
@@ -45,37 +49,43 @@ public class Job
     }
 
     private Model model;
-    
+
+    @NotNull
     @Column(name = "model")
     @Enumerated(EnumType.ORDINAL)
     public Model getModel()
     {
         return model;
     }
-    
+
+    @NotEmpty
     @Column(name = "scenario")
     private String scenario;
-    
+
+    @NotEmpty
     @Column(name = "study")
     private String study;
-    
+
+    @NotEmpty
     @Column(name = "scenario_location")
     private String scenarioLocation;
-    
-    @Digits(integer = 4, fraction = 0)
+
+    @NotNull
+    @Min(1000) @Max(9999)
     @Column(name = "scenario_start_year")
     private Integer scenarioStartYear;
-    
-    @Digits(integer = 4, fraction = 0)
+
+    @NotNull
+    @Min(1000) @Max(9999)
     @Column(name = "scenario_end_year")
     private Integer scenarioEndYear;
-    
+
+    @NotEmpty
     @Column(name = "scheduling_information")
     private String schedulingInformation;
-    
 
     // simple getters/setters below here
-    
+
     public Integer getId()
     {
         return id;

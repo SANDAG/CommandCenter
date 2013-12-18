@@ -14,21 +14,21 @@ public class UserService extends BaseService<User, Integer>
         super(User.class);
     }
 
-    public User create(String email)
+    public User fetchOrCreate(String principal)
     {
         // selecting then inserting b/c checking violated unique constraint isn't straightforward 
         //   (just a ConstraintViolationException with a generic message
         //    and parsing the wrapped Cause message is fragile)
         User user = (User) getSession()
             .createCriteria(User.class)
-            .add(Restrictions.eq("email", email))
+            .add(Restrictions.eq("principal", principal))
             .uniqueResult();
         if (user == null)
         {
             user = new User();
-            user.setEmail(email);
+            user.setPrincipal(principal);
             create(user);
-        } 
+        }
         return user;
     }
 

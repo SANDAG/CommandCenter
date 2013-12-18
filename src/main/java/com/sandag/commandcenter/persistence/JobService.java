@@ -11,7 +11,5 @@ public class JobService extends BaseService<Job, Integer>
     {
         super(Job.class);
     }
-    
-    
-    
+   
 }
