@@ -42,7 +42,7 @@ public abstract class BaseService<T, PK extends Serializable>
         getSession().delete(o);
     }
 
-    private Session getSession()
+    protected Session getSession()
     {
         return sessionFactory.getCurrentSession();
     }

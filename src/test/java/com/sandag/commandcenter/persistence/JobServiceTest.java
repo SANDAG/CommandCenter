@@ -1,6 +1,6 @@
 package com.sandag.commandcenter.persistence;
 
-public class JobManagerTest
+public class JobServiceTest
 {
 
 }

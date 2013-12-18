@@ -50,6 +50,11 @@
 			<version>4.2.8.Final</version>
 		</dependency>
 		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.0.2.Final</version>
+		</dependency>
+		<dependency>
 			<groupId>com.microsoft</groupId>
 			<artifactId>sql-jdbc-4</artifactId>
 			<version>3.0</version>
