@@ -18,17 +18,16 @@ import com.sandag.commandcenter.model.User;
 import com.sandag.commandcenter.persistence.JobService;
 import com.sandag.commandcenter.persistence.UserService;
 
-// TODO unit testing!!!!!
 @Controller
 @RequestMapping("/job")
 public class JobController
 {
 
     @Autowired
-    private UserService userService;
+    protected UserService userService;
 
     @Autowired
-    private JobService jobService;
+    protected JobService jobService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String displayEmptyJobForm(Model model)
@@ -39,6 +38,8 @@ public class JobController
         return "job";
     }
 
+    // WARNING does not handle editing
+    //   for editing, user should not be set to the principal if already set (if admins can edit any job)
     @RequestMapping(method = RequestMethod.POST)
     public String submitJob(@Valid Job job, BindingResult result, Model model, Principal principal)
     {
@@ -58,7 +59,7 @@ public class JobController
         return "job";
     }
 
-    private Map<String, String> getModelNamesMap()
+    Map<String, String> getModelNamesMap()
     {
         Map<String, String> map = new LinkedHashMap<String, String>();
         map.put("", "Please select a model");

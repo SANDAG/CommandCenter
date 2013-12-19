@@ -1,6 +1,8 @@
 package com.sandag.commandcenter.persistence;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ public class UserServiceTest
         String principal = "domain\\username";
         User userOrig = service.fetchOrCreate(principal);
         User userDupe = service.fetchOrCreate(principal);
+        assertNotNull(userOrig.getId());
         assertEquals(userOrig.getId(), userDupe.getId());
     }
 

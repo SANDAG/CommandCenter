@@ -94,6 +94,12 @@
 			<version>1.0.60</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>[1.0,2.0)</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -108,7 +114,6 @@
 			<url>http://svn.sandag.org:8081/nexus/content/repositories/thirdparty</url>
 		</repository>
 	</repositories>
-
 	<profiles>
 		<profile>
 			<id>jenkins</id>
