@@ -11,7 +11,6 @@ import java.util.LinkedHashMap;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ import com.sandag.commandcenter.persistence.UserService;
 public class JobControllerTest
 {
 
-    @Autowired
     private JobController controller;
 
     private Model model;

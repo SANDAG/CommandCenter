@@ -2,6 +2,7 @@ package com.sandag.commandcenter.persistence;
 
 import java.io.Serializable;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public abstract class BaseService<T, PK extends Serializable>
 {
-    @Autowired
-    private SessionFactory sessionFactory;
+    @Autowired protected SessionFactory sessionFactory;
 
     private Class<T> type;
 
@@ -47,6 +47,11 @@ public abstract class BaseService<T, PK extends Serializable>
         return sessionFactory.getCurrentSession();
     }
 
+    protected Criteria startQuery()
+    {
+        return this.getSession().createCriteria(type);
+    }
+    
     public void setSessionFactory(SessionFactory sessionFactory)
     {
         this.sessionFactory = sessionFactory;

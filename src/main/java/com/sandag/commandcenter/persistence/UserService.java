@@ -19,8 +19,7 @@ public class UserService extends BaseService<User, Integer>
         // selecting then inserting b/c checking violated unique constraint isn't straightforward 
         //   (just a ConstraintViolationException with a generic message
         //    and parsing the wrapped Cause message is fragile)
-        User user = (User) getSession()
-            .createCriteria(User.class)
+        User user = (User) startQuery()          
             .add(Restrictions.eq("principal", principal))
             .uniqueResult();
         if (user == null)

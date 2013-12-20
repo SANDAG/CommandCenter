@@ -36,6 +36,7 @@
 				hibernate.format_sql=true
 				hibernate.show_sql=true
 				hibernate.hbm2ddl.auto=create-drop
+				javax.persistence.validation.mode=none
 			</value>
 		</property>
 	</bean>

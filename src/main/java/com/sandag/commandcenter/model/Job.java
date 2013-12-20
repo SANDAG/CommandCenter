@@ -84,7 +84,22 @@ public class Job
     @Column(name = "scheduling_information")
     private String schedulingInformation;
 
+    @Column(name = "queue_position")
+    @GeneratedValue
+    private int queuePosition;
+    
+
     // simple getters/setters below here
+
+    public int getQueuePosition()
+    {
+        return queuePosition;
+    }
+
+    public void setQueuePosition(int queuePosition)
+    {
+        this.queuePosition = queuePosition;
+    }
 
     public Integer getId()
     {
