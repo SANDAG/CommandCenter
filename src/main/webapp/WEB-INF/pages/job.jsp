@@ -3,7 +3,13 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <!DOCTYPE html>
 <html>
-<head></head>
+<head>
+<script>
+	$(function() {
+		setActiveNav('nav-job');
+	});
+</script>
+</head>
 <body>
   <div class="row">
     <div class="col-md-12">

@@ -2,7 +2,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
-<head></head>
+<head>
+  <script>
+  	$(function() {
+  		setActiveNav('nav-queue');
+  	});
+  </script>
+</head>
 <body>
   <div class="row">
     <div class="col-md-12">
