@@ -3,6 +3,7 @@ package com.sandag.commandcenter.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +38,13 @@ public class QueueControllerTest
         jobs.add(job);
         when(service.readAll()).thenReturn(jobs);
         controller.jobService = service;
+        Principal principal = mock(Principal.class);
+        when(principal.getName()).thenReturn("principal name");
         
-        assertEquals("queue", controller.display(model));
+        assertEquals("queue", controller.display(model, principal));
         assertTrue(model.containsAttribute("message"));
+        assertTrue(model.containsAttribute("principalName"));
+        assertTrue(model.containsAttribute("jobAccessManager"));
         Object modelJobs = model.asMap().get("jobs");
         assertEquals(jobs, modelJobs);
     }

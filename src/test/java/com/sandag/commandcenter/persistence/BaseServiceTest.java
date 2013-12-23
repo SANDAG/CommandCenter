@@ -57,12 +57,21 @@ public class BaseServiceTest
     }
 
     @Test
-    public void testDelete()
+    public void testDeleteByEntity()
     {
         BaseServiceEntity created = createEntity();
         service.delete(created);
         assertNull(service.read(created.getId()));
     }
+    
+    @Test
+    public void testDeleteById()
+    {
+        BaseServiceEntity created = createEntity();
+        service.delete(created.getId());
+        assertNull(service.read(created.getId()));
+    }
+    
 
     @Test
     public void queryStartsWithRightType()

@@ -39,6 +39,11 @@
 			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
 			<!-- http://code.dblock.org/single-sign-on-spring-security-negotiate-filter-kerberos-ntlm-wwaffle -->
 			<groupId>com.github.dblock.waffle</groupId>
 			<artifactId>waffle-spring-security3</artifactId>

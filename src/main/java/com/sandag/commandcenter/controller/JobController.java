@@ -7,16 +7,20 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
 import com.sandag.commandcenter.persistence.JobService;
 import com.sandag.commandcenter.persistence.UserService;
+import com.sandag.commandcenter.security.JobAccessManager;
 
 @Controller
 @RequestMapping("/job")
@@ -29,6 +33,9 @@ public class JobController
     @Autowired
     protected JobService jobService;
 
+    @Autowired
+    protected JobAccessManager jobAccessManager;
+
     @RequestMapping(method = RequestMethod.GET)
     public String displayEmptyJobForm(Model model)
     {
@@ -39,14 +46,14 @@ public class JobController
     }
 
     // WARNING does not handle editing
-    //   for editing, user should not be set to the principal if already set (if admins can edit any job)
+    // for editing, user should not be set to the principal if already set (if admins can edit any job)
     @RequestMapping(method = RequestMethod.POST)
-    public String submitJob(@Valid Job job, BindingResult result, Model model, Principal principal)
+    public String addJob(@Valid Job job, BindingResult result, Model model, Principal principal)
     {
         model.addAttribute("modelNameMappings", getModelNamesMap());
-        
+
         if (result.hasErrors())
-        {       
+        {
             model.addAttribute("message", "Please fix the error(s) below and resubmit your job");
         } else
         {
@@ -59,6 +66,15 @@ public class JobController
         return "job";
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @ResponseBody
+    @PreAuthorize("@jobAccessManager.canDelete(@jobService.read(#id), #principal)")
+    public String deleteJob(@PathVariable Integer id, Principal principal)
+    {
+        jobService.delete(id);
+        return "Job deleted";
+    }
+
     Map<String, String> getModelNamesMap()
     {
         Map<String, String> map = new LinkedHashMap<String, String>();
@@ -69,5 +85,6 @@ public class JobController
         }
         return map;
     }
+
 
 }

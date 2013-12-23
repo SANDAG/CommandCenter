@@ -49,7 +49,7 @@ public class JobControllerTest
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        assertEquals("job", controller.submitJob(null, result, model, null));
+        assertEquals("job", controller.addJob(null, result, model, null));
         assertTrue(model.containsAttribute("modelNameMappings"));
         assertTrue(((String) model.asMap().get("message")).matches(".*fix.*error.*"));
     }
@@ -76,7 +76,7 @@ public class JobControllerTest
         controller.jobService = jobService;
         controller.userService = userService;
 
-        assertEquals("job", controller.submitJob(job, result, model, principal));
+        assertEquals("job", controller.addJob(job, result, model, principal));
 
         verify(userService).fetchOrCreate(principalName);
         verify(job).setUser(user);

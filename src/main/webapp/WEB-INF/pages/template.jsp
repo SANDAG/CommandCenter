@@ -19,7 +19,6 @@
 		$('#' + navId).addClass('active');
 	}
 </script>
-
 <decorator:head />
 </head>
 <body>

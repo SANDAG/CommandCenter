@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public abstract class BaseService<T, PK extends Serializable>
 {
-    @Autowired protected SessionFactory sessionFactory;
+    @Autowired
+    protected SessionFactory sessionFactory;
 
     private Class<T> type;
 
@@ -42,6 +43,14 @@ public abstract class BaseService<T, PK extends Serializable>
         getSession().delete(o);
     }
 
+    public void delete(PK id)
+    {
+        Session session = getSession();
+        @SuppressWarnings("unchecked")
+        T o = (T) session.load(type, id);
+        session.delete(o);
+    }
+
     protected Session getSession()
     {
         return sessionFactory.getCurrentSession();
@@ -51,7 +60,7 @@ public abstract class BaseService<T, PK extends Serializable>
     {
         return this.getSession().createCriteria(type);
     }
-    
+
     public void setSessionFactory(SessionFactory sessionFactory)
     {
         this.sessionFactory = sessionFactory;
