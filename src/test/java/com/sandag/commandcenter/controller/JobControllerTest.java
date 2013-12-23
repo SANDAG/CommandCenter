@@ -98,4 +98,16 @@ public class JobControllerTest
 
     }
 
+    @Test
+    public void jobGetsDeleted()
+    {
+        JobService jobService = mock(JobService.class);
+        controller.jobService = jobService;
+        int id = 234;
+
+        controller.deleteJob(id, null);
+
+        verify(jobService).delete(id);
+    }
+
 }
