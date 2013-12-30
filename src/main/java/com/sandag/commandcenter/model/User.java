@@ -39,4 +39,9 @@ public class User
         this.principal = principal;
     }
 
+    public boolean isSame(User another)
+    {
+        return id != null && id.equals(another.getId());
+    }
+    
 }

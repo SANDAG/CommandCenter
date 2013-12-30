@@ -19,7 +19,7 @@
 	});
 
 	function deleteJob(button) {
-		var id = button.data('job_id'), row = button.closest('tr');
+		var row = button.closest('tr'), id = row.data('job_id');
 
 		// sorry - the Eclipse formatter does this
 		$
@@ -76,13 +76,13 @@
             <th>Study name</th>
             <th>Scenario Location</th>
             <th>Created by</th>
-            <th></th>
+            <th colspan="99"></th>
           </tr>
         </thead>
         <tbody>
           <c:forEach items="${jobs}" var="job" varStatus="status">
             <c:set var="owned" value="${jobAccessManager.canDelete(job, principal)}" />
-            <tr class="${owned ? 'owned' : 'unowned'}">
+            <tr class="${owned ? 'owned' : 'unowned'}" data-job_id="${job.id}">
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
               <td class="text-right">${status.count}.</td>
               <td>${job.model}</td>
@@ -90,10 +90,19 @@
               <td>${job.study}</td>
               <td>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
+              <td><c:if test="${owned && moveUpIds.contains(job.id)}">
+                  <button type="button" class="btn btn-default btn-xs upButton" title="Move up the queue">
+                    <span class="glyphicon glyphicon-arrow-up"></span>
+                  </button>
+                </c:if></td>
+              <td><c:if test="${owned && moveDownIds.contains(job.id)}">
+                  <button type="button" class="btn btn-default btn-xs downButton" title="Move down the queue">
+                    <span class="glyphicon glyphicon-arrow-down"></span>
+                  </button>
+                </c:if></td>
               <td><c:if test="${owned}">
-                  <button type="button" class="btn btn-danger btn-xs deleteButton" data-job_id="${job.id}"
-                    title="Remove from queue">
-                    <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                  <button type="button" class="btn btn-danger btn-xs deleteButton" title="Remove from queue">
+                    <span class="glyphicon glyphicon-trash"></span>
                   </button>
                 </c:if></td>
             </tr>
