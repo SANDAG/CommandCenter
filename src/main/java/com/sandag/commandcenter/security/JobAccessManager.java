@@ -10,7 +10,7 @@ import com.sandag.commandcenter.model.Job;
 public class JobAccessManager
 {
 
-    public boolean canDelete(Job job, Principal principal) 
+    public boolean canUpdate(Job job, Principal principal) 
     {
         return principal.getName().equals(job.getUser().getPrincipal());
     }

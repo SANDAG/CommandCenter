@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
@@ -41,6 +44,25 @@ public class QueueController
         model.addAttribute("moveUpIds", getCanMoveUpJobIds(jobs, principal));
         model.addAttribute("moveDownIds", getCanMoveDownJobIds(jobs, principal));
         return "queue";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/move")
+    @PreAuthorize("@jobAccessManager.canUpdate(@jobService.read(#id), #principal)")
+    public void move(@PathVariable Integer id, @RequestParam(defaultValue = "true") boolean moveUp, Principal principal)
+    {
+        // no-op if either is null (someone else changed the queue order or deleted a job?)
+        Job chosen = jobService.read(id);
+        if (chosen == null)
+        {
+            return;
+        }
+        Job other = moveUp ? jobService.getMoveableJobBefore(chosen) : jobService.getMoveableJobAfter(chosen);
+        if (other == null)
+        {
+            return;
+        }
+
+        jobService.updateWithSwappedQueuePositions(chosen, other);
     }
 
     protected List<Integer> getCanMoveUpJobIds(List<Job> jobs, Principal principal)

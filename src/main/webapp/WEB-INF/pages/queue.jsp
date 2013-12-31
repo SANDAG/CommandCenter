@@ -13,27 +13,49 @@
 			deleteJob($(this));
 		});
 
+		$('.upButton').click(function() {
+			moveJob($(this), true);
+		});
+
+		$('.downButton').click(function() {
+			moveJob($(this), false);
+		});
+
 		$('#user-toggle').on('switch-change', function(e, data) {
 			data.value ? $(".unowned").show(500) : $(".unowned").hide(500);
 		});
 	});
 
 	function deleteJob(button) {
-		var row = button.closest('tr'), id = row.data('job_id');
+		var row = button.closest('tr');
+		var id = row.data('job_id');
+		var successFunction = function(response) {
+			row.remove();
+			$('#message').text(response);
+		};
+		var errorFunction = function(e) {
+			alert('There was an error deleting your job; please try again later.');
+		};
 
-		// sorry - the Eclipse formatter does this
-		$
-				.ajax({
-					type : 'DELETE',
-					url : 'job/' + id,
-					success : function(response) {
-						row.remove();
-						$('#message').text(response);
-					},
-					error : function(e) {
-						alert('There was an error deleting your job; please try again later.');
-					}
-				});
+		$.ajax({
+			type : 'DELETE',
+			url : 'job/' + id,
+			success : successFunction,
+			error : errorFunction
+		});
+	}
+
+	function moveJob(button, isMoveUp) {
+		var row = button.closest('tr');
+		var id = row.data('job_id');
+		var completeFunction = function(){document.location.reload();}
+
+		$.ajax({
+			type : 'GET',
+			async : false,
+			url : 'queue/' + id + '/move?moveUp=' + isMoveUp,
+			complete: completeFunction
+		});
 	}
 </script>
 <style>
@@ -81,7 +103,7 @@
         </thead>
         <tbody>
           <c:forEach items="${jobs}" var="job" varStatus="status">
-            <c:set var="owned" value="${jobAccessManager.canDelete(job, principal)}" />
+            <c:set var="owned" value="${jobAccessManager.canUpdate(job, principal)}" />
             <tr class="${owned ? 'owned' : 'unowned'}" data-job_id="${job.id}">
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
               <td class="text-right">${status.count}.</td>

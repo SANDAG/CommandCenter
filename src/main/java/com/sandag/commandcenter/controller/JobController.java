@@ -68,7 +68,7 @@ public class JobController
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     @ResponseBody
-    @PreAuthorize("@jobAccessManager.canDelete(@jobService.read(#id), #principal)")
+    @PreAuthorize("@jobAccessManager.canUpdate(@jobService.read(#id), #principal)")
     public String deleteJob(@PathVariable Integer id, Principal principal)
     {
         jobService.delete(id);

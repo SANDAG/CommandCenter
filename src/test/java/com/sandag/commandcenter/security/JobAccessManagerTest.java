@@ -28,7 +28,7 @@ public class JobAccessManagerTest
         Job job = new Job();
         job.setUser(user);
         
-        assertTrue(manager.canDelete(job, principal));
+        assertTrue(manager.canUpdate(job, principal));
     }
 
     @Test
@@ -43,6 +43,6 @@ public class JobAccessManagerTest
         Job job = new Job();
         job.setUser(user);
         
-        assertFalse(manager.canDelete(job, principal));
+        assertFalse(manager.canUpdate(job, principal));
     }
 }

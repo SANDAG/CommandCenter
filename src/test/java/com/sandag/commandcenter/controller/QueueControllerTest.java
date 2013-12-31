@@ -20,7 +20,10 @@ import com.sandag.commandcenter.persistence.UserService;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyObject;
 
 public class QueueControllerTest
 {
@@ -117,6 +120,98 @@ public class QueueControllerTest
         assertTrue(Arrays.asList(expected).equals(moveableIds));
     }
 
+    @Test
+    public void moveUpForDeletedJob()
+    {
+        int deletedJobId = 1234134;
+        JobService service = mock(JobService.class);
+        when(service.read(deletedJobId)).thenReturn(null);
+        controller.jobService = service;
+        
+        controller.move(deletedJobId, true, null);
+        verify(service, never()).getMoveableJobBefore((Job) anyObject());
+        verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
+    }
+    
+    @Test
+    public void moveUpForUnswappableJob()
+    {
+        // in case someone else changed queue
+        
+        int jobId = 1234134;
+        Job job = new Job();
+        JobService service = mock(JobService.class);
+        when(service.read(jobId)).thenReturn(job);
+        when(service.getMoveableJobBefore(job)).thenReturn(null);
+        controller.jobService = service;
+        
+        controller.move(jobId, true, null);
+        verify(service).getMoveableJobBefore(job);
+        verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
+    }
+    
+    @Test
+    public void moveUpWorks()
+    {
+        int jobId = 1234134;
+        Job jobA = new Job();
+        Job jobB = new Job();
+        JobService service = mock(JobService.class);
+        when(service.read(jobId)).thenReturn(jobA);
+        when(service.getMoveableJobBefore(jobA)).thenReturn(jobB);
+        controller.jobService = service;
+        
+        controller.move(jobId, true, null);        
+        verify(service).getMoveableJobBefore(jobA);
+        verify(service).updateWithSwappedQueuePositions(jobA, jobB);
+    }
+
+    @Test
+    public void moveDownForDeletedJob()
+    {
+        int deletedJobId = 1234134;
+        JobService service = mock(JobService.class);
+        when(service.read(deletedJobId)).thenReturn(null);
+        controller.jobService = service;
+        
+        controller.move(deletedJobId, false, null);
+        verify(service, never()).getMoveableJobAfter((Job) anyObject());
+        verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
+    }
+    
+    @Test
+    public void moveDownForUnswappableJob()
+    {
+        // in case someone else changed queue
+        
+        int jobId = 1234134;
+        Job job = new Job();
+        JobService service = mock(JobService.class);
+        when(service.read(jobId)).thenReturn(job);
+        when(service.getMoveableJobAfter(job)).thenReturn(null);
+        controller.jobService = service;
+        
+        controller.move(jobId, false, null);
+        verify(service).getMoveableJobAfter(job);
+        verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
+    }
+    
+    @Test
+    public void moveDownWorks()
+    {
+        int jobId = 1234134;
+        Job jobA = new Job();
+        Job jobB = new Job();
+        JobService service = mock(JobService.class);
+        when(service.read(jobId)).thenReturn(jobA);
+        when(service.getMoveableJobAfter(jobA)).thenReturn(jobB);
+        controller.jobService = service;
+        
+        controller.move(jobId, false, null);        
+        verify(service).getMoveableJobAfter(jobA);
+        verify(service).updateWithSwappedQueuePositions(jobA, jobB);
+    }
+    
     private void setEmptyUserService()
     {
         User user = new User();
@@ -124,5 +219,6 @@ public class QueueControllerTest
         when(userService.fetchOrCreate(anyString())).thenReturn(user);
         controller.userService = userService;
     }
+    
 
 }
