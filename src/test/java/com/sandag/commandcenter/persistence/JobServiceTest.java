@@ -19,6 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
 
+import static com.sandag.commandcenter.model.Job.Status.QUEUED;
+import static com.sandag.commandcenter.model.Job.Status.RUNNING;
+import static com.sandag.commandcenter.model.Job.Status.COMPLETE;
+import static com.sandag.commandcenter.model.Job.Status.ARCHIVED;
+import static com.sandag.commandcenter.model.Job.Status.DELETED;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/db.xml", "classpath:/autowire.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager")
@@ -118,7 +124,37 @@ public class JobServiceTest
         for (int i = 0; i < numJobs; i++)
         {
             Job job = new Job();
+            job.setStatus(Job.Status.QUEUED);
             job.setUser(i % 2 == 0 ? userEvens : userOdds);
+            service.create(job);
+            jobs.add(job);
+        }
+        return jobs;
+    }
+
+    @Test
+    public void findMoveablesChecksStatus()
+    {
+        User user = new User();
+        userService.create(user);
+
+        List<Job> jobs = createJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED, QUEUED);
+
+        // 1st job is the moveable before the last
+        assertEquals(jobs.get(0).getId(), service.getMoveableJobBefore(jobs.get(jobs.size() - 1)).getId());
+
+        // last job is the moveable before the 1st
+        assertEquals(jobs.get(jobs.size() - 1).getId(), service.getMoveableJobAfter(jobs.get(0)).getId());
+    }
+
+    private List<Job> createJobs(User user, Job.Status... statuses)
+    {
+        List<Job> jobs = new ArrayList<Job>();
+        for (Job.Status status : statuses)
+        {
+            Job job = new Job();
+            job.setUser(user);
+            job.setStatus(status);
             service.create(job);
             jobs.add(job);
         }
@@ -132,30 +168,19 @@ public class JobServiceTest
         Job jobB = getJobWithAUser();
         service.create(jobA);
         service.create(jobB);
-        
+
         int posA = jobA.getQueuePosition();
         int posB = jobB.getQueuePosition();
-        
+
         service.updateWithSwappedQueuePositions(jobA, jobB);
-        
+
         jobA = service.read(jobA.getId());
         jobB = service.read(jobB.getId());
-        
+
         assertEquals(posA, jobB.getQueuePosition());
         assertEquals(posB, jobA.getQueuePosition());
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     // support
     private Job getJobWithAUser()
     {

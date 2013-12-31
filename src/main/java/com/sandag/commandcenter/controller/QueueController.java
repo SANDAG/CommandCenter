@@ -20,7 +20,7 @@ import com.sandag.commandcenter.persistence.UserService;
 import com.sandag.commandcenter.security.JobAccessManager;
 
 @Controller
-@RequestMapping("/queue")
+@RequestMapping("/jobs")
 public class QueueController
 {
 
@@ -67,7 +67,7 @@ public class QueueController
 
     protected List<Integer> getCanMoveUpJobIds(List<Job> jobs, Principal principal)
     {
-        List<Integer> ids = getOwnedJobIds(jobs, principal);
+        List<Integer> ids = getOwnedQueuedJobIds(jobs, principal);
         if (ids.size() > 0)
         {
             // first is at top and can't move up
@@ -78,7 +78,7 @@ public class QueueController
 
     protected List<Integer> getCanMoveDownJobIds(List<Job> jobs, Principal principal)
     {
-        List<Integer> ids = getOwnedJobIds(jobs, principal);
+        List<Integer> ids = getOwnedQueuedJobIds(jobs, principal);
         if (ids.size() > 0)
         {
             // last is at bottom and can't move down
@@ -87,13 +87,13 @@ public class QueueController
         return ids;
     }
 
-    private List<Integer> getOwnedJobIds(List<Job> jobs, Principal principal)
+    private List<Integer> getOwnedQueuedJobIds(List<Job> jobs, Principal principal)
     {
         List<Integer> ids = new ArrayList<Integer>();
         User user = userService.fetchOrCreate(principal.getName());
         for (Job job : jobs)
         {
-            if (user.isSame(job.getUser()))
+            if (user.isSame(job.getUser()) && Job.Status.QUEUED == job.getStatus())
             {
                 ids.add(job.getId());
             }

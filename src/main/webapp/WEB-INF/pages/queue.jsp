@@ -53,7 +53,7 @@
 		$.ajax({
 			type : 'GET',
 			async : false,
-			url : 'queue/' + id + '/move?moveUp=' + isMoveUp,
+			url : 'jobs/' + id + '/move?moveUp=' + isMoveUp,
 			complete: completeFunction
 		});
 	}

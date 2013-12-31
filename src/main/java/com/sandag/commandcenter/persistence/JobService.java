@@ -42,18 +42,20 @@ public class JobService extends BaseService<Job, Integer>
         update(jobA);
         update(jobB);
     }
-    
+
     public Job getMoveableJobAfter(Job job)
     {
         // lowest positioned job greater than job param for same user
-        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.gt("queuePosition", job.getQueuePosition()))
-                .addOrder(Order.asc("queuePosition")).setFirstResult(0).setMaxResults(1).uniqueResult();
+        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.eq("status", Job.Status.QUEUED))
+                .add(Restrictions.gt("queuePosition", job.getQueuePosition())).addOrder(Order.asc("queuePosition")).setFirstResult(0)
+                .setMaxResults(1).uniqueResult();
     }
 
     public Job getMoveableJobBefore(Job job)
     {
         // highest positioned job less than job param for same user
-        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.lt("queuePosition", job.getQueuePosition()))
-                .addOrder(Order.desc("queuePosition")).setFirstResult(0).setMaxResults(1).uniqueResult();
+        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.eq("status", Job.Status.QUEUED))
+                .add(Restrictions.lt("queuePosition", job.getQueuePosition())).addOrder(Order.desc("queuePosition")).setFirstResult(0)
+                .setMaxResults(1).uniqueResult();
     }
 }

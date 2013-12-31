@@ -28,11 +28,11 @@
   <div class="navbar navbar-default navbar-static-top">
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="queue">SANDAG Command Center</a>
+        <a class="navbar-brand" href="jobs">SANDAG Command Center</a>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li id="nav-queue"><a href="queue">Queue</a></li>
+          <li id="nav-queue"><a href="jobs">Queue</a></li>
           <li id="nav-job"><a href="job">Job</a></li>
         </ul>
       </div>

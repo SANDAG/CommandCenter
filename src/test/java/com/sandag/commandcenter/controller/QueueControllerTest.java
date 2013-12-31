@@ -18,6 +18,12 @@ import com.sandag.commandcenter.model.User;
 import com.sandag.commandcenter.persistence.JobService;
 import com.sandag.commandcenter.persistence.UserService;
 
+import static com.sandag.commandcenter.model.Job.Status.QUEUED;
+import static com.sandag.commandcenter.model.Job.Status.RUNNING;
+import static com.sandag.commandcenter.model.Job.Status.COMPLETE;
+import static com.sandag.commandcenter.model.Job.Status.ARCHIVED;
+import static com.sandag.commandcenter.model.Job.Status.DELETED;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.never;
@@ -41,7 +47,7 @@ public class QueueControllerTest
     public void canDisplayQueue()
     {
         setEmptyUserService();
-        
+
         JobService service = mock(JobService.class);
         List<Job> jobs = new ArrayList<Job>();
         Job job = new Job();
@@ -69,19 +75,19 @@ public class QueueControllerTest
         testGetMoveIds(new Integer[] {}, new int[] {}, new int[] {}, false);
 
         // ones
-        testGetMoveIds(new Integer[] {}, new int[] {7}, new int[] {0}, true);
-        testGetMoveIds(new Integer[] {}, new int[] {7}, new int[] {0}, false);
+        testGetMoveIds(new Integer[] {}, new int[] {7 }, new int[] {0 }, true);
+        testGetMoveIds(new Integer[] {}, new int[] {7 }, new int[] {0 }, false);
 
         // more
-        testGetMoveIds(new Integer[] {3}, new int[] {7, 3, 6, 12}, new int[] {0, 1}, true);
-        testGetMoveIds(new Integer[] {7}, new int[] {7, 3, 6, 12}, new int[] {0, 1}, false);
+        testGetMoveIds(new Integer[] {3 }, new int[] {7, 3, 6, 12 }, new int[] {0, 1 }, true);
+        testGetMoveIds(new Integer[] {7 }, new int[] {7, 3, 6, 12 }, new int[] {0, 1 }, false);
 
-        testGetMoveIds(new Integer[] {6, 12}, new int[] {7, 3, 6, 12}, new int[] {0, 2, 3}, true);
-        testGetMoveIds(new Integer[] {7, 6}, new int[] {7, 3, 6, 12}, new int[] {0, 2, 3}, false);
+        testGetMoveIds(new Integer[] {6, 12 }, new int[] {7, 3, 6, 12 }, new int[] {0, 2, 3 }, true);
+        testGetMoveIds(new Integer[] {7, 6 }, new int[] {7, 3, 6, 12 }, new int[] {0, 2, 3 }, false);
 
         // unowned
-        testGetMoveIds(new Integer[] {}, new int[] {7, 3, 6, 12}, new int[] {}, true);
-        testGetMoveIds(new Integer[] {}, new int[] {7, 3, 6, 12}, new int[] {}, false);
+        testGetMoveIds(new Integer[] {}, new int[] {7, 3, 6, 12 }, new int[] {}, true);
+        testGetMoveIds(new Integer[] {}, new int[] {7, 3, 6, 12 }, new int[] {}, false);
     }
 
     private void testGetMoveIds(Integer[] expected, int[] jobIds, int[] ownedPositions, boolean up)
@@ -112,6 +118,7 @@ public class QueueControllerTest
             Job job = new Job();
             job.setId(id);
             job.setUser(owned ? user : otherUser);
+            job.setStatus(QUEUED);
             jobs.add(job);
         }
 
@@ -121,35 +128,78 @@ public class QueueControllerTest
     }
 
     @Test
+    public void checkGetMoveIdLimitedByStatus()
+    {
+        String username = "Craig";
+        int userId = 23;
+        User user = new User();
+        user.setId(userId);
+        user.setPrincipal(username);
+
+        UserService userService = mock(UserService.class);
+        when(userService.fetchOrCreate(username)).thenReturn(user);
+        controller.userService = userService;
+
+        Principal principal = mock(Principal.class);
+        when(principal.getName()).thenReturn(username);
+
+        List<Job> jobs = getJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED, QUEUED);
+
+        List<Integer> upMoveableIds = controller.getCanMoveUpJobIds(jobs, principal);
+        List<Integer> downMoveableIds = controller.getCanMoveDownJobIds(jobs, principal);
+
+        assertEquals(1, upMoveableIds.size());
+        assertEquals(1, downMoveableIds.size());
+
+        assertEquals(jobs.get(0).getId(), downMoveableIds.get(0));
+        assertEquals(jobs.get(jobs.size() - 1).getId(), upMoveableIds.get(0));
+    }
+
+    private List<Job> getJobs(User user, Job.Status... statuses)
+    {
+        List<Job> jobs = new ArrayList<Job>();
+        int mockId = 0;
+        for (Job.Status status : statuses)
+        {
+            Job job = new Job();
+            job.setUser(user);
+            job.setStatus(status);
+            job.setId(mockId++);
+            jobs.add(job);
+        }
+        return jobs;
+    }
+
+    @Test
     public void moveUpForDeletedJob()
     {
         int deletedJobId = 1234134;
         JobService service = mock(JobService.class);
         when(service.read(deletedJobId)).thenReturn(null);
         controller.jobService = service;
-        
+
         controller.move(deletedJobId, true, null);
         verify(service, never()).getMoveableJobBefore((Job) anyObject());
         verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
-    
+
     @Test
     public void moveUpForUnswappableJob()
     {
         // in case someone else changed queue
-        
+
         int jobId = 1234134;
         Job job = new Job();
         JobService service = mock(JobService.class);
         when(service.read(jobId)).thenReturn(job);
         when(service.getMoveableJobBefore(job)).thenReturn(null);
         controller.jobService = service;
-        
+
         controller.move(jobId, true, null);
         verify(service).getMoveableJobBefore(job);
         verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
-    
+
     @Test
     public void moveUpWorks()
     {
@@ -160,8 +210,8 @@ public class QueueControllerTest
         when(service.read(jobId)).thenReturn(jobA);
         when(service.getMoveableJobBefore(jobA)).thenReturn(jobB);
         controller.jobService = service;
-        
-        controller.move(jobId, true, null);        
+
+        controller.move(jobId, true, null);
         verify(service).getMoveableJobBefore(jobA);
         verify(service).updateWithSwappedQueuePositions(jobA, jobB);
     }
@@ -173,29 +223,29 @@ public class QueueControllerTest
         JobService service = mock(JobService.class);
         when(service.read(deletedJobId)).thenReturn(null);
         controller.jobService = service;
-        
+
         controller.move(deletedJobId, false, null);
         verify(service, never()).getMoveableJobAfter((Job) anyObject());
         verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
-    
+
     @Test
     public void moveDownForUnswappableJob()
     {
         // in case someone else changed queue
-        
+
         int jobId = 1234134;
         Job job = new Job();
         JobService service = mock(JobService.class);
         when(service.read(jobId)).thenReturn(job);
         when(service.getMoveableJobAfter(job)).thenReturn(null);
         controller.jobService = service;
-        
+
         controller.move(jobId, false, null);
         verify(service).getMoveableJobAfter(job);
         verify(service, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
-    
+
     @Test
     public void moveDownWorks()
     {
@@ -206,12 +256,12 @@ public class QueueControllerTest
         when(service.read(jobId)).thenReturn(jobA);
         when(service.getMoveableJobAfter(jobA)).thenReturn(jobB);
         controller.jobService = service;
-        
-        controller.move(jobId, false, null);        
+
+        controller.move(jobId, false, null);
         verify(service).getMoveableJobAfter(jobA);
         verify(service).updateWithSwappedQueuePositions(jobA, jobB);
     }
-    
+
     private void setEmptyUserService()
     {
         User user = new User();
@@ -219,6 +269,5 @@ public class QueueControllerTest
         when(userService.fetchOrCreate(anyString())).thenReturn(user);
         controller.userService = userService;
     }
-    
 
 }
