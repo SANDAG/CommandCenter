@@ -20,6 +20,11 @@
 		$('ul.nav li').removeClass('active');
 		$('#' + navId).addClass('active');
 	}
+	
+	function getParameterByName(name) {
+	    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+	    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+	}
 </script>
 <decorator:head />
 </head>

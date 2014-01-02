@@ -124,7 +124,6 @@ public class JobServiceTest
         for (int i = 0; i < numJobs; i++)
         {
             Job job = new Job();
-            job.setStatus(Job.Status.QUEUED);
             job.setUser(i % 2 == 0 ? userEvens : userOdds);
             service.create(job);
             jobs.add(job);

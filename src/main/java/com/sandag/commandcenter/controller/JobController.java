@@ -60,8 +60,7 @@ public class JobController
             User user = userService.fetchOrCreate(principal.getName());
             job.setUser(user);
             jobService.create(job);
-            model.addAttribute("message", "Successfully queued job");
-            // TODO return view "jobQueue" here instead (when that page is ready)?
+            return "redirect:jobs?highlight=" + job.getId();
         }
         return "job";
     }

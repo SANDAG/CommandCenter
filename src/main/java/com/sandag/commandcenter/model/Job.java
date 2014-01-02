@@ -22,11 +22,14 @@ public class Job
 
     public enum Status
     {
+        // WARNING do not change this order - values are stored in the database using this order
+        //   add additional statuses to the end of the list
         QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED;
     }
 
     public enum Model
     {
+        // WARNING do not change this order - values are stored in the database using this order
         ABM, PECAS;
     }
 
@@ -39,9 +42,10 @@ public class Job
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Status status;
+    private Status status = Status.QUEUED;
 
-    @Column(name = "status")
+    // default to QUEUED (Status enum position 0)
+    @Column(name = "status", columnDefinition = "INT DEFAULT 0", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     public Status getStatus()
     {
