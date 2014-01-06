@@ -4,6 +4,6 @@ import com.sandag.commandcenter.model.Job;
 
 public interface Runner
 {
-    public Job.Model supports();
-    public void run();
+    Job.Model supports();
+    void run();
 }

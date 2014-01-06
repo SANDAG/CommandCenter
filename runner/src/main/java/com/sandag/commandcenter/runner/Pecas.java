@@ -7,8 +7,8 @@ import com.sandag.commandcenter.model.Job.Model;
 @Service
 public class Pecas implements Runner
 {
-    Model supported = Model.PECAS;
-    
+    private Model supported = Model.PECAS;
+
     @Override
     public Model supports()
     {
@@ -19,6 +19,6 @@ public class Pecas implements Runner
     public void run()
     {
         // TODO Auto-generated method stub
-        
-    }   
+
+    }
 }
