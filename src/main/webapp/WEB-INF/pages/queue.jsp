@@ -57,8 +57,8 @@
 			var href = highlightJobId ? 
     			window.location.href.replace('highlight=' + highlightJobId, 'highlight=' + id) :
     			window.location.href + (window.location.search.length ? '&' : '?') + 'highlight=' + id; 		
-			document.location.assign(href);
-		}
+			window.location.assign(href);
+		};
 
 		$.ajax({
 			type : 'GET',
