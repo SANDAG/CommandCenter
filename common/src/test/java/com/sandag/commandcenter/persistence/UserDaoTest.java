@@ -13,11 +13,11 @@ import com.sandag.commandcenter.model.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/db.xml", "classpath:/autowire.xml" })
-public class UserServiceTest
+public class UserDaoTest
 {
 
     @Autowired
-    private UserService service;
+    private UserDao service;
 
     @Test
     public void createWithDupePrincipalReturnsUser()

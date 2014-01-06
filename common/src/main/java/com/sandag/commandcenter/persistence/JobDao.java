@@ -5,18 +5,18 @@ import java.util.List;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.sandag.commandcenter.model.Job;
 
-@Service
-public class JobService extends BaseService<Job, Integer>
+@Repository
+public class JobDao extends BaseDao<Job, Integer>
 {
 
     @Autowired
-    private SequenceService sequenceService;
+    private SequenceDao sequenceDao;
 
-    public JobService()
+    public JobDao()
     {
         super(Job.class);
     }
@@ -29,7 +29,7 @@ public class JobService extends BaseService<Job, Integer>
 
     public Integer create(Job job)
     {
-        job.setQueuePosition(sequenceService.next());
+        job.setQueuePosition(sequenceDao.next());
         return super.create(job);
     }
 
@@ -57,5 +57,17 @@ public class JobService extends BaseService<Job, Integer>
         return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.eq("status", Job.Status.QUEUED))
                 .add(Restrictions.lt("queuePosition", job.getQueuePosition())).addOrder(Order.desc("queuePosition")).setFirstResult(0)
                 .setMaxResults(1).uniqueResult();
+    }
+
+    public Job startNextInQueue(String runnerName, Job.Model... model)
+    {
+        Job next = (Job) startQuery().add(Restrictions.in("model", model)).add(Restrictions.eq("status", Job.Status.QUEUED))
+                .addOrder(Order.asc("queuePosition")).setFirstResult(0).setMaxResults(1).uniqueResult();
+        if (next != null)
+        {
+            next.setStatus(Job.Status.RUNNING);
+            next.setRunner(runnerName);
+        }
+        return next;
     }
 }

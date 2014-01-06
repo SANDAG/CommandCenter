@@ -15,8 +15,8 @@ import org.springframework.ui.Model;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
-import com.sandag.commandcenter.persistence.JobService;
-import com.sandag.commandcenter.persistence.UserService;
+import com.sandag.commandcenter.persistence.JobDao;
+import com.sandag.commandcenter.persistence.UserDao;
 
 import static com.sandag.commandcenter.model.Job.Status.QUEUED;
 import static com.sandag.commandcenter.model.Job.Status.RUNNING;
@@ -48,12 +48,12 @@ public class QueueControllerTest
     {
         setEmptyUserService();
 
-        JobService service = mock(JobService.class);
+        JobDao service = mock(JobDao.class);
         List<Job> jobs = new ArrayList<Job>();
         Job job = new Job();
         jobs.add(job);
         when(service.readAll()).thenReturn(jobs);
-        controller.jobService = service;
+        controller.jobDao = service;
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn("principal name");
 
@@ -103,9 +103,9 @@ public class QueueControllerTest
         User otherUser = new User();
         otherUser.setId(otherUserId);
 
-        UserService userService = mock(UserService.class);
-        when(userService.fetchOrCreate(username)).thenReturn(user);
-        controller.userService = userService;
+        UserDao userDao = mock(UserDao.class);
+        when(userDao.fetchOrCreate(username)).thenReturn(user);
+        controller.userDao = userDao;
 
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn(username);
@@ -136,9 +136,9 @@ public class QueueControllerTest
         user.setId(userId);
         user.setPrincipal(username);
 
-        UserService userService = mock(UserService.class);
-        when(userService.fetchOrCreate(username)).thenReturn(user);
-        controller.userService = userService;
+        UserDao userDao = mock(UserDao.class);
+        when(userDao.fetchOrCreate(username)).thenReturn(user);
+        controller.userDao = userDao;
 
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn(username);
@@ -174,9 +174,9 @@ public class QueueControllerTest
     public void moveUpForDeletedJob()
     {
         int deletedJobId = 1234134;
-        JobService service = mock(JobService.class);
+        JobDao service = mock(JobDao.class);
         when(service.read(deletedJobId)).thenReturn(null);
-        controller.jobService = service;
+        controller.jobDao = service;
 
         controller.move(deletedJobId, true, null);
         verify(service, never()).getMoveableJobBefore((Job) anyObject());
@@ -190,10 +190,10 @@ public class QueueControllerTest
 
         int jobId = 1234134;
         Job job = new Job();
-        JobService service = mock(JobService.class);
+        JobDao service = mock(JobDao.class);
         when(service.read(jobId)).thenReturn(job);
         when(service.getMoveableJobBefore(job)).thenReturn(null);
-        controller.jobService = service;
+        controller.jobDao = service;
 
         controller.move(jobId, true, null);
         verify(service).getMoveableJobBefore(job);
@@ -206,10 +206,10 @@ public class QueueControllerTest
         int jobId = 1234134;
         Job jobA = new Job();
         Job jobB = new Job();
-        JobService service = mock(JobService.class);
+        JobDao service = mock(JobDao.class);
         when(service.read(jobId)).thenReturn(jobA);
         when(service.getMoveableJobBefore(jobA)).thenReturn(jobB);
-        controller.jobService = service;
+        controller.jobDao = service;
 
         controller.move(jobId, true, null);
         verify(service).getMoveableJobBefore(jobA);
@@ -220,9 +220,9 @@ public class QueueControllerTest
     public void moveDownForDeletedJob()
     {
         int deletedJobId = 1234134;
-        JobService service = mock(JobService.class);
+        JobDao service = mock(JobDao.class);
         when(service.read(deletedJobId)).thenReturn(null);
-        controller.jobService = service;
+        controller.jobDao = service;
 
         controller.move(deletedJobId, false, null);
         verify(service, never()).getMoveableJobAfter((Job) anyObject());
@@ -236,10 +236,10 @@ public class QueueControllerTest
 
         int jobId = 1234134;
         Job job = new Job();
-        JobService service = mock(JobService.class);
+        JobDao service = mock(JobDao.class);
         when(service.read(jobId)).thenReturn(job);
         when(service.getMoveableJobAfter(job)).thenReturn(null);
-        controller.jobService = service;
+        controller.jobDao = service;
 
         controller.move(jobId, false, null);
         verify(service).getMoveableJobAfter(job);
@@ -252,10 +252,10 @@ public class QueueControllerTest
         int jobId = 1234134;
         Job jobA = new Job();
         Job jobB = new Job();
-        JobService service = mock(JobService.class);
+        JobDao service = mock(JobDao.class);
         when(service.read(jobId)).thenReturn(jobA);
         when(service.getMoveableJobAfter(jobA)).thenReturn(jobB);
-        controller.jobService = service;
+        controller.jobDao = service;
 
         controller.move(jobId, false, null);
         verify(service).getMoveableJobAfter(jobA);
@@ -265,9 +265,9 @@ public class QueueControllerTest
     private void setEmptyUserService()
     {
         User user = new User();
-        UserService userService = mock(UserService.class);
-        when(userService.fetchOrCreate(anyString())).thenReturn(user);
-        controller.userService = userService;
+        UserDao userDao = mock(UserDao.class);
+        when(userDao.fetchOrCreate(anyString())).thenReturn(user);
+        controller.userDao = userDao;
     }
 
 }

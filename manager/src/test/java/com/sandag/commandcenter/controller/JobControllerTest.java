@@ -17,8 +17,8 @@ import org.springframework.validation.BindingResult;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
-import com.sandag.commandcenter.persistence.JobService;
-import com.sandag.commandcenter.persistence.UserService;
+import com.sandag.commandcenter.persistence.JobDao;
+import com.sandag.commandcenter.persistence.UserDao;
 
 public class JobControllerTest
 {
@@ -62,7 +62,7 @@ public class JobControllerTest
         user.setPrincipal(principalName);
 
         Job job = mock(Job.class);
-        JobService jobService = mock(JobService.class);
+        JobDao jobDao = mock(JobDao.class);
 
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(false);
@@ -70,18 +70,18 @@ public class JobControllerTest
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn(principalName);
 
-        UserService userService = mock(UserService.class);
-        when(userService.fetchOrCreate(principalName)).thenReturn(user);
+        UserDao userDao = mock(UserDao.class);
+        when(userDao.fetchOrCreate(principalName)).thenReturn(user);
 
-        controller.jobService = jobService;
-        controller.userService = userService;
+        controller.jobDao = jobDao;
+        controller.userDao = userDao;
 
         String redirViewPrefix = "redirect:jobs?highlight=";
         assertTrue(controller.addJob(job, result, model, principal).startsWith(redirViewPrefix));
 
-        verify(userService).fetchOrCreate(principalName);
+        verify(userDao).fetchOrCreate(principalName);
         verify(job).setUser(user);
-        verify(jobService).create(job);
+        verify(jobDao).create(job);
 
         assertTrue(model.containsAttribute("modelNameMappings"));
     }
@@ -101,13 +101,13 @@ public class JobControllerTest
     @Test
     public void jobGetsDeleted()
     {
-        JobService jobService = mock(JobService.class);
-        controller.jobService = jobService;
+        JobDao jobDao = mock(JobDao.class);
+        controller.jobDao = jobDao;
         int id = 234;
 
         controller.deleteJob(id, null);
 
-        verify(jobService).delete(id);
+        verify(jobDao).delete(id);
     }
 
 }

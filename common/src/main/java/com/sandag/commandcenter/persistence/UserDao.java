@@ -1,15 +1,15 @@
 package com.sandag.commandcenter.persistence;
 
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.sandag.commandcenter.model.User;
 
-@Service
-public class UserService extends BaseService<User, Integer>
+@Repository
+public class UserDao extends BaseDao<User, Integer>
 {
 
-    public UserService()
+    public UserDao()
     {
         super(User.class);
     }

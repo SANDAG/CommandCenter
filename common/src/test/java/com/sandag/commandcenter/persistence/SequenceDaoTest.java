@@ -10,10 +10,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/db.xml", "classpath:/autowire.xml" })
-public class SequenceServiceTest
+public class SequenceDaoTest
 {
     @Autowired
-    private SequenceService service;
+    private SequenceDao service;
 
     @Test
     public void nextValueIncreases()

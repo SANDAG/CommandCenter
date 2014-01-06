@@ -92,7 +92,10 @@ public class Job
     @GeneratedValue
     private int queuePosition;
     
-
+    @Column(name = "runner")
+    private String runner;
+    
+    
     // simple getters/setters below here
 
     public int getQueuePosition()
@@ -193,6 +196,16 @@ public class Job
     public void setModel(Model model)
     {
         this.model = model;
+    }
+
+    public String getRunner()
+    {
+        return runner;
+    }
+
+    public void setRunner(String runner)
+    {
+        this.runner = runner;
     };
 
 }

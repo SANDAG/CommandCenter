@@ -1,16 +1,16 @@
 package com.sandag.commandcenter.persistence;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sandag.commandcenter.model.Sequence;
 
-@Service
-public class SequenceService extends BaseService<Sequence, Integer>
+@Repository
+public class SequenceDao extends BaseDao<Sequence, Integer>
 {
 
-    public SequenceService()
+    public SequenceDao()
     {
         super(Sequence.class);
     }

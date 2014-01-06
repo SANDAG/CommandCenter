@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
-import com.sandag.commandcenter.persistence.JobService;
-import com.sandag.commandcenter.persistence.UserService;
+import com.sandag.commandcenter.persistence.JobDao;
+import com.sandag.commandcenter.persistence.UserDao;
 import com.sandag.commandcenter.security.JobAccessManager;
 
 @Controller
@@ -25,10 +25,10 @@ public class QueueController
 {
 
     @Autowired
-    protected JobService jobService;
+    protected JobDao jobDao;
 
     @Autowired
-    protected UserService userService;
+    protected UserDao userDao;
 
     @Autowired
     private JobAccessManager manager;
@@ -37,7 +37,7 @@ public class QueueController
     public String display(Model model, Principal principal)
     {
         model.addAttribute("message", "View the queue");
-        List<Job> jobs = jobService.readAll();
+        List<Job> jobs = jobDao.readAll();
         model.addAttribute("jobs", jobs);
         model.addAttribute("principalName", principal.getName());
         model.addAttribute("jobAccessManager", manager);
@@ -47,22 +47,22 @@ public class QueueController
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/move")
-    @PreAuthorize("@jobAccessManager.canUpdate(@jobService.read(#id), #principal)")
+    @PreAuthorize("@jobAccessManager.canUpdate(@jobDao.read(#id), #principal)")
     public void move(@PathVariable Integer id, @RequestParam(defaultValue = "true") boolean moveUp, Principal principal)
     {
         // no-op if either is null (someone else changed the queue order or deleted a job?)
-        Job chosen = jobService.read(id);
+        Job chosen = jobDao.read(id);
         if (chosen == null)
         {
             return;
         }
-        Job other = moveUp ? jobService.getMoveableJobBefore(chosen) : jobService.getMoveableJobAfter(chosen);
+        Job other = moveUp ? jobDao.getMoveableJobBefore(chosen) : jobDao.getMoveableJobAfter(chosen);
         if (other == null)
         {
             return;
         }
 
-        jobService.updateWithSwappedQueuePositions(chosen, other);
+        jobDao.updateWithSwappedQueuePositions(chosen, other);
     }
 
     protected List<Integer> getCanMoveUpJobIds(List<Job> jobs, Principal principal)
@@ -90,7 +90,7 @@ public class QueueController
     private List<Integer> getOwnedQueuedJobIds(List<Job> jobs, Principal principal)
     {
         List<Integer> ids = new ArrayList<Integer>();
-        User user = userService.fetchOrCreate(principal.getName());
+        User user = userDao.fetchOrCreate(principal.getName());
         for (Job job : jobs)
         {
             if (user.isSame(job.getUser()) && Job.Status.QUEUED == job.getStatus())

@@ -17,6 +17,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sandag.commandcenter.model.Job;
+import com.sandag.commandcenter.model.Job.Model;
 import com.sandag.commandcenter.model.User;
 
 import static com.sandag.commandcenter.model.Job.Status.QUEUED;
@@ -29,13 +30,13 @@ import static com.sandag.commandcenter.model.Job.Status.DELETED;
 @ContextConfiguration(locations = {"classpath:/db.xml", "classpath:/autowire.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager")
 @Transactional
-public class JobServiceTest
+public class JobDaoTest
 {
     @Autowired
-    private JobService service;
+    private JobDao service;
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @After
     public void cleanUp()
@@ -118,8 +119,8 @@ public class JobServiceTest
         List<Job> jobs = new ArrayList<Job>();
         User userEvens = new User();
         User userOdds = new User();
-        userService.create(userEvens);
-        userService.create(userOdds);
+        userDao.create(userEvens);
+        userDao.create(userOdds);
 
         for (int i = 0; i < numJobs; i++)
         {
@@ -135,7 +136,7 @@ public class JobServiceTest
     public void findMoveablesChecksStatus()
     {
         User user = new User();
-        userService.create(user);
+        userDao.create(user);
 
         List<Job> jobs = createJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED, QUEUED);
 
@@ -180,12 +181,49 @@ public class JobServiceTest
         assertEquals(posB, jobA.getQueuePosition());
     }
 
+    @Test
+    public void startsNextInQueue()
+    {
+        Model model = Job.Model.ABM;
+        String runner = "ASLKJDF";
+
+        createJobWith(model, COMPLETE); // not queued
+        createJobWith(Model.PECAS, QUEUED); // wrong model
+        Job j2 = createJobWith(model, QUEUED); // next
+        Job j3 = createJobWith(model, QUEUED); // after next
+        
+        Job next = service.startNextInQueue(runner, model);
+        assertEquals(j2.getId(), next.getId());
+        assertEquals(runner, next.getRunner());
+        assertEquals(RUNNING, next.getStatus());
+        
+        Job nextNext = service.startNextInQueue(runner, model);
+        assertEquals(j3.getId(), nextNext.getId());
+    }
+    
+    @Test
+    public void noneQueuedReturnsNull()
+    {
+        createJobWith(Model.ABM, COMPLETE);        
+        assertNull(service.startNextInQueue("", Job.Model.ABM, Job.Model.PECAS));
+    }
+    
+    
     // support
+    private Job createJobWith(Model model, Job.Status status) 
+    {
+        Job job = getJobWithAUser();
+        job.setModel(model);
+        job.setStatus(status);
+        service.create(job);
+        return job;
+    }
+    
     private Job getJobWithAUser()
     {
         Job job = new Job();
         User user = new User();
-        userService.create(user);
+        userDao.create(user);
         job.setUser(user);
         return job;
     }

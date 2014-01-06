@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public abstract class BaseService<T, PK extends Serializable>
+public abstract class BaseDao<T, PK extends Serializable>
 {
     @Autowired
     protected SessionFactory sessionFactory;
 
     private Class<T> type;
 
-    public BaseService(Class<T> type)
+    public BaseDao(Class<T> type)
     {
         this.type = type;
     }

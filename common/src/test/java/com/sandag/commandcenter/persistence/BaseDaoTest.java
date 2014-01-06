@@ -20,11 +20,11 @@ import com.sandag.commandcenter.model.BaseServiceEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/db.xml", "classpath:/autowire.xml" })
-public class BaseServiceTest
+public class BaseDaoTest
 {
 
     @Autowired
-    private BaseServiceImpl service;
+    private BaseDaoImpl service;
 
     @Test
     public void testCreate()
@@ -76,7 +76,7 @@ public class BaseServiceTest
     @Test
     public void queryStartsWithRightType()
     {
-        BaseService<BaseServiceEntity, Integer> localService = spy(new BaseServiceImpl());
+        BaseDao<BaseServiceEntity, Integer> localService = spy(new BaseDaoImpl());
         Session session = mock(Session.class);
         doReturn(session).when(localService).getSession();
         localService.startQuery();

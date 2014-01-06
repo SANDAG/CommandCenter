@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
-import com.sandag.commandcenter.persistence.JobService;
-import com.sandag.commandcenter.persistence.UserService;
+import com.sandag.commandcenter.persistence.JobDao;
+import com.sandag.commandcenter.persistence.UserDao;
 import com.sandag.commandcenter.security.JobAccessManager;
 
 @Controller
@@ -28,10 +28,10 @@ public class JobController
 {
 
     @Autowired
-    protected UserService userService;
+    protected UserDao userDao;
 
     @Autowired
-    protected JobService jobService;
+    protected JobDao jobDao;
 
     @Autowired
     protected JobAccessManager jobAccessManager;
@@ -57,9 +57,9 @@ public class JobController
             model.addAttribute("message", "Please fix the error(s) below and resubmit your job");
         } else
         {
-            User user = userService.fetchOrCreate(principal.getName());
+            User user = userDao.fetchOrCreate(principal.getName());
             job.setUser(user);
-            jobService.create(job);
+            jobDao.create(job);
             return "redirect:jobs?highlight=" + job.getId();
         }
         return "job";
@@ -67,10 +67,10 @@ public class JobController
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     @ResponseBody
-    @PreAuthorize("@jobAccessManager.canUpdate(@jobService.read(#id), #principal)")
+    @PreAuthorize("@jobAccessManager.canUpdate(@jobDao.read(#id), #principal)")
     public String deleteJob(@PathVariable Integer id, Principal principal)
     {
-        jobService.delete(id);
+        jobDao.delete(id);
         return "Job deleted";
     }
 
