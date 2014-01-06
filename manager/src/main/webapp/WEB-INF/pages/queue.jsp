@@ -9,7 +9,7 @@
 	var highlightJobId;
 	$(function() {
 		highlightJobId = getParameterByName('highlight');
-		
+
 		setActiveNav('nav-queue');
 
 		$('.deleteButton').click(function() {
@@ -27,7 +27,7 @@
 		$('#user-toggle').on('switch-change', function(e, data) {
 			data.value ? $(".unowned").show(500) : $(".unowned").hide(500);
 		});
-		
+
 		$('tr[data-job_id=' + highlightJobId + ']').addClass('highlight');
 	});
 
@@ -54,9 +54,11 @@
 		var row = button.closest('tr');
 		var id = row.data('job_id');
 		var completeFunction = function() {
-			var href = highlightJobId ? 
-    			window.location.href.replace('highlight=' + highlightJobId, 'highlight=' + id) :
-    			window.location.href + (window.location.search.length ? '&' : '?') + 'highlight=' + id; 		
+			var href = highlightJobId ? window.location.href.replace(
+					'highlight=' + highlightJobId, 'highlight=' + id)
+					: window.location.href
+							+ (window.location.search.length ? '&' : '?')
+							+ 'highlight=' + id;
 			window.location.assign(href);
 		};
 
@@ -64,7 +66,7 @@
 			type : 'GET',
 			async : false,
 			url : 'jobs/' + id + '/move?moveUp=' + isMoveUp,
-			complete: completeFunction
+			complete : completeFunction
 		});
 	}
 </script>
@@ -78,19 +80,19 @@
 }
 
 .table-striped>tbody>tr.highlight>td {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 tbody:before {
-    /* allows the top hover border on the first row */
-    line-height:1em;
-    content:" ";
-    display:block;
+	/* allows the top hover border on the first row */
+	line-height: 1em;
+	content: " ";
+	display: block;
 }
 
 .table-striped>tbody>tr:hover>td {
-  border-top: solid red 1px;
-  border-bottom: solid red 1px;
+	border-top: solid red 1px;
+	border-bottom: solid red 1px;
 }
 
 .owned-marker,#user-toggle .glyphicon {

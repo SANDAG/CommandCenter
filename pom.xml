@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sandag</groupId>
 	<artifactId>commandcenter</artifactId>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>commandcenter</name>
 	<url>http://maven.apache.org</url>
@@ -94,12 +94,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.0.60</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>[1.0,2.0)</version>
@@ -174,8 +168,12 @@
 		</plugins>
 	</reporting>
 
-
 	<build>
 		<finalName>commandcenter</finalName>
 	</build>
+	<modules>
+		<module>runner</module>
+		<module>manager</module>
+		<module>common</module>
+	</modules>
 </project>

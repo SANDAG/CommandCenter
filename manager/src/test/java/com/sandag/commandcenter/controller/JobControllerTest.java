@@ -76,14 +76,14 @@ public class JobControllerTest
         controller.jobService = jobService;
         controller.userService = userService;
 
-        assertEquals("job", controller.addJob(job, result, model, principal));
+        String redirViewPrefix = "redirect:jobs?highlight=";
+        assertTrue(controller.addJob(job, result, model, principal).startsWith(redirViewPrefix));
 
         verify(userService).fetchOrCreate(principalName);
         verify(job).setUser(user);
         verify(jobService).create(job);
 
         assertTrue(model.containsAttribute("modelNameMappings"));
-        assertTrue(((String) model.asMap().get("message")).matches("Success.*"));
     }
 
     @Test
