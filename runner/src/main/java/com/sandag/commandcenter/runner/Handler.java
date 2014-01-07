@@ -6,8 +6,10 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.sandag.commandcenter.model.Job;
@@ -25,6 +27,8 @@ public class Handler
     @Autowired
     protected ServiceNameRetriever serviceNameRetriever;
 
+    private static final Logger LOGGER = Logger.getLogger(Handler.class.getName());
+    
     protected Map<Job.Model, Runner> runners = new HashMap<Job.Model, Runner>();
     protected Job.Model[] supportedModels;
     protected String serviceName;
@@ -41,13 +45,16 @@ public class Handler
         serviceName = serviceNameRetriever.retrieve();
     }
 
+    @Scheduled(fixedDelay=10000)
     public void runNext()
     {
+        LOGGER.debug("runNext started");
         Job next = jobDao.startNextInQueue(serviceName, supportedModels);
         if (next != null)
         {
             Runner runner = runners.get(next.getModel());
             runner.run();
         }
+        LOGGER.debug("runNext finished");        
     }
 }
