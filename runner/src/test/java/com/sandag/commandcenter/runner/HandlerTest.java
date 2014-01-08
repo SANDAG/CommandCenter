@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
 import com.sandag.commandcenter.model.Job;
+import com.sandag.commandcenter.model.Job.Model;
 import com.sandag.commandcenter.persistence.JobDao;
 
 import static org.junit.Assert.assertEquals;
@@ -15,6 +16,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyObject;
 
@@ -79,8 +81,9 @@ public class HandlerTest
         
         handler.jobDao = dao;
         handler.runners = runners;
+        handler.initialized = true;
         handler.runNext();
-        verify(runner).run();
+        verify(runner).run(job);
     }
     
     @Test
@@ -93,6 +96,15 @@ public class HandlerTest
         handler.runNext();
     }
     
+    @Test 
+    public void noOpWhenUninitialized() {
+        Handler handler = new Handler();
+        JobDao dao = mock(JobDao.class);
+        handler.jobDao = dao;
+        
+        handler.runNext();
+        verify(dao, never()).startNextInQueue(anyString(), (Model[]) anyObject());
+    }
     
     // support
     private void assertContains(Object[] array, Object value) 

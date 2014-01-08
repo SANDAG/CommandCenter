@@ -28,10 +28,12 @@ public class Handler
     protected ServiceNameRetriever serviceNameRetriever;
 
     private static final Logger LOGGER = Logger.getLogger(Handler.class.getName());
-    
+
     protected Map<Job.Model, Runner> runners = new HashMap<Job.Model, Runner>();
     protected Job.Model[] supportedModels;
     protected String serviceName;
+
+    boolean initialized = false;
 
     @PostConstruct
     public void initialize() throws UnknownHostException
@@ -43,18 +45,23 @@ public class Handler
         }
         supportedModels = runners.keySet().toArray(new Job.Model[0]);
         serviceName = serviceNameRetriever.retrieve();
+        initialized = true;
     }
 
-    @Scheduled(fixedDelay=10000)
+    @Scheduled(fixedDelay = 10000)
     public void runNext()
     {
+        if (!initialized)
+        {
+            return;
+        }
         LOGGER.debug("runNext started");
         Job next = jobDao.startNextInQueue(serviceName, supportedModels);
         if (next != null)
         {
             Runner runner = runners.get(next.getModel());
-            runner.run();
+            runner.run(next);
         }
-        LOGGER.debug("runNext finished");        
+        LOGGER.debug("runNext finished");
     }
 }
