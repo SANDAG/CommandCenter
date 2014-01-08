@@ -70,52 +70,22 @@
 		});
 	}
 </script>
-<style>
-.table-striped>tbody>tr:nth-child(odd).owned>td {
-	background-color: #ff9;
-}
-
-.table-striped>tbody>tr:nth-child(even).owned>td {
-	background-color: #ffc;
-}
-
-.table-striped>tbody>tr.highlight>td {
-	font-weight: bold;
-}
-
-tbody:before {
-	/* allows the top hover border on the first row */
-	line-height: 1em;
-	content: " ";
-	display: block;
-}
-
-.table-striped>tbody>tr:hover>td {
-	border-top: solid red 1px;
-	border-bottom: solid red 1px;
-}
-
-.owned-marker,#user-toggle .glyphicon {
-	color: #ccc;
-}
-
-#user-toggle label.switch-small {
-	padding-top: 0;
-}
-
-.owned .owned-marker {
-	color: #000;
-}
-</style>
 </head>
 <body>
   <div class="row">
-    <div class="col-md-12">
-      <h3 id="message" class="pull-left">${message}</h3>
+    <div class="col-md-6">
+      <%@ include file="jobsNavigation.jsp" %>
+    </div>
+    <div class="col-md-6">
       <div id="user-toggle" class="make-switch switch-small pull-right" data-label-icon="glyphicon glyphicon-user"
         data-on-label="Shown" data-off-label="Hidden">
         <input type="checkbox" checked>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h3 id="message" class="pull-left">${message}</h3>
       <table class="table table-striped">
         <thead>
           <tr>

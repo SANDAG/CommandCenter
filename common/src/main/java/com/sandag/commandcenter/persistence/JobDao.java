@@ -22,11 +22,17 @@ public class JobDao extends BaseDao<Job, Integer>
     }
 
     @SuppressWarnings("unchecked")
-    public List<Job> readAll()
+    public List<Job> readQueued()
     {
-        return startQuery().addOrder(Order.asc("queuePosition")).list();
+        return startQuery().add(Restrictions.eq("status", Job.Status.QUEUED)).addOrder(Order.asc("queuePosition")).list();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Job> read(Job.Status... statuses)
+    {
+        return startQuery().add(Restrictions.in("status", statuses)).list();
+    }
+    
     public Integer create(Job job)
     {
         job.setQueuePosition(sequenceDao.next());

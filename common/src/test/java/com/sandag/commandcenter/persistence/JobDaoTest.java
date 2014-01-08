@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Test;
@@ -45,21 +47,25 @@ public class JobDaoTest
     }
 
     @Test
-    public void resultsReadInOrder()
+    public void queuedResultsReadInOrder()
     {
         int numResults = 5;
+        User user = new User();
+        userDao.create(user);
         for (int i = 0; i < numResults; i++)
         {
-            service.create(getJobWithAUser());
+            createJobs(user, QUEUED);
 
         }
-        List<Job> results = service.readAll();
+        createJobs(user, RUNNING, COMPLETE, ARCHIVED, DELETED); // do not get read
+        List<Job> results = service.readQueued();
         assertEquals(numResults, results.size());
         int lastPosition = -1;
         for (Job job : results)
         {
             int position = job.getQueuePosition();
             assertTrue(position > lastPosition);
+            assertEquals(QUEUED, job.getStatus());
             lastPosition = position;
         }
     }
@@ -76,6 +82,36 @@ public class JobDaoTest
             int current = job.getQueuePosition();
             assertTrue(current > last);
             last = current;
+        }
+    }
+
+    @Test
+    public void readByStatus()
+    {
+        int numCopies = 2;
+        Job.Status[] statuses = new Job.Status[] {RUNNING, DELETED };
+        User user = new User();
+        userDao.create(user);
+        for (int i = 0; i < numCopies; i++)
+        {
+            createJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED);
+        }
+        List<Job> results = service.read(statuses);
+        assertEquals(numCopies * statuses.length, results.size());
+        Map<Job.Status, Integer> countByStatus = new HashMap<Job.Status, Integer>();
+        for (Job job : results)
+        {
+            if (countByStatus.containsKey(job.getStatus()))
+            {
+                countByStatus.put(job.getStatus(), countByStatus.get(job.getStatus()) + 1);
+            } else
+            {
+                countByStatus.put(job.getStatus(), 1);
+            }
+        }
+        for (Job.Status status : statuses)
+        {
+            assertEquals(numCopies, countByStatus.get(status).intValue());
         }
     }
 
@@ -191,26 +227,25 @@ public class JobDaoTest
         createJobWith(Model.PECAS, QUEUED); // wrong model
         Job j2 = createJobWith(model, QUEUED); // next
         Job j3 = createJobWith(model, QUEUED); // after next
-        
+
         Job next = service.startNextInQueue(runner, model);
         assertEquals(j2.getId(), next.getId());
         assertEquals(runner, next.getRunner());
         assertEquals(RUNNING, next.getStatus());
-        
+
         Job nextNext = service.startNextInQueue(runner, model);
         assertEquals(j3.getId(), nextNext.getId());
     }
-    
+
     @Test
     public void noneQueuedReturnsNull()
     {
-        createJobWith(Model.ABM, COMPLETE);        
+        createJobWith(Model.ABM, COMPLETE);
         assertNull(service.startNextInQueue("", Job.Model.ABM, Job.Model.PECAS));
     }
-    
-    
+
     // support
-    private Job createJobWith(Model model, Job.Status status) 
+    private Job createJobWith(Model model, Job.Status status)
     {
         Job job = getJobWithAUser();
         job.setModel(model);
@@ -218,7 +253,7 @@ public class JobDaoTest
         service.create(job);
         return job;
     }
-    
+
     private Job getJobWithAUser()
     {
         Job job = new Job();

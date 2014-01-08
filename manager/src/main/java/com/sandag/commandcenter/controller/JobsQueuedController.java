@@ -20,8 +20,8 @@ import com.sandag.commandcenter.persistence.UserDao;
 import com.sandag.commandcenter.security.JobAccessManager;
 
 @Controller
-@RequestMapping("/jobs")
-public class QueueController
+@RequestMapping("/jobs/queued")
+public class JobsQueuedController
 {
 
     @Autowired
@@ -36,14 +36,14 @@ public class QueueController
     @RequestMapping(method = RequestMethod.GET)
     public String display(Model model, Principal principal)
     {
-        model.addAttribute("message", "View the queue");
-        List<Job> jobs = jobDao.readAll();
+        model.addAttribute("message", "");
+        List<Job> jobs = jobDao.readQueued();
         model.addAttribute("jobs", jobs);
         model.addAttribute("principalName", principal.getName());
         model.addAttribute("jobAccessManager", manager);
         model.addAttribute("moveUpIds", getCanMoveUpJobIds(jobs, principal));
         model.addAttribute("moveDownIds", getCanMoveDownJobIds(jobs, principal));
-        return "queue";
+        return "jobsQueued";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/move")

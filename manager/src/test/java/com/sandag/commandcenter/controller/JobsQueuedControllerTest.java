@@ -31,16 +31,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyObject;
 
-public class QueueControllerTest
+public class JobsQueuedControllerTest
 {
-    private QueueController controller;
+    private JobsQueuedController controller;
     private Model model;
 
     @Before
     public void setUp()
     {
         model = new ExtendedModelMap();
-        controller = new QueueController();
+        controller = new JobsQueuedController();
     }
 
     @Test
@@ -52,12 +52,12 @@ public class QueueControllerTest
         List<Job> jobs = new ArrayList<Job>();
         Job job = new Job();
         jobs.add(job);
-        when(service.readAll()).thenReturn(jobs);
+        when(service.readQueued()).thenReturn(jobs);
         controller.jobDao = service;
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn("principal name");
 
-        assertEquals("queue", controller.display(model, principal));
+        assertEquals("jobsQueued", controller.display(model, principal));
         assertTrue(model.containsAttribute("message"));
         assertTrue(model.containsAttribute("principalName"));
         assertTrue(model.containsAttribute("jobAccessManager"));
