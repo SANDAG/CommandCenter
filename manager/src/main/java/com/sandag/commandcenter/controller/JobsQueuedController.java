@@ -20,7 +20,7 @@ import com.sandag.commandcenter.persistence.UserDao;
 import com.sandag.commandcenter.security.JobAccessManager;
 
 @Controller
-@RequestMapping("/jobs/queued")
+@RequestMapping({"/", "/jobs/queued"})
 public class JobsQueuedController
 {
 

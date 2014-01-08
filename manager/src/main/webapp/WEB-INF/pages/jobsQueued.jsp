@@ -24,8 +24,8 @@
 			moveJob($(this), false);
 		});
 
-		$('#user-toggle').on('switch-change', function(e, data) {
-			data.value ? $(".unowned").show(500) : $(".unowned").hide(500);
+		$('#user-toggle').change(function() {
+			$(this).is(":checked") ? $("tr.unowned").show(500) : $("tr.unowned").hide(500);
 		});
 
 		$('tr[data-job_id=' + highlightJobId + ']').addClass('highlight');
@@ -44,7 +44,7 @@
 
 		$.ajax({
 			type : 'DELETE',
-			url : 'job/' + id,
+			url : '<c:url value="/job/"/>' + id,
 			success : successFunction,
 			error : errorFunction
 		});
@@ -65,7 +65,8 @@
 		$.ajax({
 			type : 'GET',
 			async : false,
-			url : 'jobs/' + id + '/move?moveUp=' + isMoveUp,
+			url : '<c:url value="/jobs/queued/" />' + id + '/move?moveUp='
+					+ isMoveUp,
 			complete : completeFunction
 		});
 	}
@@ -73,14 +74,12 @@
 </head>
 <body>
   <div class="row">
-    <div class="col-md-6">
-      <%@ include file="jobsNavigation.jsp" %>
+    <div class="col-md-8">
+      <%@ include file="jobsNavigation.jsp"%>
     </div>
-    <div class="col-md-6">
-      <div id="user-toggle" class="make-switch switch-small pull-right" data-label-icon="glyphicon glyphicon-user"
-        data-on-label="Shown" data-off-label="Hidden">
-        <input type="checkbox" checked>
-      </div>
+    <div class="col-md-4">
+      <a class="btn btn-success pull-right" href="<c:url value="/job" />"><i class="glyphicon glyphicon-plus"></i>
+        Add Job</a>
     </div>
   </div>
   <div class="row">
@@ -89,8 +88,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th></th>
-            <th></th>
+            <th colspan="2"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox" id="user-toggle" checked="checked" /></th>
             <th>Model</th>
             <th>Scenario name</th>
             <th>Study name</th>

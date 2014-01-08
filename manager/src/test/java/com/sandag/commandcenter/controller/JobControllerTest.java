@@ -76,7 +76,7 @@ public class JobControllerTest
         controller.jobDao = jobDao;
         controller.userDao = userDao;
 
-        String redirViewPrefix = "redirect:jobs?highlight=";
+        String redirViewPrefix = "redirect:jobs/queued?highlight=";
         assertTrue(controller.addJob(job, result, model, principal).startsWith(redirViewPrefix));
 
         verify(userDao).fetchOrCreate(principalName);

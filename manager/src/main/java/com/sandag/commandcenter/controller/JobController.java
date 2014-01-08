@@ -60,7 +60,7 @@ public class JobController
             User user = userDao.fetchOrCreate(principal.getName());
             job.setUser(user);
             jobDao.create(job);
-            return "redirect:jobs?highlight=" + job.getId();
+            return "redirect:jobs/queued?highlight=" + job.getId();
         }
         return "job";
     }

@@ -13,5 +13,10 @@
 				return;
 			}
 		}
+		// default page
+		if (urlPath.indexOf("jobs") == -1) {
+			$('#jobsNavQueued').addClass('active');
+		}
+			
 	});
 </script>

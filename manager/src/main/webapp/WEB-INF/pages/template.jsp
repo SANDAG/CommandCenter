@@ -35,13 +35,7 @@
   <div class="navbar navbar-default navbar-static-top">
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="jobs">SANDAG Command Center</a>
-      </div>
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li id="nav-queue"><a href="<c:url value="/jobs/queued"/>">Jobs</a></li>
-          <li id="nav-job"><a href="<c:url value="/job"/>">Job</a></li>
-        </ul>
+        <a class="navbar-brand" href="<c:url value="/jobs/queued" />">SANDAG Command Center</a>
       </div>
     </div>
   </div>

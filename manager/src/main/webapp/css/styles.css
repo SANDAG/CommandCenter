@@ -22,12 +22,8 @@ tbody:before {
 	border-bottom: solid red 1px;
 }
 
-.owned-marker,#user-toggle .glyphicon {
+.owned-marker, .glyphicon.unowned {
 	color: #ccc;
-}
-
-#user-toggle label.switch-small {
-	padding-top: 0;
 }
 
 .owned .owned-marker {
