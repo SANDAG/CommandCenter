@@ -1,5 +1,14 @@
 package com.sandag.commandcenter.runner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,16 +19,6 @@ import org.springframework.context.ApplicationContext;
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Model;
 import com.sandag.commandcenter.persistence.JobDao;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.never;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyBoolean;
 
 public class HandlerTest
 {    
@@ -74,7 +73,7 @@ public class HandlerTest
         when(job.getModel()).thenReturn(jobModel);
 
         Runner runner = mock(Runner.class);
-        when(runner.run()).thenReturn(runSuccessful);
+        when(runner.run(null)).thenReturn(runSuccessful);
         
         @SuppressWarnings("unchecked")
         Map<Job.Model, Runner> runners = mock(Map.class);
@@ -86,7 +85,7 @@ public class HandlerTest
         handler.runners = runners;
         handler.initialized = true;
         handler.runNext();
-        verify(runner).run();
+        verify(runner).run(null);
         verify(dao).updateStatusOnComplete(job, runSuccessful);
     }
     

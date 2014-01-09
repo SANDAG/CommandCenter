@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.persistence.JobDao;
 
-public class JobsRunningControllerTest
+public class JobsCompleteControllerTest
 {
     private JobsRunningController controller;
     private Model model;
@@ -35,7 +35,7 @@ public class JobsRunningControllerTest
         List<Job> jobs = new ArrayList<Job>();
         Job job = new Job();
         jobs.add(job);
-        when(dao.read(Job.Status.RUNNING)).thenReturn(jobs);
+        when(dao.read(Job.Status.COMPLETE, Job.Status.FAILED)).thenReturn(jobs);
         controller.jobDao = dao;
 
         assertEquals("jobsRunning", controller.display(model));

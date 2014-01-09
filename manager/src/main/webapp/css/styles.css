@@ -29,3 +29,11 @@ tbody:before {
 .owned .owned-marker {
 	color: #000;
 }
+
+.red {
+	color: #F00;
+}
+.green {
+	color: #0F0;
+}
+

@@ -24,8 +24,6 @@
             <th></th>
             <th>Model</th>
             <th>Scenario name</th>
-            <th>Study name</th>
-            <th>Scenario location</th>
             <th>Created by</th>
           </tr>
         </thead>
@@ -33,12 +31,12 @@
           <c:forEach items="${jobs}" var="job" varStatus="status">
             <c:set var="owned" value="${jobAccessManager.canUpdate(job, principal)}" />
             <tr class="${owned ? 'owned' : 'unowned'}" data-job_id="${job.id}">
+              <td>
+                <span class="glyphicon glyphicon-${job.status == 'FAILED' ? 'remove red' : 'ok green'}" title="${job.status == 'FAILED' ? 'Failed' : 'Complete'}"></span>
+              </td>
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
-              <td class="text-right">${status.count}.</td>
               <td>${job.model}</td>
               <td>${job.scenario}</td>
-              <td>${job.study}</td>
-              <td>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
             </tr>
           </c:forEach>

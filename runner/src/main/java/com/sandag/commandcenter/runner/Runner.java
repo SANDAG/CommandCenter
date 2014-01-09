@@ -12,13 +12,16 @@ import com.sandag.commandcenter.model.Job.Model;
 public class Runner
 {   
     private static final Logger LOGGER = Logger.getLogger(Runner.class.getName());
-    private Model model;
-    private ProcessBuilderWrapper processBuilder;
-    private String workingDir;
     
+    private Model model;
+    private String workingDir;
+    private String commandLine;
+    
+    ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
+
     public void initialize() 
     {
-        processBuilder.directory(new File(workingDir));
+        processBuilder.command(commandLine);
     }
     
     public Model supports()
@@ -26,11 +29,12 @@ public class Runner
         return model;
     }
     
-    public boolean run()
+    public boolean run(String scenarioFolder)
     {
         // success means not failure - exit value not set consistently (expect false positives)
         boolean success = false;
         LOGGER.debug(model.name() + " run started");
+        processBuilder.directory(new File(workingDir + File.separatorChar + scenarioFolder));
         try
         {
             Process process = processBuilder.start();
@@ -59,4 +63,8 @@ public class Runner
         this.workingDir = workingDir;
     }
     
+    public void setCommandLine(String commandLine)
+    {
+        this.commandLine = commandLine;
+    }
 }

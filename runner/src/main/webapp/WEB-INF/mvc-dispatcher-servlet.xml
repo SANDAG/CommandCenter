@@ -31,22 +31,24 @@
 	<bean id="properties" class="java.util.HashMap">
 		<constructor-arg>
 			<map key-type="java.lang.String" value-type="java.lang.String">
-				<entry key="baseDir" value="E:/Projects/Clients/SANDAG" />
-				
-				<entry key="pecasWorkingDir" value="PECAS Integration/Working Folder" />
-				<entry key="pecasCmdLine" value="RunPECAS.py" />
+				<!-- for wrjmdlppw01 <entry key="baseDir" value="E:/Projects/Clients/SANDAG" 
+					/> <entry key="pecasWorkingDir" value="PECAS Integration/Working Folder" 
+					/> <entry key="pecasCmdLine" value="RunPECAS.py" /> -->
+					
+				<!-- Craig's dev box -->
+				<entry key="baseDir" value="C:/Users/craig.sabbey/git/sandag/commandcenter/runner" />
+				<entry key="pecasWorkingDir" value="src/main/resources" />
+				<entry key="pecasCmdLine" value="python successfulExit.py" />
 			</map>
 		</constructor-arg>
 	</bean>
-	
-	<bean id="pecas" class="com.sandag.commandcenter.runner.Runner" init-method="initialize">
+
+	<bean id="pecas" class="com.sandag.commandcenter.runner.Runner"
+		init-method="initialize">
 		<property name="model" value="PECAS" />
-		<property name="workingDir" value="#{properties['baseDir'] + '/' + properties['pecasWorkingDir']}" />
-		<property name="processBuilder">
-			<bean class="com.sandag.commandcenter.runner.ProcessBuilderWrapper">
-				<constructor-arg value="#{properties['pecasCmdLine']}" />
-			</bean>
-		</property>
+		<property name="workingDir"
+			value="#{properties['baseDir'] + '/' + properties['pecasWorkingDir']}" />
+		<property name="commandLine" value="#{properties['pecasCmdLine']}" />
 	</bean>
-	
+
 </beans>

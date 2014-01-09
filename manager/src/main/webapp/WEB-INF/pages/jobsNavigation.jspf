@@ -1,10 +1,11 @@
 <ul class="nav nav-pills">
   <li id="jobsNavQueued"><a href="<c:url value="/jobs/queued"/>">Queued</a></li>
   <li id="jobsNavRunning"><a href="<c:url value="/jobs/running"/>">Running</a></li>
+  <li id="jobsNavComplete"><a href="<c:url value="/jobs/complete"/>">Complete</a></li>
 </ul>
 <script>
 	$(function () {
-		var pathToLiId = {'jobs/queued': '#jobsNavQueued', 'jobs/running': '#jobsNavRunning'};
+		var pathToLiId = {'jobs/queued': '#jobsNavQueued', 'jobs/running': '#jobsNavRunning', 'jobs/complete': '#jobsNavComplete'};
 		var urlPath = window.location.pathname;
 		
 		for (var path in pathToLiId) {
