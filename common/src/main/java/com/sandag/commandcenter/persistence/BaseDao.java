@@ -61,9 +61,4 @@ public abstract class BaseDao<T, PK extends Serializable>
         return this.getSession().createCriteria(type);
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory)
-    {
-        this.sessionFactory = sessionFactory;
-    }
-
 }

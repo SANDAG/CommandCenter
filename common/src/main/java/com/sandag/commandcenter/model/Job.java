@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "job")
-public class Job
+public class Job extends BaseEntity
 {
 
     public enum Status

@@ -20,7 +20,7 @@
             <value>com.microsoft.sqlserver.jdbc.SQLServerDriver</value>
         </property>
         <property name="url"
-            value="jdbc:sqlserver://localhost:1433;databaseName=sandag;user=dev_user;password=dev;" />
+            value="jdbc:sqlserver://10251vm:1433;databaseName=sandag;user=dev_user;password=dev;" />
         <property name="username" value="dev_user" />
         <property name="password" value="dev" />
     </bean>

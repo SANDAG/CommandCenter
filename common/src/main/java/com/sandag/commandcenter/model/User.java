@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "authenticated_user") // user is an SQL reserved word
-public class User
+public class User extends BaseEntity
 {
 
     @Id
