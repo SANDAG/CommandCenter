@@ -76,4 +76,10 @@ public class JobDao extends BaseDao<Job, Integer>
         }
         return next;
     }
+
+    public void updateStatusOnComplete(Job job, boolean success)
+    {
+        job.setStatus(success ? Job.Status.COMPLETE : Job.Status.FAILED);
+        update(job);
+    }
 }

@@ -60,8 +60,10 @@ public class Handler
         if (next != null)
         {
             Runner runner = runners.get(next.getModel());
-            runner.run(next);
+            boolean success = runner.run();
+            jobDao.updateStatusOnComplete(next, success);
         }
         LOGGER.debug("runNext finished");
     }
+    
 }

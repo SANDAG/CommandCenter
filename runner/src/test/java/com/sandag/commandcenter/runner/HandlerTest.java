@@ -19,6 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.never;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyBoolean;
 
 public class HandlerTest
 {    
@@ -62,16 +63,18 @@ public class HandlerTest
     @Test
     public void runsNext()
     {
+        boolean runSuccessful = true;
         JobDao dao = mock(JobDao.class);
         Handler handler = new Handler();
         handler.serviceName = "name";
         handler.supportedModels = new Job.Model[]{Job.Model.ABM, Job.Model.PECAS};
 
         Job.Model jobModel = Job.Model.ABM;
-        Job job = new Job();
-        job.setModel(jobModel);
+        Job job = mock(Job.class);
+        when(job.getModel()).thenReturn(jobModel);
 
         Runner runner = mock(Runner.class);
+        when(runner.run()).thenReturn(runSuccessful);
         
         @SuppressWarnings("unchecked")
         Map<Job.Model, Runner> runners = mock(Map.class);
@@ -83,7 +86,8 @@ public class HandlerTest
         handler.runners = runners;
         handler.initialized = true;
         handler.runNext();
-        verify(runner).run(job);
+        verify(runner).run();
+        verify(dao).updateStatusOnComplete(job, runSuccessful);
     }
     
     @Test
@@ -105,8 +109,8 @@ public class HandlerTest
         handler.runNext();
         verify(dao, never()).startNextInQueue(anyString(), (Model[]) anyObject());
     }
-    
-    // support
+        
+    // support 
     private void assertContains(Object[] array, Object value) 
     {
         for (Object o : array)

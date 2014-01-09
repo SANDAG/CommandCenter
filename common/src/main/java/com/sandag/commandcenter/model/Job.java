@@ -24,7 +24,7 @@ public class Job extends BaseEntity
     {
         // WARNING do not change this order - values are stored in the database using this order
         //   add additional statuses to the end of the list
-        QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED;
+        QUEUED, RUNNING, COMPLETE, FAILED, ARCHIVED, DELETED;
     }
 
     public enum Model

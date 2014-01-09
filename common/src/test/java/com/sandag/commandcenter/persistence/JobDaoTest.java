@@ -35,7 +35,7 @@ import static com.sandag.commandcenter.model.Job.Status.DELETED;
 public class JobDaoTest
 {
     @Autowired
-    private JobDao service;
+    private JobDao dao;
 
     @Autowired
     private UserDao userDao;
@@ -43,7 +43,7 @@ public class JobDaoTest
     @After
     public void cleanUp()
     {
-        service.getSession().createQuery("DELETE FROM Job").executeUpdate();
+        dao.getSession().createQuery("DELETE FROM Job").executeUpdate();
     }
 
     @Test
@@ -58,7 +58,7 @@ public class JobDaoTest
 
         }
         createJobs(user, RUNNING, COMPLETE, ARCHIVED, DELETED); // do not get read
-        List<Job> results = service.readQueued();
+        List<Job> results = dao.readQueued();
         assertEquals(numResults, results.size());
         int lastPosition = -1;
         for (Job job : results)
@@ -78,7 +78,7 @@ public class JobDaoTest
         for (int i = 0; i < numResults; i++)
         {
             Job job = getJobWithAUser();
-            service.create(job);
+            dao.create(job);
             int current = job.getQueuePosition();
             assertTrue(current > last);
             last = current;
@@ -96,7 +96,7 @@ public class JobDaoTest
         {
             createJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED);
         }
-        List<Job> results = service.read(statuses);
+        List<Job> results = dao.read(statuses);
         assertEquals(numCopies * statuses.length, results.size());
         Map<Job.Status, Integer> countByStatus = new HashMap<Job.Status, Integer>();
         for (Job job : results)
@@ -122,13 +122,13 @@ public class JobDaoTest
         List<Job> jobs = setupMoveableJobs(numJobs);
 
         // nothing before 1st for each user
-        assertNull(service.getMoveableJobBefore(jobs.get(0)));
-        assertNull(service.getMoveableJobBefore(jobs.get(1)));
+        assertNull(dao.getMoveableJobBefore(jobs.get(0)));
+        assertNull(dao.getMoveableJobBefore(jobs.get(1)));
 
         for (int i = 2; i < numJobs; i++)
         {
             // i - 2 for the even/odd user assignment
-            assertEquals(jobs.get(i - 2).getId(), service.getMoveableJobBefore(jobs.get(i)).getId());
+            assertEquals(jobs.get(i - 2).getId(), dao.getMoveableJobBefore(jobs.get(i)).getId());
         }
     }
 
@@ -139,13 +139,13 @@ public class JobDaoTest
         List<Job> jobs = setupMoveableJobs(numJobs);
 
         // nothing after last for each user
-        assertNull(service.getMoveableJobAfter(jobs.get(numJobs - 1)));
-        assertNull(service.getMoveableJobAfter(jobs.get(numJobs - 2)));
+        assertNull(dao.getMoveableJobAfter(jobs.get(numJobs - 1)));
+        assertNull(dao.getMoveableJobAfter(jobs.get(numJobs - 2)));
 
         for (int i = numJobs - 3; i >= 0; i--)
         {
             // i + 2 for the even/odd user assignment
-            assertEquals(jobs.get(i + 2).getId(), service.getMoveableJobAfter(jobs.get(i)).getId());
+            assertEquals(jobs.get(i + 2).getId(), dao.getMoveableJobAfter(jobs.get(i)).getId());
         }
     }
 
@@ -162,7 +162,7 @@ public class JobDaoTest
         {
             Job job = new Job();
             job.setUser(i % 2 == 0 ? userEvens : userOdds);
-            service.create(job);
+            dao.create(job);
             jobs.add(job);
         }
         return jobs;
@@ -177,10 +177,10 @@ public class JobDaoTest
         List<Job> jobs = createJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED, QUEUED);
 
         // 1st job is the moveable before the last
-        assertEquals(jobs.get(0).getId(), service.getMoveableJobBefore(jobs.get(jobs.size() - 1)).getId());
+        assertEquals(jobs.get(0).getId(), dao.getMoveableJobBefore(jobs.get(jobs.size() - 1)).getId());
 
         // last job is the moveable before the 1st
-        assertEquals(jobs.get(jobs.size() - 1).getId(), service.getMoveableJobAfter(jobs.get(0)).getId());
+        assertEquals(jobs.get(jobs.size() - 1).getId(), dao.getMoveableJobAfter(jobs.get(0)).getId());
     }
 
     private List<Job> createJobs(User user, Job.Status... statuses)
@@ -191,7 +191,7 @@ public class JobDaoTest
             Job job = new Job();
             job.setUser(user);
             job.setStatus(status);
-            service.create(job);
+            dao.create(job);
             jobs.add(job);
         }
         return jobs;
@@ -202,16 +202,16 @@ public class JobDaoTest
     {
         Job jobA = getJobWithAUser();
         Job jobB = getJobWithAUser();
-        service.create(jobA);
-        service.create(jobB);
+        dao.create(jobA);
+        dao.create(jobB);
 
         int posA = jobA.getQueuePosition();
         int posB = jobB.getQueuePosition();
 
-        service.updateWithSwappedQueuePositions(jobA, jobB);
+        dao.updateWithSwappedQueuePositions(jobA, jobB);
 
-        jobA = service.read(jobA.getId());
-        jobB = service.read(jobB.getId());
+        jobA = dao.read(jobA.getId());
+        jobB = dao.read(jobB.getId());
 
         assertEquals(posA, jobB.getQueuePosition());
         assertEquals(posB, jobA.getQueuePosition());
@@ -228,12 +228,12 @@ public class JobDaoTest
         Job j2 = createJobWith(model, QUEUED); // next
         Job j3 = createJobWith(model, QUEUED); // after next
 
-        Job next = service.startNextInQueue(runner, model);
+        Job next = dao.startNextInQueue(runner, model);
         assertEquals(j2.getId(), next.getId());
         assertEquals(runner, next.getRunner());
         assertEquals(RUNNING, next.getStatus());
 
-        Job nextNext = service.startNextInQueue(runner, model);
+        Job nextNext = dao.startNextInQueue(runner, model);
         assertEquals(j3.getId(), nextNext.getId());
     }
 
@@ -241,16 +241,39 @@ public class JobDaoTest
     public void noneQueuedReturnsNull()
     {
         createJobWith(Model.ABM, COMPLETE);
-        assertNull(service.startNextInQueue("", Job.Model.ABM, Job.Model.PECAS));
+        assertNull(dao.startNextInQueue("", Job.Model.ABM, Job.Model.PECAS));
+    }
+
+    @Test
+    public void statusUpdatesOnSuccess()
+    {
+        checkCompletionStatusUpdated(true, Job.Status.COMPLETE);
+    }
+    
+    @Test
+    public void statusUpdatesOnFailure()
+    {
+        checkCompletionStatusUpdated(false, Job.Status.FAILED);
     }
 
     // support
+    private void checkCompletionStatusUpdated(boolean success, Job.Status status)
+    {
+        Job job = getJobWithAUser();
+        dao.create(job);
+
+        dao.updateStatusOnComplete(job, success);
+        Job retrieved = dao.read(job.getId());
+        assertEquals(status, retrieved.getStatus());
+    }
+    
+    
     private Job createJobWith(Model model, Job.Status status)
     {
         Job job = getJobWithAUser();
         job.setModel(model);
         job.setStatus(status);
-        service.create(job);
+        dao.create(job);
         return job;
     }
 
