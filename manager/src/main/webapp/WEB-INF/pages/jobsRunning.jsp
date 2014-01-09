@@ -25,7 +25,7 @@
             <th>Model</th>
             <th>Scenario name</th>
             <th>Study name</th>
-            <th>Scenario Location</th>
+            <th>Scenario location</th>
             <th>Created by</th>
             <th colspan="99"></th>
           </tr>
