@@ -9,7 +9,7 @@
 <body>
   <div class="row">
     <div class="col-md-8">
-      <%@ include file="jobsNavigation.jsp" %>
+      <%@ include file="jobsNavigation.jspf" %>
     </div>
     <div class="col-md-4">
     </div>
