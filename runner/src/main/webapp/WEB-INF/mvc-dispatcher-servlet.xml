@@ -31,14 +31,15 @@
 	<bean id="properties" class="java.util.HashMap">
 		<constructor-arg>
 			<map key-type="java.lang.String" value-type="java.lang.String">
-				<!-- for wrjmdlppw01 <entry key="baseDir" value="E:/Projects/Clients/SANDAG" 
-					/> <entry key="pecasWorkingDir" value="PECAS Integration/Working Folder" 
-					/> <entry key="pecasCmdLine" value="RunPECAS.py" /> -->
-					
-				<!-- Craig's dev box -->
-				<entry key="baseDir" value="C:/Users/craig.sabbey/git/sandag/commandcenter/runner" />
-				<entry key="pecasWorkingDir" value="src/main/resources" />
-				<entry key="pecasCmdLine" value="python successfulExit.py" />
+				<!-- for wrjmdlppw01 
+				<entry key="baseDir" value="E:/Projects/Clients/SANDAG" />
+				<entry key="pecasWorkingDir" value="PECAS Integration/WorkingFolder" />
+				<entry key="pecasCmdLine" value="python RunPECAS.py" />
+-->
+				<!-- Craig's dev box <entry key="baseDir" value="C:/Users/craig.sabbey/git/sandag/commandcenter/runner" 
+					/> <entry key="pecasWorkingDir" value="src/main/resources" /> <entry key="pecasCmdLine" 
+					value="python successfulExit.py" />
+				-->
 			</map>
 		</constructor-arg>
 	</bean>
