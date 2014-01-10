@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class Reader
 {
-    int maxBytes = 4096;
+    protected int maxBytes = 4096;
 
     @Value("#{properties['baseDir'] + '/' + properties['logFileDir']}")
-    String dir;
+    protected String dir;
 
     @RequestMapping(value = "/log", produces = MediaType.TEXT_PLAIN_VALUE)
-    public @ResponseBody
-    byte[] read(@RequestParam String fileName, @RequestParam int startByte)
+    public @ResponseBody byte[] read(@RequestParam String fileName, @RequestParam int startByte)
     {
         try
         {

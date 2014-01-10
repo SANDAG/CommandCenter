@@ -24,7 +24,8 @@ public abstract class BaseEntity
     @PrePersist
     protected void onCreate()
     {
-        updated = created = new Date();
+        created = new Date();
+        updated = created;
     }
 
     @PreUpdate

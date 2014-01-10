@@ -17,7 +17,7 @@ public class Runner
     private String workingDir;
     private String commandLine;
     
-    ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
+    protected ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
 
     public void initialize() 
     {

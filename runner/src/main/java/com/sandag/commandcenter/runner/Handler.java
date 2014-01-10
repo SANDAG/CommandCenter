@@ -33,7 +33,7 @@ public class Handler
     protected Job.Model[] supportedModels;
     protected String serviceName;
 
-    boolean initialized = false;
+    protected boolean initialized = false;
 
     @PostConstruct
     public void initialize() throws UnknownHostException

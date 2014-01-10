@@ -8,10 +8,11 @@ public class ProcessBuilderWrapper
 {
     protected ProcessBuilder processBuilder;
 
-    public void command(String command) {
+    public void command(String command)
+    {
         processBuilder = new ProcessBuilder(command.split(" "));
     }
-    
+
     public void directory(File file)
     {
         processBuilder.directory(file);
