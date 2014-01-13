@@ -27,7 +27,7 @@ public class ProcessBuilderWrapperTest
     public void wrapsDirectory() {
         File dir = new File(".");
         ProcessBuilderWrapper wrapper = new ProcessBuilderWrapper();
-        wrapper.command("python");
+        wrapper.command("[some command here]");
         wrapper.directory(dir);
         assertEquals(dir, wrapper.processBuilder.directory());
     }
@@ -35,7 +35,7 @@ public class ProcessBuilderWrapperTest
     @Test
     public void wrapsStart() throws IOException {
         ProcessBuilderWrapper wrapper = new ProcessBuilderWrapper();
-        wrapper.command("python");
+        wrapper.command("java");
         Process process = wrapper.start();
         assertNotNull(process);
         process.destroy();
