@@ -3,19 +3,24 @@ package com.sandag.commandcenter.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import org.hibernate.Session;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Repository;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sandag.commandcenter.model.BaseServiceEntity;
+import com.sandag.commandcenter.model.StringKeyEntity;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,8 +29,11 @@ public class BaseDaoTest
 {
 
     @Autowired
-    private BaseDaoImpl service;
+    private BaseDaoImpl service;    
 
+    @Autowired  
+    private ApplicationContext context;  
+    
     @Test
     public void testCreate()
     {
@@ -83,6 +91,29 @@ public class BaseDaoTest
         verify(session).createCriteria(BaseServiceEntity.class);
     }
 
+    @Test
+    public void converts()
+    {
+    	BaseServiceEntity created = createEntity();
+    	BaseServiceEntity read = service.convert(String.valueOf(created.getId()));
+    	assertEquals(created.getId(), read.getId());        
+    }
+    
+    @Test
+    public void supportingUnsupportedPkTypeFails()
+    {
+    	StringKeyEntityDaoImpl dao = context.getBean(StringKeyEntityDaoImpl.class);
+    	StringKeyEntity ent = new StringKeyEntity();
+    	dao.create(ent);
+    	try 
+    	{
+    		dao.convert(ent.id);
+    		fail("NotYetImplementedException expected");
+    	} catch (NotYetImplementedException e)
+    	{    		
+    	}
+    }
+    
     // support
     private BaseServiceEntity createEntity()
     {
@@ -91,5 +122,14 @@ public class BaseDaoTest
         service.create(ent);
         return ent;
     }
-
+    
+    @Repository
+    public static class StringKeyEntityDaoImpl  extends BaseDao<StringKeyEntity, String>
+    {
+        public StringKeyEntityDaoImpl()
+        {
+            super(StringKeyEntity.class, String.class);
+        }
+    }
+    
 }

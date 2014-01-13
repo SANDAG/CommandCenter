@@ -18,7 +18,7 @@ public class JobDao extends BaseDao<Job, Integer>
 
     public JobDao()
     {
-        super(Job.class);
+        super(Job.class, Integer.class);
     }
 
     @SuppressWarnings("unchecked")

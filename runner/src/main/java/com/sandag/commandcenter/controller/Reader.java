@@ -22,7 +22,8 @@ public class Reader
     protected String dir;
 
     @RequestMapping(value = "/log", produces = MediaType.TEXT_PLAIN_VALUE)
-    public @ResponseBody byte[] read(@RequestParam String fileName, @RequestParam int startByte)
+    @ResponseBody
+    public byte[] read(@RequestParam String fileName, @RequestParam int startByte)
     {
         try
         {
@@ -34,12 +35,14 @@ public class Reader
                 return null;
             }
             ByteBuffer buffer = ByteBuffer.allocate(byteCount);
+            // TODO test IOException (close on channel, read on channel, file not found (ioe child) for new stream) 
             try (FileInputStream in = new FileInputStream(file); FileChannel channel = in.getChannel())
             {
                 channel.read(buffer, startByte);
             }
             return buffer.array();
-        } catch (IOException e)
+        } 
+        catch (IOException e)
         {
             // file may no longer exist
             return null;

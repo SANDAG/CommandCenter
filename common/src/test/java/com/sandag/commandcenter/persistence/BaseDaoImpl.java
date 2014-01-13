@@ -10,7 +10,7 @@ public class BaseDaoImpl  extends BaseDao<BaseServiceEntity, Integer>
 
     public BaseDaoImpl()
     {
-        super(BaseServiceEntity.class);
+        super(BaseServiceEntity.class, Integer.class);
     }
 
 }

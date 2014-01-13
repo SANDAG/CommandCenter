@@ -11,7 +11,7 @@ public class UserDao extends BaseDao<User, Integer>
 
     public UserDao()
     {
-        super(User.class);
+        super(User.class, Integer.class);
     }
 
     public User fetchOrCreate(String principal)
