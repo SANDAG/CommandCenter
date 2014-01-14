@@ -3,12 +3,12 @@ package com.sandag.commandcenter.runner;
 import java.io.File;
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
 
 import com.sandag.commandcenter.model.Job.Model;
 
-@Service
 public class Runner
 {   
     private static final Logger LOGGER = Logger.getLogger(Runner.class.getName());
@@ -19,6 +19,7 @@ public class Runner
     
     protected ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
 
+    @PostConstruct
     public void initialize() 
     {
         processBuilder.command(commandLine);

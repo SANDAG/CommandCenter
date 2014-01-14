@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,24 +15,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class Reader
+public class LogFileReaderController
 {
     protected int maxBytes = 4096;
-
-    @Value("#{properties['baseDir'] + '/' + properties['logFileDir']}")
+    private static final Logger LOGGER = Logger.getLogger(LogFileReaderController.class.getName());
+    
+    @Value(value = "#{'${baseDir}'}")
     protected String dir;
 
     @RequestMapping(value = "/log", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public byte[] read(@RequestParam String fileName, @RequestParam int startByte)
+    public byte[] read(@RequestParam String filePath, @RequestParam int startByte)
     {
         try
         {
-            File file = new File(dir + File.separatorChar + fileName);
+            String absolutePath = dir + File.separatorChar + filePath;
+        	LOGGER.debug(String.format("Reading file '%s' starting at %d", absolutePath, startByte));
+			File file = new File(absolutePath);
             int byteCount = (int) Math.min(maxBytes, file.length() - startByte);
             if (byteCount <= 0)
             {
-                // at/past end of file
+            	LOGGER.debug("No bytes to read (at/past end of file?)");
                 return null;
             }
             ByteBuffer buffer = ByteBuffer.allocate(byteCount);

@@ -12,10 +12,10 @@ import java.net.URL;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ReaderTest
+public class LogFileReaderControllerTest
 {
 
-    Reader reader;
+    LogFileReaderController controller;
     File file;
     String fileName;
     String contentsStart = "1 Here is some data";
@@ -24,18 +24,18 @@ public class ReaderTest
     @Before
     public void setup() throws URISyntaxException
     {
-        reader = new Reader();
+        controller = new LogFileReaderController();
         URL fileUrl = ClassLoader.getSystemResource("logFile.log");
         file = new File(fileUrl.toURI());
         fileName = file.getName();
-        reader.dir = file.getParent();
+        controller.dir = file.getParent();
     }
 
     @Test
     public void missingFileReturnsNull()
     {
         file = new File("does not exist");
-        assertNull(reader.read(file.getName(), 0));
+        assertNull(controller.read(file.getName(), 0));
     }
 
     @Test
@@ -44,14 +44,14 @@ public class ReaderTest
         int lastByte = (int) (file.length() - 1);
         String fileName = file.getName();
         
-        assertNotNull(reader.read(fileName, lastByte));
-        assertNull(reader.read(fileName, lastByte + 1));
+        assertNotNull(controller.read(fileName, lastByte));
+        assertNull(controller.read(fileName, lastByte + 1));
     }
 
     @Test 
     public void readsData()
     {
-        String output = new String(reader.read(fileName, 0));
+        String output = new String(controller.read(fileName, 0));
         assertTrue(output.startsWith(contentsStart));
     }
     
@@ -60,8 +60,8 @@ public class ReaderTest
     {
         int length = contentsEnd.length();
         // assumption for this test
-        assertTrue(reader.maxBytes >= length);
-        String output = new String(reader.read(fileName, (int) (file.length() - length)));
+        assertTrue(controller.maxBytes >= length);
+        String output = new String(controller.read(fileName, (int) (file.length() - length)));
         assertEquals(contentsEnd, output);
     }
     
@@ -69,7 +69,7 @@ public class ReaderTest
     public void offsetWorks()
     {
         int offset = 3;
-        String output = new String(reader.read(fileName, offset));
+        String output = new String(controller.read(fileName, offset));
         assertTrue(output.startsWith(contentsStart.substring(3)));
     }
 }

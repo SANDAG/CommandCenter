@@ -1,7 +1,6 @@
-package com.sandag.commandcenter.controller;
+package com.sandag.commandcenter.io;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.net.URL;
@@ -28,34 +27,33 @@ public class FileListerTest {
 	public void setup()
 	{		
 		URL rootUrl = ClassLoader.getSystemResource("fileListTestDir");
-		lister.rootPath = rootUrl.getPath();
+		lister.baseDir = rootUrl.getPath();
+		lister.workingDir = "modelWorkingDir";
 		lister.initialize();
 
 		job = new Job();		
 		model = new ExtendedModelMap();
-
 	}	
 	
 	@Test
 	public void basicControllerFunctionalityWorks()
 	{
-		assertEquals("files", lister.listFiles(job, model));
-		assertTrue(model.containsAttribute("files"));
+		List<String> files = lister.listFiles(job);
+		assertEquals(0, files.size());
 	}
 	
 	@Test
 	public void filteredFilesFound() 
 	{
 		String scenarioNameDir = "scenarioNameDir";
-		job.setScenario(scenarioNameDir);	
-		lister.fileNames = Arrays.asList(new String[]{"file_0_1_a", "file_top"});
-		lister.listFiles(job, model);
-		@SuppressWarnings("unchecked")
-		List<String> files = (List<String>)model.asMap().get("files");
+		job.setScenario(scenarioNameDir);
+		lister.logFileNames = Arrays.asList(new String[]{"file_top", "file_0_1_a"});
+		List<String> files = lister.listFiles(job);
 		assertEquals(2, files.size());
+		String prefix = lister.workingDir + "/" + scenarioNameDir + "/";
 		assertContained(new String[]{
-				scenarioNameDir + "/file_top", 
-				scenarioNameDir + "/innerDirectory_0/innerDirectory_0_1/file_0_1_a"
+				prefix + "file_top", 
+				prefix + "innerDirectory_0/innerDirectory_0_1/file_0_1_a"
 			}, files);
 	}
 	
@@ -63,9 +61,7 @@ public class FileListerTest {
 	public void emptyDirDoesNotFail()
 	{
 		job.setScenario("emptyScenarioNameDir");
-		lister.listFiles(job, model);
-		@SuppressWarnings("unchecked")
-		List<String> files = (List<String>)model.asMap().get("files");		
+		List<String> files = lister.listFiles(job);		
 		assertEquals(0, files.size());
 	}
 	
@@ -73,9 +69,7 @@ public class FileListerTest {
 	public void nonexistantDirDoesNotFail()
 	{
 		job.setScenario("nonExistantScenarioNameDir");
-		lister.listFiles(job, model);
-		@SuppressWarnings("unchecked")
-		List<String> files = (List<String>)model.asMap().get("files");		
+		List<String> files = lister.listFiles(job);		
 		assertEquals(0, files.size());
 	}
 	

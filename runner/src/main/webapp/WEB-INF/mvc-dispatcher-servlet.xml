@@ -16,8 +16,10 @@
 	<import resource="classpath:db.xml" />
 
 	<context:component-scan base-package="com.sandag.commandcenter" />
-	<mvc:annotation-driven />
+	<mvc:annotation-driven conversion-service="conversionService" />
 	<task:annotation-driven />
+	<context:property-placeholder location="classpath:10251L.properties" />
+
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -28,31 +30,25 @@
 		</property>
 	</bean>
 
-	<bean id="properties" class="java.util.HashMap">
-		<constructor-arg>
-			<map key-type="java.lang.String" value-type="java.lang.String">
-				<!-- for wrjmdlppw01 <entry key="baseDir" value="E:/Projects/Clients/SANDAG" 
-					/> <entry key="pecasWorkingDir" value="PECAS Integration/WorkingFolder" /> 
-					<entry key="pecasCmdLine" value="python RunPECAS.py" /> -->
-				<!-- Craig's dev box -->
-				<entry key="baseDir"
-					value="C:/Users/craig.sabbey/git/sandag/commandcenter/runner" />
-				<entry key="pecasWorkingDir" value="src/main/resources" />
-				<entry key="pecasCmdLine" value="python successfulExit.py" />
-				
-				<!-- TODO per model -->
-				<entry key="logFileDir" value="src/main/resources/development" />
-				
-			</map>
-		</constructor-arg>
-	</bean>
-
-	<bean id="pecas" class="com.sandag.commandcenter.runner.Runner"
-		init-method="initialize">
+	<bean id="pecasRunner" class="com.sandag.commandcenter.runner.Runner">
 		<property name="model" value="PECAS" />
-		<property name="workingDir"
-			value="#{properties['baseDir'] + '/' + properties['pecasWorkingDir']}" />
-		<property name="commandLine" value="#{properties['pecasCmdLine']}" />
+		<property name="workingDir" value="#{'${baseDir}' + '/' + '${PECAS_workingDir}'}" />
+		<property name="commandLine" value="#{'${PECAS_cmdLine}'}" />
 	</bean>
 
+	<bean id="pecasLogLister" class="com.sandag.commandcenter.io.FileLister">
+		<property name="model" value="PECAS" />
+		<property name="workingDir" value="#{'${PECAS_workingDir}'}" />
+		<property name="logFileNames" value="#{'${PECAS_logFileNames}'.split(',')}" />
+	</bean>
+
+	<bean id="conversionService"
+		class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.sandag.commandcenter.persistence.JobDao" />
+				<bean class="com.sandag.commandcenter.persistence.UserDao" />
+			</list>
+		</property>
+	</bean>
 </beans>
