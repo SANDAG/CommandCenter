@@ -14,8 +14,7 @@
   </c:if>
   <spring:bind path="${path}">
     <div class="control-group ${status.error ? 'has-error' : '' }">
-      <label class="control-label" for="${path}">${label}
-        <c:if test="${required}">
+      <label class="control-label" for="${path}">${label} <c:if test="${required}">
           <span class="required">*</span>
         </c:if></label>
       <div class="controls">

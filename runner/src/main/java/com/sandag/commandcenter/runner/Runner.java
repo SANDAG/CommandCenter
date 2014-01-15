@@ -10,26 +10,26 @@ import org.apache.log4j.Logger;
 import com.sandag.commandcenter.model.Job.Model;
 
 public class Runner
-{   
+{
     private static final Logger LOGGER = Logger.getLogger(Runner.class.getName());
-    
+
     private Model model;
     private String workingDir;
     private String commandLine;
-    
+
     protected ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
 
     @PostConstruct
-    public void initialize() 
+    public void initialize()
     {
         processBuilder.command(commandLine);
     }
-    
+
     public Model supports()
     {
         return model;
     }
-    
+
     public boolean run(String scenarioFolder)
     {
         // success means not failure - exit value not set consistently (expect false positives)
@@ -48,7 +48,7 @@ public class Runner
         LOGGER.debug(model.name() + " run finished");
         return success;
     }
-    
+
     public void setModel(Model model)
     {
         this.model = model;
@@ -63,7 +63,7 @@ public class Runner
     {
         this.workingDir = workingDir;
     }
-    
+
     public void setCommandLine(String commandLine)
     {
         this.commandLine = commandLine;

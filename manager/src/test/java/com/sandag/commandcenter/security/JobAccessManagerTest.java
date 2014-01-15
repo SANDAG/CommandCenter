@@ -27,7 +27,7 @@ public class JobAccessManagerTest
         when(user.getPrincipal()).thenReturn(username);
         Job job = new Job();
         job.setUser(user);
-        
+
         assertTrue(manager.canUpdate(job, principal));
     }
 
@@ -42,7 +42,7 @@ public class JobAccessManagerTest
         when(user.getPrincipal()).thenReturn(principalUsername);
         Job job = new Job();
         job.setUser(user);
-        
+
         assertFalse(manager.canUpdate(job, principal));
     }
 }

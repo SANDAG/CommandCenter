@@ -13,70 +13,78 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.sandag.commandcenter.model.Job;
 
-public class FileLister {
-	
-	protected Job.Model model;
-	protected List<String> logFileNames;
-	protected String workingDir;
-		
-	@Value(value = "${baseDir}")
-	String baseDir;
-	URI base;
-	private static final Logger LOGGER = Logger.getLogger(FileLister.class.getName());
-	
-	@PostConstruct
-	public void initialize() 
-	{
-		base = new File(baseDir).toURI();
-		LOGGER.debug(String.format("Have root path: '%s' ('%s')", baseDir,  base));
-	}
+public class FileLister
+{
 
-	public List<String> listFiles(@PathVariable Job job)
-	{
-		File scenarioDir = new File(String.format("%s/%s/%s", baseDir, workingDir, job.getScenario()));
-		LOGGER.debug(String.format("Listing files for: '%s'", scenarioDir.getPath()));
-		return search(scenarioDir);
-	}
+    protected Job.Model model;
+    protected List<String> logFileNames;
+    protected String workingDir;
 
-	private List<String> search(File dir) 
-	{
-		List<String> files = new ArrayList<String>();
-		search(dir, files);
-		return files;
-	}
+    @Value(value = "${baseDir}")
+    String baseDir;
+    URI base;
+    private static final Logger LOGGER = Logger.getLogger(FileLister.class.getName());
 
-	private void search(File dir, List<String> files) {
-		File[] list = dir.listFiles();
+    @PostConstruct
+    public void initialize()
+    {
+        base = new File(baseDir).toURI();
+        LOGGER.debug(String.format("Have root path: '%s' ('%s')", baseDir, base));
+    }
 
-		if (list == null) {
-			return;
-		}
+    public List<String> listFiles(@PathVariable Job job)
+    {
+        File scenarioDir = new File(String.format("%s/%s/%s", baseDir, workingDir, job.getScenario()));
+        LOGGER.debug(String.format("Listing files for: '%s'", scenarioDir.getPath()));
+        return search(scenarioDir);
+    }
 
-		for (File f : list) {
-			if (logFileNames.contains(f.getName())) {
-				files.add(base.relativize(f.toURI()).getPath());
-			} else if (f.isDirectory()) {
-				search(f, files);
-			}
-		}
-	}
+    private List<String> search(File dir)
+    {
+        List<String> files = new ArrayList<String>();
+        search(dir, files);
+        return files;
+    }
 
-	public Job.Model getModel() 
-	{
-		return model;
-	}
-	
-	public void setModel(Job.Model model)
-	{
-		this.model = model;
-	}
+    private void search(File dir, List<String> files)
+    {
+        File[] list = dir.listFiles();
 
-	public void setLogFileNames(List<String> logFileNames) {
-		this.logFileNames = logFileNames;
-	}
+        if (list == null)
+        {
+            return;
+        }
 
-	public void setWorkingDir(String workingDir) {
-		this.workingDir = workingDir;
-	}
+        for (File f : list)
+        {
+            if (logFileNames.contains(f.getName()))
+            {
+                files.add(base.relativize(f.toURI()).getPath());
+            } else if (f.isDirectory())
+            {
+                search(f, files);
+            }
+        }
+    }
+
+    public Job.Model getModel()
+    {
+        return model;
+    }
+
+    public void setModel(Job.Model model)
+    {
+        this.model = model;
+    }
+
+    public void setLogFileNames(List<String> logFileNames)
+    {
+        this.logFileNames = logFileNames;
+    }
+
+    public void setWorkingDir(String workingDir)
+    {
+        this.workingDir = workingDir;
+    }
 
 }

@@ -18,12 +18,13 @@ import com.sandag.commandcenter.io.FileLister;
 import com.sandag.commandcenter.model.Job;
 
 @Controller
-public class LogFilesController {
-	
+public class LogFilesController
+{
+
     @Autowired
     protected ApplicationContext context;
 
-	protected Map<Job.Model, FileLister> listers = new HashMap<Job.Model, FileLister>();
+    protected Map<Job.Model, FileLister> listers = new HashMap<Job.Model, FileLister>();
 
     @PostConstruct
     public void initialize() throws UnknownHostException
@@ -31,21 +32,20 @@ public class LogFilesController {
         Map<String, FileLister> listerBeans = context.getBeansOfType(FileLister.class);
         for (FileLister lister : listerBeans.values())
         {
-        	listers.put(lister.getModel(), lister);
+            listers.put(lister.getModel(), lister);
         }
     }
 
-	@RequestMapping(value = "/logs/job/{job}")
-	@ResponseBody
-	public List<String> listFiles(@PathVariable Job job)
-	{
-		FileLister lister = listers.get(job.getModel());
-		if (lister == null)
-		{
-			return null;
-		}
-		return lister.listFiles(job);		
-	}
-    
-    
+    @RequestMapping(value = "/logs/job/{job}")
+    @ResponseBody
+    public List<String> listFiles(@PathVariable Job job)
+    {
+        FileLister lister = listers.get(job.getModel());
+        if (lister == null)
+        {
+            return null;
+        }
+        return lister.listFiles(job);
+    }
+
 }

@@ -9,10 +9,9 @@
 <body>
   <div class="row">
     <div class="col-md-8">
-      <%@ include file="jobsNavigation.jspf" %>
+      <%@ include file="jobsNavigation.jspf"%>
     </div>
-    <div class="col-md-4">
-    </div>
+    <div class="col-md-4"></div>
   </div>
   <div class="row">
     <div class="col-md-12">
@@ -32,18 +31,17 @@
           <c:forEach items="${jobs}" var="job" varStatus="status">
             <c:set var="owned" value="${jobAccessManager.canUpdate(job, principal)}" />
             <tr class="${owned ? 'owned' : 'unowned'}" data-job_id="${job.id}">
-              <td>
-                <span class="glyphicon glyphicon-${job.status == 'FAILED' ? 'remove red' : 'ok green'}" title="${job.status == 'FAILED' ? 'Failed' : 'Complete'}"></span>
-              </td>
+              <td><span class="glyphicon glyphicon-${job.status == 'FAILED' ? 'remove red' : 'ok green'}"
+                title="${job.status == 'FAILED' ? 'Failed' : 'Complete'}"></span></td>
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
               <td>${job.model}</td>
               <td>${job.scenario}</td>
               <td>${job.user.principal}</td>
               <td><c:if test="${owned}">
-                  <a href="http://${job.runner}:8080/runner/logs/job/${job.id}" class="btn btn-info btn-xs" title="View logs">
-                    <span class="glyphicon glyphicon-folder-open"></span>
+                  <a href="http://${job.runner}:8080/runner/logs/job/${job.id}" class="btn btn-info btn-xs"
+                    title="View logs"> <span class="glyphicon glyphicon-folder-open"></span>
                   </a>
-                </c:if></td>              
+                </c:if></td>
             </tr>
           </c:forEach>
         </tbody>

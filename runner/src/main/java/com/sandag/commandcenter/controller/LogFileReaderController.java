@@ -19,7 +19,7 @@ public class LogFileReaderController
 {
     protected int maxBytes = 4096;
     private static final Logger LOGGER = Logger.getLogger(LogFileReaderController.class.getName());
-    
+
     @Value(value = "#{'${baseDir}'}")
     protected String dir;
 
@@ -30,23 +30,22 @@ public class LogFileReaderController
         try
         {
             String absolutePath = dir + File.separatorChar + filePath;
-        	LOGGER.debug(String.format("Reading file '%s' starting at %d", absolutePath, startByte));
-			File file = new File(absolutePath);
+            LOGGER.debug(String.format("Reading file '%s' starting at %d", absolutePath, startByte));
+            File file = new File(absolutePath);
             int byteCount = (int) Math.min(maxBytes, file.length() - startByte);
             if (byteCount <= 0)
             {
-            	LOGGER.debug("No bytes to read (at/past end of file?)");
+                LOGGER.debug("No bytes to read (at/past end of file?)");
                 return null;
             }
             ByteBuffer buffer = ByteBuffer.allocate(byteCount);
-            // TODO test IOException (close on channel, read on channel, file not found (ioe child) for new stream) 
+            // TODO test IOException (close on channel, read on channel, file not found (ioe child) for new stream)
             try (FileInputStream in = new FileInputStream(file); FileChannel channel = in.getChannel())
             {
                 channel.read(buffer, startByte);
             }
             return buffer.array();
-        } 
-        catch (IOException e)
+        } catch (IOException e)
         {
             // file may no longer exist
             return null;

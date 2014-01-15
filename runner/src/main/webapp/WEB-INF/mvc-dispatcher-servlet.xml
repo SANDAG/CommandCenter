@@ -32,7 +32,8 @@
 
 	<bean id="pecasRunner" class="com.sandag.commandcenter.runner.Runner">
 		<property name="model" value="PECAS" />
-		<property name="workingDir" value="#{'${baseDir}' + '/' + '${PECAS_workingDir}'}" />
+		<property name="workingDir"
+			value="#{'${baseDir}' + '/' + '${PECAS_workingDir}'}" />
 		<property name="commandLine" value="#{'${PECAS_cmdLine}'}" />
 	</bean>
 

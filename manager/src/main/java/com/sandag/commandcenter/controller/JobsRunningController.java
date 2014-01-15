@@ -33,5 +33,4 @@ public class JobsRunningController
         return "jobsRunning";
     }
 
-
 }

@@ -88,7 +88,8 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th colspan="2"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox" id="user-toggle" checked="checked" /></th>
+            <th colspan="2"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox"
+              id="user-toggle" checked="checked" /></th>
             <th>Model</th>
             <th>Scenario name</th>
             <th>Study name</th>
