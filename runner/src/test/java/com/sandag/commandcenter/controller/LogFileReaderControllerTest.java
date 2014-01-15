@@ -15,11 +15,11 @@ import org.junit.Test;
 public class LogFileReaderControllerTest
 {
 
-    LogFileReaderController controller;
-    File file;
-    String fileName;
-    String contentsStart = "1 Here is some data";
-    String contentsEnd = "browser in chunks...\r\n";
+    private LogFileReaderController controller;
+    private File file;
+    private String fileName;
+    private String contentsStart = "1 Here is some data";
+    private String contentsEnd = "browser in chunks...\r\n";
 
     @Before
     public void setup() throws URISyntaxException
@@ -42,10 +42,10 @@ public class LogFileReaderControllerTest
     public void atOrPastEndReturnsNull()
     {
         int lastByte = (int) (file.length() - 1);
-        String fileName = file.getName();
+        String name = file.getName();
         
-        assertNotNull(controller.read(fileName, lastByte));
-        assertNull(controller.read(fileName, lastByte + 1));
+        assertNotNull(controller.read(name, lastByte));
+        assertNull(controller.read(name, lastByte + 1));
     }
 
     @Test 

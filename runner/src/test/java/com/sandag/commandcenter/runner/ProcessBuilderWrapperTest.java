@@ -12,7 +12,8 @@ public class ProcessBuilderWrapperTest
 {
 
     @Test
-    public void constructsProcessBuilder() {
+    public void constructsProcessBuilder()
+    {
         String command0 = "interpreter";
         String command1 = "scriptName.xyz";
         ProcessBuilderWrapper wrapper = new ProcessBuilderWrapper();
@@ -22,18 +23,20 @@ public class ProcessBuilderWrapperTest
         assertEquals(command0, pb.command().get(0));
         assertEquals(command1, pb.command().get(1));
     }
-    
+
     @Test
-    public void wrapsDirectory() {
+    public void wrapsDirectory()
+    {
         File dir = new File(".");
         ProcessBuilderWrapper wrapper = new ProcessBuilderWrapper();
         wrapper.command("[some command here]");
         wrapper.directory(dir);
         assertEquals(dir, wrapper.processBuilder.directory());
     }
-    
+
     @Test
-    public void wrapsStart() throws IOException {
+    public void wrapsStart() throws IOException
+    {
         ProcessBuilderWrapper wrapper = new ProcessBuilderWrapper();
         wrapper.command("java");
         Process process = wrapper.start();

@@ -3,6 +3,7 @@ package com.sandag.commandcenter.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -22,18 +23,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.sandag.commandcenter.model.BaseServiceEntity;
 import com.sandag.commandcenter.model.StringKeyEntity;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/db.xml", "classpath:/autowire.xml" })
+@ContextConfiguration(locations = {"classpath:/db.xml", "classpath:/autowire.xml" })
 public class BaseDaoTest
 {
 
     @Autowired
-    private BaseDaoImpl service;    
+    private BaseDaoImpl service;
 
-    @Autowired  
-    private ApplicationContext context;  
-    
+    @Autowired
+    private ApplicationContext context;
+
     @Test
     public void testCreate()
     {
@@ -71,7 +71,7 @@ public class BaseDaoTest
         service.delete(created);
         assertNull(service.read(created.getId()));
     }
-    
+
     @Test
     public void testDeleteById()
     {
@@ -79,7 +79,6 @@ public class BaseDaoTest
         service.delete(created.getId());
         assertNull(service.read(created.getId()));
     }
-    
 
     @Test
     public void queryStartsWithRightType()
@@ -94,26 +93,28 @@ public class BaseDaoTest
     @Test
     public void converts()
     {
-    	BaseServiceEntity created = createEntity();
-    	BaseServiceEntity read = service.convert(String.valueOf(created.getId()));
-    	assertEquals(created.getId(), read.getId());        
+        BaseServiceEntity created = createEntity();
+        BaseServiceEntity read = service.convert(String.valueOf(created.getId()));
+        assertEquals(created.getId(), read.getId());
     }
-    
+
     @Test
     public void supportingUnsupportedPkTypeFails()
     {
-    	StringKeyEntityDaoImpl dao = context.getBean(StringKeyEntityDaoImpl.class);
-    	StringKeyEntity ent = new StringKeyEntity();
-    	dao.create(ent);
-    	try 
-    	{
-    		dao.convert(ent.id);
-    		fail("NotYetImplementedException expected");
-    	} catch (NotYetImplementedException e)
-    	{    		
-    	}
+        StringKeyEntityDaoImpl dao = context.getBean(StringKeyEntityDaoImpl.class);
+        StringKeyEntity ent = new StringKeyEntity();
+        dao.create(ent);
+        try
+        {
+            dao.convert(ent.getId());
+            fail("NotYetImplementedException expected");
+        } catch (NotYetImplementedException e)
+        {
+            // for checkstyle
+            assertTrue(true);
+        }
     }
-    
+
     // support
     private BaseServiceEntity createEntity()
     {
@@ -122,14 +123,14 @@ public class BaseDaoTest
         service.create(ent);
         return ent;
     }
-    
+
     @Repository
-    public static class StringKeyEntityDaoImpl  extends BaseDao<StringKeyEntity, String>
+    public static class StringKeyEntityDaoImpl extends BaseDao<StringKeyEntity, String>
     {
         public StringKeyEntityDaoImpl()
         {
             super(StringKeyEntity.class, String.class);
         }
     }
-    
+
 }

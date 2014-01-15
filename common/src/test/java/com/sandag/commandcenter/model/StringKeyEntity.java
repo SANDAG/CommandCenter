@@ -13,5 +13,15 @@ public class StringKeyEntity
     @GeneratedValue
     @Column(name = "id")
     @Id
-	public String id;
+    private String id;
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
 }

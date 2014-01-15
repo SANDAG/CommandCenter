@@ -9,25 +9,29 @@ public class BaseEntityTest
 {
 
     @Test
-    public void onCreateSetsBoth() 
+    public void onCreateSetsBoth()
     {
-        BaseEntity ent = new BaseEntity(){};
+        BaseEntity ent = new BaseEntity()
+        {
+        };
         assertNull(ent.getCreated());
         assertNull(ent.getUpdated());
-        
+
         ent.onCreate();
         assertNotNull(ent.getCreated());
         assertNotNull(ent.getUpdated());
     }
-    
+
     @Test
-    public void onUpdateSetsUpdated() 
+    public void onUpdateSetsUpdated()
     {
-        BaseEntity ent = new BaseEntity(){};
+        BaseEntity ent = new BaseEntity()
+        {
+        };
         assertNull(ent.getUpdated());
-        
+
         ent.onUpdate();
         assertNotNull(ent.getUpdated());
     }
-    
+
 }
