@@ -48,7 +48,7 @@ public class Handler
         initialized = true;
     }
 
-    @Scheduled(fixedDelay = 600000)
+    @Scheduled(fixedDelayString = "${runDelayMs}")
     public void runNext()
     {
         if (!initialized)

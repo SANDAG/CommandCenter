@@ -16,7 +16,7 @@
 	<import resource="classpath:db.xml" />
 
 	<context:component-scan base-package="com.sandag.commandcenter" />
-	<mvc:annotation-driven /><!-- conversion-service="conversionService" /> -->
+	<mvc:annotation-driven conversion-service="conversionService" />
 	<task:annotation-driven />
 	<context:property-placeholder location="classpath:10251VM.properties" ignore-unresolvable="true" />
 
@@ -42,15 +42,4 @@
 		<property name="logFileNames" value="#{'${PECAS_logFileNames}'.split(',')}" />
 	</bean>
 	
-	<!-- 
-	<bean id="conversionService"
-		class="org.springframework.context.support.ConversionServiceFactoryBean">
-		<property name="converters">
-			<list>
-				<bean class="com.sandag.commandcenter.persistence.JobDao" />
-				<bean class="com.sandag.commandcenter.persistence.UserDao" />
-			</list>
-		</property>
-	</bean>
-	 -->
 </beans>

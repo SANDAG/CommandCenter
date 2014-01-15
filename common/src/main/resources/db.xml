@@ -58,4 +58,14 @@
     <tx:annotation-driven transaction-manager="transactionManager"
         proxy-target-class="true" />
 
+    <bean id="conversionService"
+        class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="com.sandag.commandcenter.persistence.JobDao" />
+                <bean class="com.sandag.commandcenter.persistence.UserDao" />
+            </list>
+        </property>
+    </bean>
+
 </beans>

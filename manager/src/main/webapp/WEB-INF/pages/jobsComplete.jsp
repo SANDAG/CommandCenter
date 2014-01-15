@@ -38,7 +38,7 @@
               <td>${job.scenario}</td>
               <td>${job.user.principal}</td>
               <td><c:if test="${owned}">
-                  <a href="http://${job.runner}:8080/runner/logs/job/${job.id}" class="btn btn-info btn-xs"
+                  <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-xs"
                     title="View logs"> <span class="glyphicon glyphicon-folder-open"></span>
                   </a>
                 </c:if></td>
