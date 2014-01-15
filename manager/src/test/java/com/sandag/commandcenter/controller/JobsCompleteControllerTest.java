@@ -20,14 +20,14 @@ import com.sandag.commandcenter.persistence.JobDao;
 
 public class JobsCompleteControllerTest
 {
-    private JobsRunningController controller;
+    private JobsCompleteController controller;
     private Model model;
 
     @Before
     public void setUp()
     {
         model = new ExtendedModelMap();
-        controller = new JobsRunningController();
+        controller = new JobsCompleteController();
     }
 
     @Test
@@ -40,7 +40,7 @@ public class JobsCompleteControllerTest
         when(dao.read((Status[]) anyVararg())).thenReturn(jobs);
         controller.jobDao = dao;
 
-        assertEquals("jobsRunning", controller.display(model));
+        assertEquals("jobsComplete", controller.display(model));
         assertTrue(model.containsAttribute("message"));
         Object modelJobs = model.asMap().get("jobs");
         assertEquals(jobs, modelJobs);

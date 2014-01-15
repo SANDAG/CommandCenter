@@ -47,24 +47,27 @@ public class BaseEntityTriggers extends EmptyInterceptor
         setState("created", entity.getCreated(), propertyNames, state);
         setState("updated", entity.getUpdated(), propertyNames, state);
     }
-    
-    private void setState(String fieldName, Object value, String[] propertyNames, Object[] state) {
+
+    private void setState(String fieldName, Object value, String[] propertyNames, Object[] state)
+    {
         int position = getPosition(fieldName, propertyNames);
-        if (position >=0) 
+        if (position >= 0)
         {
             state[position] = value;
         }
 
     }
-    
-    private int getPosition(String columnName, String[] propertyNames) 
+
+    private int getPosition(String columnName, String[] propertyNames)
     {
-        for ( int i=0; i < propertyNames.length; i++ ) {
-            if (columnName.equals( propertyNames[i] ) ) {
+        for (int i = 0; i < propertyNames.length; i++)
+        {
+            if (columnName.equals(propertyNames[i]))
+            {
                 return i;
             }
         }
         return -1;
     }
-        
+
 }

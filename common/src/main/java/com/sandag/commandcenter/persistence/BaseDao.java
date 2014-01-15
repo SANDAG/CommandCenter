@@ -66,14 +66,14 @@ public abstract class BaseDao<T, PK extends Serializable> implements Converter<S
     }
 
     @SuppressWarnings("unchecked")
-	public T convert(String id) {
-    	if (pkType.equals(Integer.class))
-    	{
-    		return read((PK)Integer.valueOf(id));
-    	}
-    	else
-    	{
-    		throw new NotYetImplementedException(String.format("Primary keys of type '%s' are not supported for conversion", pkType.getName()));
-    	}
+    public T convert(String id)
+    {
+        if (pkType.equals(Integer.class))
+        {
+            return read((PK) Integer.valueOf(id));
+        } else
+        {
+            throw new NotYetImplementedException(String.format("Primary keys of type '%s' are not supported for conversion", pkType.getName()));
+        }
     }
 }

@@ -21,8 +21,8 @@ public class FileLister
     protected String workingDir;
 
     @Value(value = "${baseDir}")
-    String baseDir;
-    URI base;
+    protected String baseDir;
+    private URI base;
     private static final Logger LOGGER = Logger.getLogger(FileLister.class.getName());
 
     @PostConstruct

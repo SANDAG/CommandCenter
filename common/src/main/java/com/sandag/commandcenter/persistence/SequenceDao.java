@@ -12,15 +12,15 @@ import com.sandag.commandcenter.model.Sequence;
 @Repository
 public class SequenceDao
 {
-	
-	@Autowired
+
+    @Autowired
     protected SessionFactory sessionFactory;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public int next()
     {
-    	Session session = sessionFactory.getCurrentSession();
-    	
+        Session session = sessionFactory.getCurrentSession();
+
         Sequence sequence = (Sequence) session.createCriteria(Sequence.class).uniqueResult();
         if (sequence == null)
         {
