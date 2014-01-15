@@ -16,9 +16,9 @@
 	<import resource="classpath:db.xml" />
 
 	<context:component-scan base-package="com.sandag.commandcenter" />
-	<mvc:annotation-driven conversion-service="conversionService" />
+	<mvc:annotation-driven /><!-- conversion-service="conversionService" /> -->
 	<task:annotation-driven />
-	<context:property-placeholder location="classpath:10251L.properties" />
+	<context:property-placeholder location="classpath:10251VM.properties" ignore-unresolvable="true" />
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -32,8 +32,7 @@
 
 	<bean id="pecasRunner" class="com.sandag.commandcenter.runner.Runner">
 		<property name="model" value="PECAS" />
-		<property name="workingDir"
-			value="#{'${baseDir}' + '/' + '${PECAS_workingDir}'}" />
+		<property name="workingDir" value="#{'${baseDir}/${PECAS_workingDir}'}" />
 		<property name="commandLine" value="#{'${PECAS_cmdLine}'}" />
 	</bean>
 
@@ -42,7 +41,8 @@
 		<property name="workingDir" value="#{'${PECAS_workingDir}'}" />
 		<property name="logFileNames" value="#{'${PECAS_logFileNames}'.split(',')}" />
 	</bean>
-
+	
+	<!-- 
 	<bean id="conversionService"
 		class="org.springframework.context.support.ConversionServiceFactoryBean">
 		<property name="converters">
@@ -52,4 +52,5 @@
 			</list>
 		</property>
 	</bean>
+	 -->
 </beans>
