@@ -27,6 +27,7 @@
             <th>Study name</th>
             <th>Scenario location</th>
             <th>Created by</th>
+            <th>Started</th>
             <th></th>
           </tr>
         </thead>
@@ -41,6 +42,7 @@
               <td>${job.study}</td>
               <td>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
+              <td>${job.started}</td>
               <td><c:if test="${owned}">
                   <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-xs" title="View logs"> <span
                     class="glyphicon glyphicon-folder-open"></span>

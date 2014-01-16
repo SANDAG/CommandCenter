@@ -7,7 +7,7 @@
 <head>
 <%@ include file="jobsCommonScripts.jspf"%>
 <script>
-	$(function () {
+	$(function() {
 		addToggle('failed-toggle', 'tr.failed');
 		addToggle('finished-toggle', 'tr.finished');
 	});
@@ -25,17 +25,17 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>
-              <i class="glyphicon glyphicon-remove red"></i>&nbsp;&nbsp;<input type="checkbox"
-                id="failed-toggle" checked="checked" /><br />
-              <i class="glyphicon glyphicon-ok green"></i>&nbsp;&nbsp;<input type="checkbox"
-                id="finished-toggle" checked="checked" />
-            </th>
-            <th><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox"
-              id="user-toggle" checked="checked" /></th>
+            <th><i class="glyphicon glyphicon-remove red"></i>&nbsp;&nbsp;<input type="checkbox" id="failed-toggle"
+              checked="checked" /><br /> <i class="glyphicon glyphicon-ok green"></i>&nbsp;&nbsp;<input
+              type="checkbox" id="finished-toggle" checked="checked" /></th>
+            <th><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox" id="user-toggle"
+              checked="checked" /></th>
             <th>Model</th>
             <th>Scenario name</th>
+            <th>Study name</th>
+            <th>Scenario location</th>
             <th>Created by</th>
+            <th>Finished</th>
             <th></th>
           </tr>
         </thead>
@@ -49,10 +49,13 @@
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
               <td>${job.model}</td>
               <td>${job.scenario}</td>
+              <td>${job.study}</td>
+              <td>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
+              <td>${job.finished}</td>
               <td><c:if test="${owned}">
-                  <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-xs"
-                    title="View logs"> <span class="glyphicon glyphicon-folder-open"></span>
+                  <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-xs" title="View logs"> <span
+                    class="glyphicon glyphicon-folder-open"></span>
                   </a>
                 </c:if></td>
             </tr>

@@ -91,6 +91,7 @@
             <th>Study name</th>
             <th>Scenario location</th>
             <th>Created by</th>
+            <th>Created</th>
             <th colspan="99"></th>
           </tr>
         </thead>
@@ -105,6 +106,7 @@
               <td>${job.study}</td>
               <td>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
+              <td>${job.created}</td>
               <td><c:if test="${owned && moveUpIds.contains(job.id)}">
                   <button type="button" class="btn btn-default btn-xs upButton" title="Move up the queue">
                     <span class="glyphicon glyphicon-arrow-up"></span>
