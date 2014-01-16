@@ -1,10 +1,9 @@
 package com.sandag.commandcenter.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyVararg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +17,16 @@ import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Status;
 import com.sandag.commandcenter.persistence.JobDao;
 
-public class JobsCompleteControllerTest
+public class JobsFinishedControllerTest
 {
-    private JobsCompleteController controller;
+    private JobsFinishedController controller;
     private Model model;
 
     @Before
     public void setUp()
     {
         model = new ExtendedModelMap();
-        controller = new JobsCompleteController();
+        controller = new JobsFinishedController();
     }
 
     @Test
@@ -40,7 +39,7 @@ public class JobsCompleteControllerTest
         when(dao.read((Status[]) anyVararg())).thenReturn(jobs);
         controller.jobDao = dao;
 
-        assertEquals("jobsComplete", controller.display(model));
+        assertEquals("jobsFinished", controller.display(model));
         Object modelJobs = model.asMap().get("jobs");
         assertEquals(jobs, modelJobs);
     }

@@ -61,7 +61,7 @@ public class Handler
         {
             Runner runner = runners.get(next.getModel());
             boolean success = runner.run(next.getScenario());
-            jobDao.updateStatusOnComplete(next, success);
+            jobDao.updateAsFinished(next, success);
         }
         LOGGER.debug("runNext finished");
     }

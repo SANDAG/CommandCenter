@@ -20,7 +20,7 @@ import com.sandag.commandcenter.persistence.UserDao;
 
 import static com.sandag.commandcenter.model.Job.Status.QUEUED;
 import static com.sandag.commandcenter.model.Job.Status.RUNNING;
-import static com.sandag.commandcenter.model.Job.Status.COMPLETE;
+import static com.sandag.commandcenter.model.Job.Status.FINISHED;
 import static com.sandag.commandcenter.model.Job.Status.ARCHIVED;
 import static com.sandag.commandcenter.model.Job.Status.DELETED;
 
@@ -142,7 +142,7 @@ public class JobsQueuedControllerTest
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn(username);
 
-        List<Job> jobs = getJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED, QUEUED);
+        List<Job> jobs = getJobs(user, QUEUED, RUNNING, FINISHED, ARCHIVED, DELETED, QUEUED);
 
         List<Integer> upMoveableIds = controller.getCanMoveUpJobIds(jobs, principal);
         List<Integer> downMoveableIds = controller.getCanMoveDownJobIds(jobs, principal);

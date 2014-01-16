@@ -1,5 +1,7 @@
 package com.sandag.commandcenter.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -24,7 +28,7 @@ public class Job extends BaseEntity
     {
         // WARNING do not change this order - values are stored in the database using this order
         //   add additional statuses to the end of the list
-        QUEUED, RUNNING, COMPLETE, FAILED, ARCHIVED, DELETED;
+        QUEUED, RUNNING, FINISHED, FAILED, ARCHIVED, DELETED;
     }
 
     public enum Model
@@ -95,6 +99,13 @@ public class Job extends BaseEntity
     @Column(name = "runner")
     private String runner;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "started")
+    private Date started;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "finished")
+    private Date finished;
     
     // simple getters/setters below here
 
@@ -206,6 +217,26 @@ public class Job extends BaseEntity
     public void setRunner(String runner)
     {
         this.runner = runner;
+    }
+
+    public Date getStarted()
+    {
+        return started;
+    }
+
+    public void setStarted(Date started)
+    {
+        this.started = started;
+    }
+
+    public Date getFinished()
+    {
+        return finished;
+    }
+
+    public void setFinished(Date finished)
+    {
+        this.finished = finished;
     };
 
 }

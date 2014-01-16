@@ -86,7 +86,7 @@ public class HandlerTest
         handler.initialized = true;
         handler.runNext();
         verify(runner).run(null);
-        verify(dao).updateStatusOnComplete(job, runSuccessful);
+        verify(dao).updateAsFinished(job, runSuccessful);
     }
 
     @Test

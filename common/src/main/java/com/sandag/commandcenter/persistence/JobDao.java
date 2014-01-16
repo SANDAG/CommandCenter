@@ -1,5 +1,6 @@
 package com.sandag.commandcenter.persistence;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.Order;
@@ -72,14 +73,16 @@ public class JobDao extends BaseDao<Job, Integer>
         if (next != null)
         {
             next.setStatus(Job.Status.RUNNING);
+            next.setStarted(new Date());
             next.setRunner(runnerName);
         }
         return next;
     }
 
-    public void updateStatusOnComplete(Job job, boolean success)
+    public void updateAsFinished(Job job, boolean success)
     {
-        job.setStatus(success ? Job.Status.COMPLETE : Job.Status.FAILED);
+        job.setStatus(success ? Job.Status.FINISHED : Job.Status.FAILED);
+        job.setFinished(new Date());
         update(job);
     }
 }

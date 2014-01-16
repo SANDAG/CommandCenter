@@ -13,8 +13,8 @@ import com.sandag.commandcenter.persistence.JobDao;
 import com.sandag.commandcenter.security.JobAccessManager;
 
 @Controller
-@RequestMapping("/jobs/complete")
-public class JobsCompleteController
+@RequestMapping("/jobs/finished")
+public class JobsFinishedController
 {
 
     @Autowired
@@ -27,9 +27,9 @@ public class JobsCompleteController
     public String display(Model model)
     {
         model.addAttribute("jobAccessManager", manager);
-        List<Job> jobs = jobDao.read(Job.Status.COMPLETE, Job.Status.FAILED);
+        List<Job> jobs = jobDao.read(Job.Status.FINISHED, Job.Status.FAILED);
         model.addAttribute("jobs", jobs);
-        return "jobsComplete";
+        return "jobsFinished";
     }
 
 }

@@ -1,6 +1,7 @@
 package com.sandag.commandcenter.persistence;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -24,7 +25,7 @@ import com.sandag.commandcenter.model.User;
 
 import static com.sandag.commandcenter.model.Job.Status.QUEUED;
 import static com.sandag.commandcenter.model.Job.Status.RUNNING;
-import static com.sandag.commandcenter.model.Job.Status.COMPLETE;
+import static com.sandag.commandcenter.model.Job.Status.FINISHED;
 import static com.sandag.commandcenter.model.Job.Status.ARCHIVED;
 import static com.sandag.commandcenter.model.Job.Status.DELETED;
 
@@ -57,7 +58,7 @@ public class JobDaoTest
             createJobs(user, QUEUED);
 
         }
-        createJobs(user, RUNNING, COMPLETE, ARCHIVED, DELETED); // do not get read
+        createJobs(user, RUNNING, FINISHED, ARCHIVED, DELETED); // do not get read
         List<Job> results = dao.readQueued();
         assertEquals(numResults, results.size());
         int lastPosition = -1;
@@ -94,7 +95,7 @@ public class JobDaoTest
         userDao.create(user);
         for (int i = 0; i < numCopies; i++)
         {
-            createJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED);
+            createJobs(user, QUEUED, RUNNING, FINISHED, ARCHIVED, DELETED);
         }
         List<Job> results = dao.read(statuses);
         assertEquals(numCopies * statuses.length, results.size());
@@ -174,7 +175,7 @@ public class JobDaoTest
         User user = new User();
         userDao.create(user);
 
-        List<Job> jobs = createJobs(user, QUEUED, RUNNING, COMPLETE, ARCHIVED, DELETED, QUEUED);
+        List<Job> jobs = createJobs(user, QUEUED, RUNNING, FINISHED, ARCHIVED, DELETED, QUEUED);
 
         // 1st job is the moveable before the last
         assertEquals(jobs.get(0).getId(), dao.getMoveableJobBefore(jobs.get(jobs.size() - 1)).getId());
@@ -223,7 +224,7 @@ public class JobDaoTest
         Model model = Job.Model.ABM;
         String runner = "ASLKJDF";
 
-        createJobWith(model, COMPLETE); // not queued
+        createJobWith(model, FINISHED); // not queued
         createJobWith(Model.PECAS, QUEUED); // wrong model
         Job j2 = createJobWith(model, QUEUED); // next
         Job j3 = createJobWith(model, QUEUED); // after next
@@ -235,36 +236,38 @@ public class JobDaoTest
 
         Job nextNext = dao.startNextInQueue(runner, model);
         assertEquals(j3.getId(), nextNext.getId());
+        assertNotNull(nextNext.getStarted());
     }
 
     @Test
     public void noneQueuedReturnsNull()
     {
-        createJobWith(Model.ABM, COMPLETE);
+        createJobWith(Model.ABM, FINISHED);
         assertNull(dao.startNextInQueue("", Job.Model.ABM, Job.Model.PECAS));
     }
 
     @Test
     public void statusUpdatesOnSuccess()
     {
-        checkCompletionStatusUpdated(true, Job.Status.COMPLETE);
+        checkStatusUpdatedWhenFinished(true, Job.Status.FINISHED);
     }
     
     @Test
     public void statusUpdatesOnFailure()
     {
-        checkCompletionStatusUpdated(false, Job.Status.FAILED);
+        checkStatusUpdatedWhenFinished(false, Job.Status.FAILED);
     }
 
     // support
-    private void checkCompletionStatusUpdated(boolean success, Job.Status status)
+    private void checkStatusUpdatedWhenFinished(boolean success, Job.Status status)
     {
         Job job = getJobWithAUser();
         dao.create(job);
 
-        dao.updateStatusOnComplete(job, success);
+        dao.updateAsFinished(job, success);
         Job retrieved = dao.read(job.getId());
         assertEquals(status, retrieved.getStatus());
+        assertNotNull(retrieved.getFinished());
     }
     
     

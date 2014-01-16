@@ -9,7 +9,7 @@
 <script>
 	$(function () {
 		addToggle('failed-toggle', 'tr.failed');
-		addToggle('complete-toggle', 'tr.complete');
+		addToggle('finished-toggle', 'tr.finished');
 	});
 </script>
 </head>
@@ -29,7 +29,7 @@
               <i class="glyphicon glyphicon-remove red"></i>&nbsp;&nbsp;<input type="checkbox"
                 id="failed-toggle" checked="checked" /><br />
               <i class="glyphicon glyphicon-ok green"></i>&nbsp;&nbsp;<input type="checkbox"
-                id="complete-toggle" checked="checked" />
+                id="finished-toggle" checked="checked" />
             </th>
             <th><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox"
               id="user-toggle" checked="checked" /></th>
@@ -43,9 +43,9 @@
           <c:forEach items="${jobs}" var="job" varStatus="status">
             <c:set var="owned" value="${jobAccessManager.canUpdate(job, principal)}" />
             <c:set var="failed" value="${job.status == 'FAILED'}" />
-            <tr class="${owned ? 'owned' : 'unowned'} ${failed ? 'failed' : 'complete'}" data-job_id="${job.id}">
+            <tr class="${owned ? 'owned' : 'unowned'} ${failed ? 'failed' : 'finished'}" data-job_id="${job.id}">
               <td><span class="glyphicon glyphicon-${job.status == 'FAILED' ? 'remove red' : 'ok green'}"
-                title="${failed ? 'Failed' : 'Complete'}"></span></td>
+                title="${failed ? 'Failed' : 'Finished'}"></span></td>
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
               <td>${job.model}</td>
               <td>${job.scenario}</td>

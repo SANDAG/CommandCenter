@@ -19,7 +19,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th colspan="2"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox"
+            <th><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox"
               id="user-toggle" checked="checked" /></th>
             <th></th>
             <th>Model</th>
