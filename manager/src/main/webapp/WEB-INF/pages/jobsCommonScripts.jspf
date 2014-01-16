@@ -1,0 +1,14 @@
+<script>
+  var highlightJobId; // global b/c used in other functions
+  var addToggle = function (toggleId, itemSelector) {
+	$('#' + toggleId).change(function() {
+		$(this).is(":checked") ? $(itemSelector).show(500) : $(itemSelector).hide(500);
+	});
+  };
+  
+  $(function() {
+    highlightJobId = getParameterByName('highlight');
+	$('tr[data-job_id=' + highlightJobId + ']').addClass('highlight');
+	addToggle('user-toggle', 'tr.unowned');
+  });
+</script>

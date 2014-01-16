@@ -27,7 +27,6 @@ public class JobsCompleteController
     public String display(Model model)
     {
         model.addAttribute("jobAccessManager", manager);
-        model.addAttribute("message", "");
         List<Job> jobs = jobDao.read(Job.Status.COMPLETE, Job.Status.FAILED);
         model.addAttribute("jobs", jobs);
         return "jobsComplete";

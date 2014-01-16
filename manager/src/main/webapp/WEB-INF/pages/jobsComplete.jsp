@@ -5,6 +5,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="jobsCommonScripts.jspf"%>
+<script>
+	$(function () {
+		addToggle('failed-toggle', 'tr.failed');
+		addToggle('complete-toggle', 'tr.complete');
+	});
+</script>
 </head>
 <body>
   <div class="row">
@@ -15,12 +22,17 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3 id="message" class="pull-left">${message}</h3>
       <table class="table table-striped">
         <thead>
           <tr>
-            <th></th>
-            <th></th>
+            <th>
+              <i class="glyphicon glyphicon-remove red"></i>&nbsp;&nbsp;<input type="checkbox"
+                id="failed-toggle" checked="checked" /><br />
+              <i class="glyphicon glyphicon-ok green"></i>&nbsp;&nbsp;<input type="checkbox"
+                id="complete-toggle" checked="checked" />
+            </th>
+            <th><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox"
+              id="user-toggle" checked="checked" /></th>
             <th>Model</th>
             <th>Scenario name</th>
             <th>Created by</th>
@@ -30,9 +42,10 @@
         <tbody>
           <c:forEach items="${jobs}" var="job" varStatus="status">
             <c:set var="owned" value="${jobAccessManager.canUpdate(job, principal)}" />
-            <tr class="${owned ? 'owned' : 'unowned'}" data-job_id="${job.id}">
+            <c:set var="failed" value="${job.status == 'FAILED'}" />
+            <tr class="${owned ? 'owned' : 'unowned'} ${failed ? 'failed' : 'complete'}" data-job_id="${job.id}">
               <td><span class="glyphicon glyphicon-${job.status == 'FAILED' ? 'remove red' : 'ok green'}"
-                title="${job.status == 'FAILED' ? 'Failed' : 'Complete'}"></span></td>
+                title="${failed ? 'Failed' : 'Complete'}"></span></td>
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
               <td>${job.model}</td>
               <td>${job.scenario}</td>

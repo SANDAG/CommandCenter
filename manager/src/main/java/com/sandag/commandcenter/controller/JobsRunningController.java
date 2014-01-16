@@ -27,7 +27,6 @@ public class JobsRunningController
     public String display(Model model)
     {
         model.addAttribute("jobAccessManager", manager);
-        model.addAttribute("message", "");
         List<Job> jobs = jobDao.read(Job.Status.RUNNING);
         model.addAttribute("jobs", jobs);
         return "jobsRunning";

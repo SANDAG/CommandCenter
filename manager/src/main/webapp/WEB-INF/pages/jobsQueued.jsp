@@ -5,11 +5,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="jobsCommonScripts.jspf"%>
 <script>
-	var highlightJobId;
 	$(function() {
-		highlightJobId = getParameterByName('highlight');
-
 		setActiveNav('nav-queue');
 
 		$('.deleteButton').click(function() {
@@ -27,8 +25,6 @@
 		$('#user-toggle').change(function() {
 			$(this).is(":checked") ? $("tr.unowned").show(500) : $("tr.unowned").hide(500);
 		});
-
-		$('tr[data-job_id=' + highlightJobId + ']').addClass('highlight');
 	});
 
 	function deleteJob(button) {
@@ -84,7 +80,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3 id="message" class="pull-left">${message}</h3>
+      <h3 id="message" class="pull-left"></h3>    
       <table class="table table-striped">
         <thead>
           <tr>

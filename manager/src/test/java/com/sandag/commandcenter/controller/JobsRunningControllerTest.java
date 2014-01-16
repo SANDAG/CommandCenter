@@ -39,7 +39,6 @@ public class JobsRunningControllerTest
         controller.jobDao = dao;
 
         assertEquals("jobsRunning", controller.display(model));
-        assertTrue(model.containsAttribute("message"));
         Object modelJobs = model.asMap().get("jobs");
         assertEquals(jobs, modelJobs);
     }

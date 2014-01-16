@@ -58,7 +58,6 @@ public class JobsQueuedControllerTest
         when(principal.getName()).thenReturn("principal name");
 
         assertEquals("jobsQueued", controller.display(model, principal));
-        assertTrue(model.containsAttribute("message"));
         assertTrue(model.containsAttribute("principalName"));
         assertTrue(model.containsAttribute("jobAccessManager"));
         assertTrue(model.containsAttribute("moveUpIds"));

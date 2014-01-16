@@ -36,7 +36,6 @@ public class JobsQueuedController
     @RequestMapping(method = RequestMethod.GET)
     public String display(Model model, Principal principal)
     {
-        model.addAttribute("message", "");
         List<Job> jobs = jobDao.readQueued();
         model.addAttribute("jobs", jobs);
         model.addAttribute("principalName", principal.getName());

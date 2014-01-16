@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="jobsCommonScripts.jspf"%>
 </head>
 <body>
   <div class="row">
@@ -15,17 +16,18 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3 id="message" class="pull-left">${message}</h3>
       <table class="table table-striped">
         <thead>
           <tr>
-            <th></th>
+            <th colspan="2"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox"
+              id="user-toggle" checked="checked" /></th>
             <th></th>
             <th>Model</th>
             <th>Scenario name</th>
             <th>Study name</th>
             <th>Scenario location</th>
             <th>Created by</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -39,6 +41,11 @@
               <td>${job.study}</td>
               <td>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
+              <td><c:if test="${owned}">
+                  <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-xs" title="View logs"> <span
+                    class="glyphicon glyphicon-folder-open"></span>
+                  </a>
+                </c:if></td>
             </tr>
           </c:forEach>
         </tbody>
