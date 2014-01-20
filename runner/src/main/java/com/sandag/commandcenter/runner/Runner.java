@@ -6,11 +6,15 @@ import java.io.IOException;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.sandag.commandcenter.model.Job.Model;
 
 public class Runner
 {
+    @Value(value = "${baseDir}")    
+    protected String baseDir;
+
     private static final Logger LOGGER = Logger.getLogger(Runner.class.getName());
 
     private Model model;
@@ -34,8 +38,9 @@ public class Runner
     {
         // success means not failure - exit value not set consistently (expect false positives)
         boolean success = false;
-        LOGGER.debug(model.name() + " run started");
-        processBuilder.directory(new File(workingDir + File.separatorChar + scenarioFolder));
+        File scenarioDir = new File(String.format("%s/%s/%s", baseDir, workingDir, scenarioFolder));
+        LOGGER.debug(String.format("'%s' run started in '%s'", model.name(), scenarioDir.getPath()));
+        processBuilder.directory(scenarioDir);
         try
         {
             Process process = processBuilder.start();

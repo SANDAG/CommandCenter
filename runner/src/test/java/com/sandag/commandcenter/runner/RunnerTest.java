@@ -19,20 +19,22 @@ public class RunnerTest
     @Test
     public void runsSetsDirectory() throws IOException
     {
-        String dir = "."; // cross-platform compatible
+        String baseDir = ".";  // cross-platform compatible
+        String dir = ".";
         String scenarioDir = "scenario0";
         
         ProcessBuilderWrapper processBuilder = mock(ProcessBuilderWrapper.class);
         Process process = mock(Process.class);
         Runner runner = new Runner();
         runner.setModel(Model.PECAS);
+        runner.baseDir = baseDir;
         runner.setProcessBuilder(processBuilder);
 
         when(processBuilder.start()).thenReturn(process);
         runner.setWorkingDir(dir);
         runner.run(scenarioDir);
 
-        verify(processBuilder).directory(new File(dir + File.separatorChar + scenarioDir));
+        verify(processBuilder).directory(new File(String.format("%s/%s/%s", baseDir, dir, scenarioDir)));
     }
 
     @Test

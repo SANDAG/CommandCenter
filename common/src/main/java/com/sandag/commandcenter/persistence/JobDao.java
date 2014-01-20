@@ -75,6 +75,7 @@ public class JobDao extends BaseDao<Job, Integer>
             next.setStatus(Job.Status.RUNNING);
             next.setStarted(new Date());
             next.setRunner(runnerName);
+            update(next);
         }
         return next;
     }

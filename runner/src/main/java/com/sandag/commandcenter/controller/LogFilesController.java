@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ public class LogFilesController
     @Autowired
     protected ApplicationContext context;
 
+    private static final Logger LOGGER = Logger.getLogger(FileLister.class.getName());
     protected Map<Job.Model, FileLister> listers = new HashMap<Job.Model, FileLister>();
 
     @PostConstruct
@@ -43,6 +45,7 @@ public class LogFilesController
         FileLister lister = listers.get(job.getModel());
         if (lister == null)
         {
+            LOGGER.warn(String.format("No file lister for '%s' in '%s'", job.getModel(), listers.keySet()));
             return null;
         }
         return lister.listFiles(job);

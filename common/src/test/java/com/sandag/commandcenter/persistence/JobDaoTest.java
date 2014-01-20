@@ -227,7 +227,7 @@ public class JobDaoTest
         createJobWith(model, FINISHED); // not queued
         createJobWith(Model.PECAS, QUEUED); // wrong model
         Job j2 = createJobWith(model, QUEUED); // next
-        Job j3 = createJobWith(model, QUEUED); // after next
+        Job j3 = createJobWith(model, QUEUED); // next next
 
         Job next = dao.startNextInQueue(runner, model);
         assertEquals(j2.getId(), next.getId());
@@ -237,6 +237,11 @@ public class JobDaoTest
         Job nextNext = dao.startNextInQueue(runner, model);
         assertEquals(j3.getId(), nextNext.getId());
         assertNotNull(nextNext.getStarted());
+        
+        // db updated
+        Job retrievedNextNext = dao.read(nextNext.getId());
+        assertEquals(nextNext.getStarted(), retrievedNextNext.getStarted());
+        assertEquals(RUNNING, retrievedNextNext.getStatus());
     }
 
     @Test
