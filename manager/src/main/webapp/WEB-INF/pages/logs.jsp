@@ -8,7 +8,7 @@
 <body>
   <div class="row">
     <div class="col-md-12">
-      <h3>Log files for scenario '<a href="<c:url value="/jobs/${job.status == RUNNING ? 'running' : 'finished'}" />?highlight=${job.id}">${job.scenario}</a>'</h3>
+      <h3>Log files for scenario '<a href="<c:url value="/jobs/${job.status eq 'RUNNING' ? 'running' : 'finished'}" />?highlight=${job.id}">${job.scenario}</a>'</h3>
       <table class="table table-striped">
         <tbody>
           <c:forEach items="${logs}" var="log">

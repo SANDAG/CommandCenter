@@ -45,7 +45,7 @@
   <div class="row">
     <div class="col-md-12">
       <button type="button" class="btn btn-info" onclick="window.history.back()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</button> 
-      <h3>Scenario <strong><a href="<c:url value="/jobs/${job.status == RUNNING ? 'running' : 'finished'}" />?highlight=${job.id}">${job.scenario}</a></strong>&#39;s log file <strong>${path}</strong></h3>
+      <h3>Scenario <strong><a href="<c:url value="/jobs/${job.status eq 'RUNNING' ? 'running' : 'finished'}" />?highlight=${job.id}">${job.scenario}</a></strong>&#39;s log file <strong>${path}</strong></h3>
       <div id="logContents"></div>
     </div>
   </div>
