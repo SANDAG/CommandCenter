@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.sandag.commandcenter.model.Job;
+import com.sandag.commandcenter.notification.RunNotifier;
 import com.sandag.commandcenter.persistence.JobDao;
 
 @Service
@@ -27,6 +28,9 @@ public class Handler
     @Autowired
     protected ServiceNameRetriever serviceNameRetriever;
 
+    @Autowired
+    protected RunNotifier runNotifier;
+    
     private static final Logger LOGGER = Logger.getLogger(Handler.class.getName());
 
     protected Map<Job.Model, Runner> runners = new HashMap<Job.Model, Runner>();
@@ -59,6 +63,7 @@ public class Handler
         Job next = jobDao.startNextInQueue(serviceName, supportedModels);
         if (next != null)
         {
+            runNotifier.sendStartedMessage(next);
             Runner runner = runners.get(next.getModel());
             boolean success = runner.run(next.getScenario());
             jobDao.updateAsFinished(next, success);

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Model;
+import com.sandag.commandcenter.notification.RunNotifier;
 import com.sandag.commandcenter.persistence.JobDao;
 
 public class HandlerTest
@@ -84,19 +86,28 @@ public class HandlerTest
         handler.jobDao = dao;
         handler.runners = runners;
         handler.initialized = true;
+        handler.runNotifier = mock(RunNotifier.class);
         handler.runNext();
         verify(runner).run(null);
         verify(dao).updateAsFinished(job, runSuccessful);
     }
 
     @Test
-    public void noNextDoesNotBreak()
+    public void noNextDoesNothing()
     {
         JobDao dao = mock(JobDao.class);
         when(dao.startNextInQueue(anyString(), (Job.Model) anyObject())).thenReturn(null);
         Handler handler = new Handler();
+        @SuppressWarnings("unchecked")
+        Map<Job.Model, Runner> runners = mock(Map.class);
+        when(runners.get(any(Job.Model.class))).thenReturn(new Runner());
+        RunNotifier runNotifier = mock(RunNotifier.class);
+        handler.runNotifier = runNotifier;
         handler.jobDao = dao;
+        handler.runners = runners;
         handler.runNext();
+        verify(runNotifier, never()).sendStartedMessage(null);
+        verify(runners, never()).get(any(Job.Model.class));
     }
 
     @Test
@@ -110,6 +121,25 @@ public class HandlerTest
         verify(dao, never()).startNextInQueue(anyString(), (Model[]) anyObject());
     }
 
+    @Test
+    public void sendsStartedMessage()
+    {
+        Job job = new Job();
+        JobDao dao = mock(JobDao.class);
+        when(dao.startNextInQueue(anyString(), (Job.Model) anyObject())).thenReturn(job);
+        Handler handler = new Handler();
+        RunNotifier runNotifier = mock(RunNotifier.class);
+        @SuppressWarnings("unchecked")
+        Map<Job.Model, Runner> runners = mock(Map.class);
+        when(runners.get(any(Job.Model.class))).thenReturn(mock(Runner.class));
+        handler.initialized = true;
+        handler.runNotifier = runNotifier;
+        handler.jobDao = dao;
+        handler.runners = runners;
+        handler.runNext();
+        verify(runNotifier).sendStartedMessage(job);
+    }
+    
     // support
     private void assertContains(Object[] array, Object value)
     {

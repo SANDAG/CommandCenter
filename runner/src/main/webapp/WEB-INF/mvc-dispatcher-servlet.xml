@@ -18,7 +18,8 @@
 	<context:component-scan base-package="com.sandag.commandcenter" />
 	<mvc:annotation-driven conversion-service="conversionService" />
 	<task:annotation-driven />
-	<context:property-placeholder location="classpath:wrjmdlppw01.properties" ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath:wrjmdlppw01.properties"
+		ignore-unresolvable="true" />
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -41,5 +42,14 @@
 		<property name="workingDir" value="#{'${PECAS_workingDir}'}" />
 		<property name="logFileNames" value="#{'${PECAS_logFileNames}'.split(',')}" />
 	</bean>
-	
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="#{'${smtpHost}'}" />
+	</bean>
+
+	<bean id="runStartTemplate" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from" value="#{'${smtpFrom}'}" />
+		<property name="subject" value="Model run started" />
+	</bean>
+
 </beans>
