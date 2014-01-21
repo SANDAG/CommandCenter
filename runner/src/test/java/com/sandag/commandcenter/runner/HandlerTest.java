@@ -107,6 +107,7 @@ public class HandlerTest
         handler.runners = runners;
         handler.runNext();
         verify(runNotifier, never()).sendStartedMessage(null);
+        verify(runNotifier, never()).sendFinishedMessage(null);
         verify(runners, never()).get(any(Job.Model.class));
     }
 
@@ -122,7 +123,7 @@ public class HandlerTest
     }
 
     @Test
-    public void sendsStartedMessage()
+    public void sendsMessages()
     {
         Job job = new Job();
         JobDao dao = mock(JobDao.class);
@@ -138,6 +139,7 @@ public class HandlerTest
         handler.runners = runners;
         handler.runNext();
         verify(runNotifier).sendStartedMessage(job);
+        verify(runNotifier).sendFinishedMessage(job);
     }
     
     // support

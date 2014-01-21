@@ -37,6 +37,12 @@
 		<property name="commandLine" value="#{'${PECAS_cmdLine}'}" />
 	</bean>
 
+	<bean id="abmRunner" class="com.sandag.commandcenter.runner.Runner">
+		<property name="model" value="ABM" />
+		<property name="workingDir" value="#{'${ABM_workingDir}'}" />
+		<property name="commandLine" value="#{'${ABM_cmdLine}'}" />
+	</bean>
+
 	<bean id="pecasLogLister" class="com.sandag.commandcenter.io.FileLister">
 		<property name="model" value="PECAS" />
 		<property name="workingDir" value="#{'${PECAS_workingDir}'}" />
@@ -50,6 +56,11 @@
 	<bean id="runStartTemplate" class="org.springframework.mail.SimpleMailMessage">
 		<property name="from" value="#{'${smtpFrom}'}" />
 		<property name="subject" value="Model run started" />
+	</bean>
+
+	<bean id="runFinishTemplate" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from" value="#{'${smtpFrom}'}" />
+		<property name="subject" value="Model run finished" />
 	</bean>
 
 </beans>

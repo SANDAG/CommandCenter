@@ -37,3 +37,6 @@ tbody:before {
 	color: #0F0;
 }
 
+th.toggle {
+	white-space: nowrap;	
+}

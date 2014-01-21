@@ -25,11 +25,12 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th><i class="glyphicon glyphicon-remove red"></i>&nbsp;&nbsp;<input type="checkbox" id="failed-toggle"
-              checked="checked" /><br /> <i class="glyphicon glyphicon-ok green"></i>&nbsp;&nbsp;<input
-              type="checkbox" id="finished-toggle" checked="checked" /></th>
-            <th><i class="glyphicon glyphicon-user unowned"></i>&nbsp;&nbsp;<input type="checkbox" id="user-toggle"
+            <th class="toggle"><i class="glyphicon glyphicon-remove red"></i>&nbsp;<input type="checkbox"
+              id="failed-toggle" checked="checked" /><br />
+            <i class="glyphicon glyphicon-ok green"></i>&nbsp;<input type="checkbox" id="finished-toggle"
               checked="checked" /></th>
+            <th class="toggle"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;<input type="checkbox"
+              id="user-toggle" checked="checked" /></th>
             <th>Model</th>
             <th>Scenario name</th>
             <th>Study name</th>

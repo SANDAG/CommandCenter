@@ -67,6 +67,7 @@ public class Handler
             Runner runner = runners.get(next.getModel());
             boolean success = runner.run(next.getScenario());
             jobDao.updateAsFinished(next, success);
+            runNotifier.sendFinishedMessage(next);
         }
         LOGGER.debug("runNext finished");
     }
