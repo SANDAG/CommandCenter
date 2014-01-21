@@ -22,9 +22,11 @@
 			moveJob($(this), false);
 		});
 
-		$('#user-toggle').change(function() {
-			$(this).is(":checked") ? $("tr.unowned").show(500) : $("tr.unowned").hide(500);
-		});
+		$('#user-toggle').change(
+				function() {
+					$(this).is(":checked") ? $("tr.unowned").show(500) : $(
+							"tr.unowned").hide(500);
+				});
 	});
 
 	function deleteJob(button) {
@@ -80,12 +82,16 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3 id="message" class="pull-left"></h3>    
+      <h3 id="message" class="pull-left"></h3>
+      <c:set var="admin" value="${roleChecker.isAdmin(pageContext.request)}" />
       <table class="table table-striped">
         <thead>
           <tr>
-            <th colspan="2" class="toggle"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;<input type="checkbox"
-              id="user-toggle" checked="checked" /></th>
+            <c:if test="not admin">
+              <th class="toggle"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;<input type="checkbox"
+                id="user-toggle" checked="checked" /></th>
+            </c:if>
+            <th></th>
             <th>Model</th>
             <th>Scenario name</th>
             <th>Study name</th>
@@ -99,7 +105,9 @@
           <c:forEach items="${jobs}" var="job" varStatus="status">
             <c:set var="owned" value="${jobAccessManager.canUpdate(pageContext.request, job, principal)}" />
             <tr class="${owned ? 'owned' : 'unowned'}" data-job_id="${job.id}">
-              <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
+              <c:if test="not admin">
+                <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
+              </c:if>
               <td class="text-right">${status.count}.</td>
               <td>${job.model}</td>
               <td>${job.scenario}</td>

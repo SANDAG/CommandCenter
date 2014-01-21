@@ -66,12 +66,12 @@ public class JobController
         return "job";
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{job}")
     @ResponseBody
     @PreAuthorize("@jobAccessManager.canUpdate(#request, @jobDao.read(#id), #principal)")
-    public String deleteJob(@PathVariable Integer id, Principal principal, HttpServletRequest request)
+    public String deleteQueuedJob(@PathVariable Job job, Principal principal, HttpServletRequest request)
     {
-        jobDao.delete(id);
+        jobDao.deleteIfQueued(job);
         return "Job deleted";
     }
 

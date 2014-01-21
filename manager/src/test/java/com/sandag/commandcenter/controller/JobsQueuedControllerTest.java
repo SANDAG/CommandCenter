@@ -177,7 +177,7 @@ public class JobsQueuedControllerTest
         when(dao.read(deletedJobId)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(deletedJobId, true, null);
+        controller.move(deletedJobId, true, null, null);
         verify(dao, never()).getMoveableJobBefore((Job) anyObject());
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -194,7 +194,7 @@ public class JobsQueuedControllerTest
         when(dao.getMoveableJobBefore(job)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(jobId, true, null);
+        controller.move(jobId, true, null, null);
         verify(dao).getMoveableJobBefore(job);
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -210,7 +210,7 @@ public class JobsQueuedControllerTest
         when(dao.getMoveableJobBefore(jobA)).thenReturn(jobB);
         controller.jobDao = dao;
 
-        controller.move(jobId, true, null);
+        controller.move(jobId, true, null, null);
         verify(dao).getMoveableJobBefore(jobA);
         verify(dao).updateWithSwappedQueuePositions(jobA, jobB);
     }
@@ -223,7 +223,7 @@ public class JobsQueuedControllerTest
         when(dao.read(deletedJobId)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(deletedJobId, false, null);
+        controller.move(deletedJobId, false, null, null);
         verify(dao, never()).getMoveableJobAfter((Job) anyObject());
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -240,7 +240,7 @@ public class JobsQueuedControllerTest
         when(dao.getMoveableJobAfter(job)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(jobId, false, null);
+        controller.move(jobId, false, null, null);
         verify(dao).getMoveableJobAfter(job);
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -256,7 +256,7 @@ public class JobsQueuedControllerTest
         when(dao.getMoveableJobAfter(jobA)).thenReturn(jobB);
         controller.jobDao = dao;
 
-        controller.move(jobId, false, null);
+        controller.move(jobId, false, null, null);
         verify(dao).getMoveableJobAfter(jobA);
         verify(dao).updateWithSwappedQueuePositions(jobA, jobB);
     }

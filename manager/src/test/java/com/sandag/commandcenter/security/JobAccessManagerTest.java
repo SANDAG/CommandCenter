@@ -29,18 +29,22 @@ public class JobAccessManagerTest
     // support
     public void checkCanUpdate(String principalUsername, String jobUsername, boolean hasAdminRole, boolean accesses)
     {
-        String adminRole = "ROLE_ADMIN";
         JobAccessManager manager = new JobAccessManager();
-        manager.adminRole = adminRole;
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        
+        RoleChecker roleChecker = mock(RoleChecker.class);
+        when(roleChecker.isAdmin(request)).thenReturn(hasAdminRole);
+        manager.roleChecker = roleChecker;
+        
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn(principalUsername);
+        
         User user = mock(User.class);
         when(user.getPrincipal()).thenReturn(jobUsername);
+        
         Job job = new Job();
         job.setUser(user);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.isUserInRole(adminRole)).thenReturn(hasAdminRole);
-
+        
         assertEquals(accesses, manager.canUpdate(request, job, principal));
     }
 }

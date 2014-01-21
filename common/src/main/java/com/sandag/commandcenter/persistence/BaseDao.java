@@ -37,6 +37,11 @@ public abstract class BaseDao<T, PK extends Serializable> implements Converter<S
         return (T) getSession().get(type, id);
     }
 
+    public void refresh(T entity)
+    {
+        getSession().refresh(entity);
+    }
+
     public void update(T o)
     {
         getSession().update(o);

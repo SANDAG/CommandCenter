@@ -28,6 +28,18 @@ public class JobDao extends BaseDao<Job, Integer>
         return startQuery().add(Restrictions.eq("status", Job.Status.QUEUED)).addOrder(Order.asc("queuePosition")).list();
     }
 
+    public boolean deleteIfQueued(Job job)
+    {
+        // refresh from db here to keep within transaction
+        refresh(job);
+        if (job.getStatus() != Job.Status.QUEUED)
+        {
+            return false;
+        }
+        delete(job);
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     public List<Job> read(Job.Status... statuses)
     {

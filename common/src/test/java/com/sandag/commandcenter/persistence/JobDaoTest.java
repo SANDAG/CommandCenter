@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Model;
+import com.sandag.commandcenter.model.Job.Status;
 import com.sandag.commandcenter.model.User;
 
 import static com.sandag.commandcenter.model.Job.Status.QUEUED;
@@ -263,6 +265,22 @@ public class JobDaoTest
         checkStatusUpdatedWhenFinished(false, Job.Status.FAILED);
     }
 
+    @Test
+    public void deleteIfQueuedDeletesOnlyIfQueued()
+    {
+        Job job = createJobWith(Model.PECAS, Status.RUNNING);
+        Job queuedInMemoryNotDb = dao.read(job.getId());
+        queuedInMemoryNotDb.setStatus(Status.QUEUED);
+        assertFalse(dao.deleteIfQueued(queuedInMemoryNotDb));
+        assertNotNull(dao.read(job.getId()));
+
+        job.setStatus(Status.QUEUED);
+        dao.update(job);
+        dao.getSession().flush(); // awkward but necessary
+        assertTrue(dao.deleteIfQueued(job));
+        assertNull(dao.read(job.getId()));
+    }
+    
     // support
     private void checkStatusUpdatedWhenFinished(boolean success, Job.Status status)
     {

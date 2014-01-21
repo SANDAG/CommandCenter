@@ -103,11 +103,11 @@ public class JobControllerTest
     {
         JobDao jobDao = mock(JobDao.class);
         controller.jobDao = jobDao;
-        int id = 234;
+        Job job = new Job();
 
-        controller.deleteJob(id, null);
+        controller.deleteQueuedJob(job, null, null);
 
-        verify(jobDao).delete(id);
+        verify(jobDao).deleteIfQueued(job);
     }
 
 }

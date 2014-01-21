@@ -53,6 +53,17 @@ public class BaseDaoTest
     }
 
     @Test
+    public void testRefresh()
+    {
+        BaseServiceEntity created = createEntity();
+        assertNull(created.getValue());
+        created.setValue("Not null");
+        assertNotNull(created.getValue());
+        service.refresh(created);
+        assertNull(created.getValue());
+    }
+    
+    @Test
     public void testUpdate()
     {
         String expected = "lsdfkjal;sdjkfl;";
