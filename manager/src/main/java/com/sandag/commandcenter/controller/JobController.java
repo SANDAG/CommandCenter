@@ -71,8 +71,7 @@ public class JobController
     @PreAuthorize("@jobAccessManager.canUpdate(#request, @jobDao.read(#id), #principal)")
     public String deleteQueuedJob(@PathVariable Job job, Principal principal, HttpServletRequest request)
     {
-        jobDao.deleteIfQueued(job);
-        return "Job deleted";
+        return jobDao.deleteIfQueued(job) ? "Job deleted" : "Job was no longer queued";
     }
 
     Map<String, String> getModelNamesMap()

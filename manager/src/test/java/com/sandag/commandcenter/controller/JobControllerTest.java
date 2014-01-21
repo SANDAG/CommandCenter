@@ -110,4 +110,20 @@ public class JobControllerTest
         verify(jobDao).deleteIfQueued(job);
     }
 
+    @Test
+    public void checkResponses()
+    {
+        JobDao jobDao = mock(JobDao.class);
+        controller.jobDao = jobDao;
+        Job job = new Job();
+        
+        when(jobDao.deleteIfQueued(job)).thenReturn(false);        
+        assertEquals("Job was no longer queued", controller.deleteQueuedJob(job, null, null));
+
+        when(jobDao.deleteIfQueued(job)).thenReturn(true);        
+        assertEquals("Job deleted", controller.deleteQueuedJob(job, null, null));
+}
+    
+    
+    
 }
