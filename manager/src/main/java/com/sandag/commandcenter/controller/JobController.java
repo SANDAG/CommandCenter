@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +68,8 @@ public class JobController
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     @ResponseBody
-    @PreAuthorize("@jobAccessManager.canUpdate(@jobDao.read(#id), #principal)")
-    public String deleteJob(@PathVariable Integer id, Principal principal)
+    @PreAuthorize("@jobAccessManager.canUpdate(#request, @jobDao.read(#id), #principal)")
+    public String deleteJob(@PathVariable Integer id, Principal principal, HttpServletRequest request)
     {
         jobDao.delete(id);
         return "Job deleted";

@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -46,8 +48,8 @@ public class JobsQueuedController
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/move")
-    @PreAuthorize("@jobAccessManager.canUpdate(@jobDao.read(#id), #principal)")
-    public void move(@PathVariable Integer id, @RequestParam(defaultValue = "true") boolean moveUp, Principal principal)
+    @PreAuthorize("@jobAccessManager.canUpdate(#request, @jobDao.read(#id), #principal)")
+    public void move(@PathVariable Integer id, @RequestParam(defaultValue = "true") boolean moveUp, Principal principal, HttpServletRequest request)
     {
         // no-op if either is null (someone else changed the queue order or deleted a job?)
         Job chosen = jobDao.read(id);

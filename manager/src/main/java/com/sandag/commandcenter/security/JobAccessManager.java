@@ -2,6 +2,9 @@ package com.sandag.commandcenter.security;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sandag.commandcenter.model.Job;
@@ -10,8 +13,11 @@ import com.sandag.commandcenter.model.Job;
 public class JobAccessManager
 {
 
-    public boolean canUpdate(Job job, Principal principal)
+    @Value(value = "${adminRole}")
+    protected String adminRole;
+
+    public boolean canUpdate(HttpServletRequest request, Job job, Principal principal)
     {
-        return principal.getName().equals(job.getUser().getPrincipal());
+        return request.isUserInRole(adminRole) || principal.getName().equals(job.getUser().getPrincipal());
     }
 }

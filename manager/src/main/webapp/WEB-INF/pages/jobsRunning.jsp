@@ -34,7 +34,7 @@
         </thead>
         <tbody>
           <c:forEach items="${jobs}" var="job" varStatus="status">
-            <c:set var="owned" value="${jobAccessManager.canUpdate(job, principal)}" />
+            <c:set var="owned" value="${jobAccessManager.canUpdate(pageContext.request, job, principal)}" />
             <tr class="${owned ? 'owned' : 'unowned'}" data-job_id="${job.id}">
               <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
               <td class="text-right">${status.count}.</td>

@@ -43,7 +43,7 @@
         </thead>
         <tbody>
           <c:forEach items="${jobs}" var="job" varStatus="status">
-            <c:set var="owned" value="${jobAccessManager.canUpdate(job, principal)}" />
+            <c:set var="owned" value="${jobAccessManager.canUpdate(pageContext.request, job, principal)}" />
             <c:set var="failed" value="${job.status == 'FAILED'}" />
             <tr class="${owned ? 'owned' : 'unowned'} ${failed ? 'failed' : 'finished'}" data-job_id="${job.id}">
               <td><span class="glyphicon glyphicon-${job.status == 'FAILED' ? 'remove red' : 'ok green'}"
