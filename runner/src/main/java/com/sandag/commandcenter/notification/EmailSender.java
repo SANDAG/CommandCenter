@@ -13,20 +13,21 @@ import com.sandag.commandcenter.model.Job;
 public class EmailSender
 {
     private static final Logger LOGGER = Logger.getLogger(EmailSender.class.getName());
-    
-    // TODO temporarily hard-coding until we figure out where to get it
-    protected String emailAddress = "craig.sabbey@rsginc.com";
 
     @Autowired
     protected MailSender mailSender;
 
+    @Autowired
+    protected EmailAddressConverter emailAddressConverter;
+    
     protected void sendEmail(Job job, SimpleMailMessage template, String message, Object... messageArgs)
     {
         SimpleMailMessage msg = new SimpleMailMessage(template);
-        msg.setTo(emailAddress);
         msg.setText(String.format(message, messageArgs));
         try
         {
+            String emailAddress = emailAddressConverter.fromActiveDirectoryName(job.getUser().getPrincipal());
+            msg.setTo(emailAddress);
             this.mailSender.send(msg);
         } catch (MailException e)
         {

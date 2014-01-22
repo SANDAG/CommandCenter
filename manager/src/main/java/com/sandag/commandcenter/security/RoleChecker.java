@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleChecker
 {
-    @Value(value = "${adminRole}")
+    @Value(value = "#{'${adminRole}'}")
     protected String adminRole;
 
     public boolean isAdmin(HttpServletRequest request)
