@@ -22,6 +22,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
+      <c:set var="admin" value="${roleChecker.isAdmin(pageContext.request)}" />
       <table class="table table-striped">
         <thead>
           <tr>
@@ -29,8 +30,10 @@
               id="failed-toggle" checked="checked" /><br />
             <i class="glyphicon glyphicon-ok green"></i>&nbsp;<input type="checkbox" id="finished-toggle"
               checked="checked" /></th>
-            <th class="toggle"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;<input type="checkbox"
-              id="user-toggle" checked="checked" /></th>
+            <c:if test="not admin">
+              <th class="toggle"><i class="glyphicon glyphicon-user unowned"></i>&nbsp;<input type="checkbox"
+                id="user-toggle" checked="checked" /></th>
+            </c:if>
             <th>Model</th>
             <th>Scenario name</th>
             <th>Study name</th>
@@ -48,7 +51,9 @@
             <tr class="${owned ? 'owned' : 'unowned'} ${failed ? 'failed' : 'finished'}" data-job_id="${job.id}">
               <td><span class="glyphicon glyphicon-${job.status == 'FAILED' ? 'remove red' : 'ok green'}"
                 title="${failed ? 'Failed' : 'Finished'}"></span></td>
-              <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
+              <c:if test="not admin">
+                <td><span class="owned-marker glyphicon glyphicon-user"></span></td>
+              </c:if>
               <td>${job.model}</td>
               <td>${job.scenario}</td>
               <td>${job.study}</td>
