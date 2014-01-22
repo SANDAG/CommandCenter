@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -92,27 +91,6 @@ public class FileReaderTest
         when(channel.read((ByteBuffer) anyObject(), anyLong())).thenThrow(new IOException());
         
         assertNull(reader.read(file, 0));
-    }
-
-    @Test
-    public void verifyClosedCalledOnAutocloseables() throws IOException
-    {
-        // this test shouldn't be necessary - it's for code coverage
-        FileInputStreamFactory factory = mock(FileInputStreamFactory.class);
-        reader.fileInputStreamFactory = factory;
-        
-        FileInputStream is = mock(FileInputStream.class);
-        when(factory.getFor((File) anyObject())).thenReturn(is);
-    
-        FileChannel channel = mock(FileChannel.class);
-        when(is.getChannel()).thenReturn(channel);
-        when(channel.read((ByteBuffer) anyObject(), anyLong())).thenThrow(new IOException());
-        
-        assertNull(reader.read(file, 0));
-        verify(is).close();
-        // calls AbstractInterruptibleChannel.close(), which fails
-        //   could use interfaces to support this
-        //verify(channel).close(); 
     }
 
 }
