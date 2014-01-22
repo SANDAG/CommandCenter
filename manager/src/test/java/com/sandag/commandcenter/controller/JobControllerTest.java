@@ -95,7 +95,6 @@ public class JobControllerTest
         {
             assertTrue(map.containsKey(m.toString()));
         }
-
     }
 
     @Test
