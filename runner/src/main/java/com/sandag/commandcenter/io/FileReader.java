@@ -45,13 +45,14 @@ public class FileReader
     private byte[] read(File file, int startByte, int byteCount)
     {   
         ByteBuffer buffer = ByteBuffer.allocate(byteCount);
+        
         try (FileInputStream in = fileInputStreamFactory.getFor(file); FileChannel channel = in.getChannel())
         {
             channel.read(buffer, startByte);
         }
         catch (IOException e)
         {
-            // nothing to read?
+            LOGGER.debug("File removed?", e);
             return null;
         }
         LOGGER.debug(String.format("Returning bytes %d-%d of %s", startByte, startByte + byteCount, file.getAbsolutePath()));
