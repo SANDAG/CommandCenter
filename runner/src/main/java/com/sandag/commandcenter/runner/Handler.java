@@ -1,6 +1,5 @@
 package com.sandag.commandcenter.runner;
 
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +29,7 @@ public class Handler
 
     @Autowired
     protected RunNotifier runNotifier;
-    
+
     private static final Logger LOGGER = Logger.getLogger(Handler.class.getName());
 
     protected Map<Job.Model, Runner> runners = new HashMap<Job.Model, Runner>();
@@ -40,7 +39,7 @@ public class Handler
     protected boolean initialized = false;
 
     @PostConstruct
-    public void initialize() throws UnknownHostException
+    public void initialize()
     {
         Map<String, Runner> runnerBeans = context.getBeansOfType(Runner.class);
         for (Runner runner : runnerBeans.values())
@@ -65,7 +64,7 @@ public class Handler
         {
             runNotifier.sendStartedMessage(next);
             Runner runner = runners.get(next.getModel());
-            boolean success = runner.run(next.getScenario());
+            boolean success = runner.run(next);
             jobDao.updateAsFinished(next, success);
             runNotifier.sendFinishedMessage(next);
         }

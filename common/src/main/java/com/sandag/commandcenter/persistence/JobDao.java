@@ -28,6 +28,12 @@ public class JobDao extends BaseDao<Job, Integer>
         return startQuery().add(Restrictions.eq("status", Job.Status.QUEUED)).addOrder(Order.asc("queuePosition")).list();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Job> readCancelled(String host)
+    {
+        return startQuery().add(Restrictions.eq("status", Job.Status.CANCELLED)).add(Restrictions.eq("runner", host)).list();
+    }
+
     public boolean deleteIfQueued(Job job)
     {
         // refresh from db here to keep within transaction
@@ -39,13 +45,13 @@ public class JobDao extends BaseDao<Job, Integer>
         delete(job);
         return true;
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<Job> read(Job.Status... statuses)
     {
         return startQuery().add(Restrictions.in("status", statuses)).list();
     }
-    
+
     public Integer create(Job job)
     {
         job.setQueuePosition(sequenceDao.next());

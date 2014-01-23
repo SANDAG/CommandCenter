@@ -30,6 +30,7 @@ import static com.sandag.commandcenter.model.Job.Status.RUNNING;
 import static com.sandag.commandcenter.model.Job.Status.FINISHED;
 import static com.sandag.commandcenter.model.Job.Status.ARCHIVED;
 import static com.sandag.commandcenter.model.Job.Status.DELETED;
+import static com.sandag.commandcenter.model.Job.Status.CANCELLED;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/db.xml", "classpath:/autowire.xml" })
@@ -186,20 +187,6 @@ public class JobDaoTest
         assertEquals(jobs.get(jobs.size() - 1).getId(), dao.getMoveableJobAfter(jobs.get(0)).getId());
     }
 
-    private List<Job> createJobs(User user, Job.Status... statuses)
-    {
-        List<Job> jobs = new ArrayList<Job>();
-        for (Job.Status status : statuses)
-        {
-            Job job = new Job();
-            job.setUser(user);
-            job.setStatus(status);
-            dao.create(job);
-            jobs.add(job);
-        }
-        return jobs;
-    }
-
     @Test
     public void swapPositionsAndUpdateWorks()
     {
@@ -239,7 +226,7 @@ public class JobDaoTest
         Job nextNext = dao.startNextInQueue(runner, model);
         assertEquals(j3.getId(), nextNext.getId());
         assertNotNull(nextNext.getStarted());
-        
+
         // db updated
         Job retrievedNextNext = dao.read(nextNext.getId());
         assertEquals(nextNext.getStarted(), retrievedNextNext.getStarted());
@@ -258,7 +245,7 @@ public class JobDaoTest
     {
         checkStatusUpdatedWhenFinished(true, Job.Status.FINISHED);
     }
-    
+
     @Test
     public void statusUpdatesOnFailure()
     {
@@ -280,7 +267,32 @@ public class JobDaoTest
         assertTrue(dao.deleteIfQueued(job));
         assertNull(dao.read(job.getId()));
     }
-    
+
+    @Test
+    public void readCancelledWorks()
+    {
+        String matchingHost = "Matching host";
+        String otherHost = "Other host";
+        User user = new User();
+        userDao.create(user);
+        createJobs(user, otherHost, CANCELLED, CANCELLED, CANCELLED, QUEUED, RUNNING, ARCHIVED);
+        createJobs(user, matchingHost, CANCELLED, CANCELLED, CANCELLED, QUEUED, RUNNING, ARCHIVED);
+        List<Job> jobs = dao.readCancelled(matchingHost);
+        assertEquals(3, jobs.size());
+        for (Job job : jobs)
+        {
+            assertEquals(CANCELLED, job.getStatus());
+            assertEquals(matchingHost, job.getRunner());
+        }
+    }
+
+    @Test
+    public void readCancelledReturnsEmptyForNone()
+    {
+        List<Job> jobs = dao.readCancelled("");
+        assertEquals(0, jobs.size());
+    }
+
     // support
     private void checkStatusUpdatedWhenFinished(boolean success, Job.Status status)
     {
@@ -292,8 +304,36 @@ public class JobDaoTest
         assertEquals(status, retrieved.getStatus());
         assertNotNull(retrieved.getFinished());
     }
-    
-    
+
+    private List<Job> createJobs(User user, Job.Status... statuses)
+    {
+        List<Job> jobs = new ArrayList<Job>();
+        for (Job.Status status : statuses)
+        {
+            Job job = new Job();
+            job.setUser(user);
+            job.setStatus(status);
+            dao.create(job);
+            jobs.add(job);
+        }
+        return jobs;
+    }
+
+    private List<Job> createJobs(User user, String runner, Job.Status... statuses)
+    {
+        List<Job> jobs = new ArrayList<Job>();
+        for (Job.Status status : statuses)
+        {
+            Job job = new Job();
+            job.setUser(user);
+            job.setRunner(runner);
+            job.setStatus(status);
+            dao.create(job);
+            jobs.add(job);
+        }
+        return jobs;
+    }
+
     private Job createJobWith(Model model, Job.Status status)
     {
         Job job = getJobWithAUser();

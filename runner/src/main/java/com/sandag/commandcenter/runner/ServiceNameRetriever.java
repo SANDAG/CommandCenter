@@ -9,9 +9,15 @@ import org.springframework.stereotype.Component;
 public class ServiceNameRetriever
 {
 
-    public String retrieve() throws UnknownHostException
+    public String retrieve()
     {
         // TODO may want to explicitly configure this to prevent confusion (but adds setup)
-        return InetAddress.getLocalHost().getHostName();
+        try
+        {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

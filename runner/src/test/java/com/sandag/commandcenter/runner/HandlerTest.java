@@ -75,7 +75,7 @@ public class HandlerTest
         when(job.getModel()).thenReturn(jobModel);
 
         Runner runner = mock(Runner.class);
-        when(runner.run(null)).thenReturn(runSuccessful);
+        when(runner.run(job)).thenReturn(runSuccessful);
 
         @SuppressWarnings("unchecked")
         Map<Job.Model, Runner> runners = mock(Map.class);
@@ -88,7 +88,7 @@ public class HandlerTest
         handler.initialized = true;
         handler.runNotifier = mock(RunNotifier.class);
         handler.runNext();
-        verify(runner).run(null);
+        verify(runner).run(job);
         verify(dao).updateAsFinished(job, runSuccessful);
     }
 
