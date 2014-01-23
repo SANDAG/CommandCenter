@@ -6,6 +6,32 @@
 <html>
 <head>
 <%@ include file="jobsCommonScripts.jspf"%>
+<script>
+	$(function() {
+		$('.cancelButton').click(function() {
+			cancelJob($(this));
+		});
+	});
+
+	function cancelJob(button) {
+		var row = button.closest('tr');
+		var id = row.data('job_id');
+		var successFunction = function(response) {
+			row.remove();
+			$('#message').text(response);
+		};
+		var errorFunction = function(e) {
+			alert('There was an error cancelling your job; please try again later.');
+		};
+
+		$.ajax({
+			type : 'PUT',
+			url : '<c:url value="/job/cancel/"/>' + id,
+			success : successFunction,
+			error : errorFunction
+		});
+	}
+</script>
 </head>
 <body>
   <div class="row">
@@ -32,7 +58,7 @@
             <th>Created by</th>
             <th>Runner</th>
             <th>Started</th>
-            <th></th>
+            <th colspan="99"></th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +80,11 @@
                   <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-xs" title="View logs"> <span
                     class="glyphicon glyphicon-folder-open"></span>
                   </a>
+                </c:if></td>
+              <td><c:if test="${owned}">
+                  <button type="button" class="btn btn-danger btn-xs cancelButton" title="Cancel running job">
+                    <span class="glyphicon glyphicon-stop"></span>
+                  </button>
                 </c:if></td>
             </tr>
           </c:forEach>

@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sandag.commandcenter.model.Job;
+import static com.sandag.commandcenter.model.Job.Status.RUNNING;
+import static com.sandag.commandcenter.model.Job.Status.QUEUED;
+import static com.sandag.commandcenter.model.Job.Status.CANCELLED;
+import static com.sandag.commandcenter.model.Job.Status.FINISHED;
+import static com.sandag.commandcenter.model.Job.Status.FAILED;
 
 @Repository
 public class JobDao extends BaseDao<Job, Integer>
@@ -25,24 +30,36 @@ public class JobDao extends BaseDao<Job, Integer>
     @SuppressWarnings("unchecked")
     public List<Job> readQueued()
     {
-        return startQuery().add(Restrictions.eq("status", Job.Status.QUEUED)).addOrder(Order.asc("queuePosition")).list();
+        return startQuery().add(Restrictions.eq("status", QUEUED)).addOrder(Order.asc("queuePosition")).list();
     }
 
     @SuppressWarnings("unchecked")
     public List<Job> readCancelled(String host)
     {
-        return startQuery().add(Restrictions.eq("status", Job.Status.CANCELLED)).add(Restrictions.eq("runner", host)).list();
+        return startQuery().add(Restrictions.eq("status", CANCELLED)).add(Restrictions.eq("runner", host)).list();
     }
 
     public boolean deleteIfQueued(Job job)
     {
         // refresh from db here to keep within transaction
         refresh(job);
-        if (job.getStatus() != Job.Status.QUEUED)
+        if (job.getStatus() != QUEUED)
         {
             return false;
         }
         delete(job);
+        return true;
+    }
+
+    public boolean cancelIfRunning(Job job)
+    {
+        // refresh from db here to keep within transaction
+        refresh(job);
+        if (job.getStatus() != RUNNING)
+        {
+            return false;
+        }
+        job.setStatus(CANCELLED);
         return true;
     }
 
@@ -71,7 +88,7 @@ public class JobDao extends BaseDao<Job, Integer>
     public Job getMoveableJobAfter(Job job)
     {
         // lowest positioned job greater than job param for same user
-        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.eq("status", Job.Status.QUEUED))
+        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.eq("status", QUEUED))
                 .add(Restrictions.gt("queuePosition", job.getQueuePosition())).addOrder(Order.asc("queuePosition")).setFirstResult(0)
                 .setMaxResults(1).uniqueResult();
     }
@@ -79,18 +96,18 @@ public class JobDao extends BaseDao<Job, Integer>
     public Job getMoveableJobBefore(Job job)
     {
         // highest positioned job less than job param for same user
-        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.eq("status", Job.Status.QUEUED))
+        return (Job) startQuery().add(Restrictions.eq("user", job.getUser())).add(Restrictions.eq("status", QUEUED))
                 .add(Restrictions.lt("queuePosition", job.getQueuePosition())).addOrder(Order.desc("queuePosition")).setFirstResult(0)
                 .setMaxResults(1).uniqueResult();
     }
 
     public Job startNextInQueue(String runnerName, Job.Model... model)
     {
-        Job next = (Job) startQuery().add(Restrictions.in("model", model)).add(Restrictions.eq("status", Job.Status.QUEUED))
+        Job next = (Job) startQuery().add(Restrictions.in("model", model)).add(Restrictions.eq("status", QUEUED))
                 .addOrder(Order.asc("queuePosition")).setFirstResult(0).setMaxResults(1).uniqueResult();
         if (next != null)
         {
-            next.setStatus(Job.Status.RUNNING);
+            next.setStatus(RUNNING);
             next.setStarted(new Date());
             next.setRunner(runnerName);
             update(next);
@@ -100,8 +117,9 @@ public class JobDao extends BaseDao<Job, Integer>
 
     public void updateAsFinished(Job job, boolean success)
     {
-        job.setStatus(success ? Job.Status.FINISHED : Job.Status.FAILED);
+        job.setStatus(success ? FINISHED : FAILED);
         job.setFinished(new Date());
         update(job);
     }
+
 }

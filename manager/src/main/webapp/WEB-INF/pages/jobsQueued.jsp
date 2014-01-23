@@ -8,8 +8,6 @@
 <%@ include file="jobsCommonScripts.jspf"%>
 <script>
 	$(function() {
-		setActiveNav('nav-queue');
-
 		$('.deleteButton').click(function() {
 			deleteJob($(this));
 		});
@@ -22,11 +20,7 @@
 			moveJob($(this), false);
 		});
 
-		$('#user-toggle').change(
-				function() {
-					$(this).is(":checked") ? $("tr.unowned").show(500) : $(
-							"tr.unowned").hide(500);
-				});
+		addToggle('user-toggle', 'tr.unowned');
 	});
 
 	function deleteJob(button) {

@@ -16,11 +16,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script>
-	function setActiveNav(navId) {
-		$('ul.nav li').removeClass('active');
-		$('#' + navId).addClass('active');
-	}
-
 	function getParameterByName(name) {
 		var match = RegExp('[?&]' + name + '=([^&]*)').exec(
 				window.location.search);

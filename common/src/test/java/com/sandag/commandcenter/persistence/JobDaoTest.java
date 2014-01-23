@@ -269,6 +269,23 @@ public class JobDaoTest
     }
 
     @Test
+    public void cancelIfRunningCancelsOnlyRunning()
+    {
+        Job job = createJobWith(Model.PECAS, Status.FINISHED);
+        Job runningInMemoryNotDb = dao.read(job.getId());
+        runningInMemoryNotDb.setStatus(Status.RUNNING);
+        assertFalse(dao.cancelIfRunning(runningInMemoryNotDb));
+        assertNotNull(dao.read(job.getId()));
+
+        job.setStatus(Status.RUNNING);
+        dao.update(job);
+        dao.getSession().flush(); // awkward but necessary
+        assertTrue(dao.cancelIfRunning(job));
+        assertEquals(CANCELLED, dao.read(job.getId()).getStatus());
+    }
+    
+    
+    @Test
     public void readCancelledWorks()
     {
         String matchingHost = "Matching host";

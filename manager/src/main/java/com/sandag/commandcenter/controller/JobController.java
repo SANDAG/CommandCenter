@@ -74,6 +74,14 @@ public class JobController
         return jobDao.deleteIfQueued(job) ? "Job deleted" : "Job was no longer queued";
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/cancel/{job}")
+    @ResponseBody
+    @PreAuthorize("@jobAccessManager.canUpdate(#request, @jobDao.read(#id), #principal)")
+    public String cancelRunningJob(@PathVariable Job job, Principal principal, HttpServletRequest request)
+    {
+        return jobDao.cancelIfRunning(job) ? "Job cancelled" : "Job was no longer running";
+    }
+    
     Map<String, String> getModelNamesMap()
     {
         Map<String, String> map = new LinkedHashMap<String, String>();

@@ -41,6 +41,9 @@ public class ProcessKiller
             if (process != null) // just finished and removed?
             {
                 process.destroy();
+                // Expecting either scenario folder to be deleted or job to be recreated
+                jobDao.delete(job);
+                processMap.remove(job);
             }
         }
     }

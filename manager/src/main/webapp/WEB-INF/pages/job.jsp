@@ -4,11 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script>
-	$(function() {
-		setActiveNav('nav-job');
-	});
-</script>
 </head>
 <body>
   <div class="row">
