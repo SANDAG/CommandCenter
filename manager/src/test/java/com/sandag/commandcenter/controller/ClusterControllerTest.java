@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,9 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.sandag.commandcenter.model.Cluster;
-import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.persistence.ClusterDao;
-import com.sandag.commandcenter.persistence.JobDao;
 
 public class ClusterControllerTest
 {
