@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>runner</artifactId>
 	<packaging>war</packaging>
-	<name>runner Maven Webapp</name>
+	<name>runner</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
