@@ -37,6 +37,15 @@ tbody:before {
 	color: #0F0;
 }
 
+.off .glyphicon {
+	color: black;
+}
+
 th.toggle {
 	white-space: nowrap;	
+}
+
+table tr td.button {
+    text-align: right;
+    width: 1px;
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-    xmlns:tx="http://www.springframework.org/schema/tx"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
               http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
               http://www.springframework.org/schema/jdbc
               http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
@@ -13,59 +13,60 @@
               http://www.springframework.org/schema/context/spring-context-3.1.xsd
        ">
 
-    <context:property-placeholder location="classpath:10251VM.db.properties"
-        ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath:10251VM.db.properties"
+		ignore-unresolvable="true" />
 
-    <bean id="dataSource"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName">
-            <value>com.microsoft.sqlserver.jdbc.SQLServerDriver</value>
-        </property>
-        <property name="url"
-            value="#{'jdbc:sqlserver://${JDBC_host}:${JDBC_port};databaseName=${JDBC_database};user=${JDBC_username};password=${JDBC_password};'}" />
-        <property name="username" value="#{'${JDBC_username}'}" />
-        <property name="password" value="#{'${JDBC_password}'}" />
-    </bean>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>com.microsoft.sqlserver.jdbc.SQLServerDriver</value>
+		</property>
+		<property name="url"
+			value="#{'jdbc:sqlserver://${JDBC_host}:${JDBC_port};databaseName=${JDBC_database};user=${JDBC_username};password=${JDBC_password};'}" />
+		<property name="username" value="#{'${JDBC_username}'}" />
+		<property name="password" value="#{'${JDBC_password}'}" />
+	</bean>
 
-    <bean id="sessionFactory"
-        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan">
-            <list>
-                <value>com.sandag.commandcenter.model</value>
-            </list>
-        </property>
-        <property name="hibernateProperties">
-            <value>
-                hibernate.dialect=org.hibernate.dialect.SQLServer2008Dialect
-                hibernate.format_sql=true
-                hibernate.show_sql=true
-                hibernate.hbm2ddl.auto=update
-                hibernate.connection.pool_size=10
-                hibernate.cache.provider_class=org.hibernate.cache.internal.NoCacheProvider
-            </value>
-        </property>
-        <property name="entityInterceptor">
-            <ref bean="baseEntityTriggers" />
-        </property>
-    </bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>com.sandag.commandcenter.model</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.SQLServer2008Dialect
+				hibernate.format_sql=true
+				hibernate.show_sql=true
+				hibernate.hbm2ddl.auto=update
+				hibernate.connection.pool_size=10
+				hibernate.cache.provider_class=org.hibernate.cache.internal.NoCacheProvider
+			</value>
+		</property>
+		<property name="entityInterceptor">
+			<ref bean="baseEntityTriggers" />
+		</property>
+	</bean>
 
-    <bean id="transactionManager"
-        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager"
-        proxy-target-class="true" />
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
 
-    <bean id="conversionService"
-        class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <list>
-                <bean class="com.sandag.commandcenter.persistence.JobDao" />
-                <bean class="com.sandag.commandcenter.persistence.UserDao" />
-            </list>
-        </property>
-    </bean>
+	<bean id="conversionService"
+		class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.sandag.commandcenter.persistence.JobDao" />
+				<bean class="com.sandag.commandcenter.persistence.UserDao" />
+				<bean class="com.sandag.commandcenter.persistence.ClusterDao" />
+			</list>
+		</property>
+	</bean>
 
 </beans>
