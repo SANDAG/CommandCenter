@@ -20,7 +20,7 @@
           <div class="col-md-4">
             <t:input path="scenarioStartYear" label="Scenario start year" />
             <t:input path="scenarioEndYear" label="Scenario end year" />
-            <t:input path="schedulingInformation" label="Scheduling information" />
+            <t:input path="schedulingInformation" label="Description" />
           </div>
           <div class="col-md-4"></div>
         </div>

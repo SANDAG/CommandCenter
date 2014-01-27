@@ -88,9 +88,8 @@ public class Job extends BaseEntity
     @Column(name = "scenario_end_year")
     private Integer scenarioEndYear;
 
-    @NotEmpty
-    @Column(name = "scheduling_information")
-    private String schedulingInformation;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "queue_position")
     @GeneratedValue
@@ -196,12 +195,12 @@ public class Job extends BaseEntity
 
     public String getSchedulingInformation()
     {
-        return schedulingInformation;
+        return description;
     }
 
     public void setSchedulingInformation(String schedulingInformation)
     {
-        this.schedulingInformation = schedulingInformation;
+        this.description = schedulingInformation;
     }
 
     public void setModel(Model model)
