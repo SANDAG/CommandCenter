@@ -25,12 +25,17 @@
 <decorator:head />
 </head>
 <body>
+  <c:set var="admin" value="${roleChecker.isAdmin(pageContext.request)}" scope="session" />
   <div class="navbar navbar-default navbar-static-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="<c:url value="/jobs/queued" />">SANDAG Command Center</a>
-      </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="<c:url value="/jobs/queued" />">SANDAG Command Center</a>
     </div>
+    <c:if test="${admin}">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="<c:url value="/jobs/queued" />">Queue</a></li>
+        <li><a href="<c:url value="/admin/clusters" />">Clusters</a></li>
+      </ul>
+    </c:if>
   </div>
   <div class="container">
     <decorator:body />
