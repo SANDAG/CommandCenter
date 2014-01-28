@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContext;
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Model;
 import com.sandag.commandcenter.notification.RunNotifier;
+import com.sandag.commandcenter.persistence.ClusterDao;
 import com.sandag.commandcenter.persistence.JobDao;
 
 public class HandlerTest
@@ -69,7 +70,8 @@ public class HandlerTest
         Handler handler = new Handler();
         handler.serviceName = "name";
         handler.supportedModels = new Job.Model[] {Job.Model.ABM, Job.Model.PECAS };
-
+        addMockClusterDao(handler, true);
+        
         Job.Model jobModel = Job.Model.ABM;
         Job job = mock(Job.class);
         when(job.getModel()).thenReturn(jobModel);
@@ -95,15 +97,13 @@ public class HandlerTest
     @Test
     public void noNextDoesNothing()
     {
-        JobDao dao = mock(JobDao.class);
-        when(dao.startNextInQueue(anyString(), (Job.Model) anyObject())).thenReturn(null);
         Handler handler = new Handler();
+        addMockJobDao(handler, null);
         @SuppressWarnings("unchecked")
         Map<Job.Model, Runner> runners = mock(Map.class);
         when(runners.get(any(Job.Model.class))).thenReturn(new Runner());
         RunNotifier runNotifier = mock(RunNotifier.class);
         handler.runNotifier = runNotifier;
-        handler.jobDao = dao;
         handler.runners = runners;
         handler.runNext();
         verify(runNotifier, never()).sendStartedMessage(null);
@@ -115,27 +115,36 @@ public class HandlerTest
     public void noOpWhenUninitialized()
     {
         Handler handler = new Handler();
-        JobDao dao = mock(JobDao.class);
-        handler.jobDao = dao;
-
+        addMockJobDao(handler, new Job());
+        addMockClusterDao(handler, true);
         handler.runNext();
-        verify(dao, never()).startNextInQueue(anyString(), (Model[]) anyObject());
+        verify(handler.jobDao, never()).startNextInQueue(anyString(), (Model[]) anyObject());
+    }
+
+    @Test
+    public void noOpWhenClusterInactive()
+    {
+        Handler handler = new Handler();
+        handler.initialized = true;
+        addMockClusterDao(handler, false);
+        addMockJobDao(handler, new Job());
+        handler.runNext();
+        verify(handler.jobDao, never()).startNextInQueue(anyString(), (Model[]) anyObject());
     }
 
     @Test
     public void sendsMessages()
     {
-        Job job = new Job();
-        JobDao dao = mock(JobDao.class);
-        when(dao.startNextInQueue(anyString(), (Job.Model) anyObject())).thenReturn(job);
         Handler handler = new Handler();
+        Job job = new Job();
+        addMockJobDao(handler, job);
+        addMockClusterDao(handler, true);
         RunNotifier runNotifier = mock(RunNotifier.class);
         @SuppressWarnings("unchecked")
         Map<Job.Model, Runner> runners = mock(Map.class);
         when(runners.get(any(Job.Model.class))).thenReturn(mock(Runner.class));
         handler.initialized = true;
         handler.runNotifier = runNotifier;
-        handler.jobDao = dao;
         handler.runners = runners;
         handler.runNext();
         verify(runNotifier).sendStartedMessage(job);
@@ -155,4 +164,18 @@ public class HandlerTest
         fail(String.format("'%s' is not in '%s'", value, array));
     }
 
+    private void addMockClusterDao(Handler handler, boolean clusterActive)
+    {
+        ClusterDao clusterDao = mock(ClusterDao.class);
+        when(clusterDao.isActive(anyString())).thenReturn(clusterActive);
+        handler.clusterDao = clusterDao;
+    }
+    
+    private void addMockJobDao(Handler handler, Job startNextReturn)
+    {
+        JobDao jobDao = mock(JobDao.class);
+        when(jobDao.startNextInQueue(anyString(), (Job.Model) anyObject())).thenReturn(startNextReturn);
+        handler.jobDao = jobDao;
+    }
+    
 }

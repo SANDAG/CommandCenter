@@ -15,7 +15,7 @@ public class Cluster extends BaseEntity
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "active")
@@ -36,9 +36,10 @@ public class Cluster extends BaseEntity
         return name;
     }
 
+    // lower case for unique constraint
     public void setName(String name)
     {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
     public boolean getActive()

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.notification.RunNotifier;
+import com.sandag.commandcenter.persistence.ClusterDao;
 import com.sandag.commandcenter.persistence.JobDao;
 
 @Service
@@ -23,6 +24,9 @@ public class Handler
 
     @Autowired
     protected JobDao jobDao;
+
+    @Autowired
+    protected ClusterDao clusterDao;
 
     @Autowired
     protected ServiceNameRetriever serviceNameRetriever;
@@ -58,6 +62,12 @@ public class Handler
         {
             return;
         }
+        if (!clusterDao.isActive(serviceName))
+        {
+            LOGGER.info(String.format("Not running - no active cluster with name '%s'.", serviceName));
+            return;
+        }
+        
         LOGGER.debug("runNext started");
         Job next = jobDao.startNextInQueue(serviceName, supportedModels);
         if (next != null)
@@ -69,6 +79,6 @@ public class Handler
             runNotifier.sendFinishedMessage(next);
         }
         LOGGER.debug("runNext finished");
-    }
-
+    }    
+    
 }
