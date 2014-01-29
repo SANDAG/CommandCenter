@@ -22,7 +22,7 @@ public class RoleChecker
     {
         boolean isAdmin = request.isUserInRole(adminRole);
         LOGGER.debug(String.format("isAdmin called, returning '%s' when matching against '%s'", isAdmin, adminRole));
-        WindowsAuthenticationToken principal = (waffle.spring.WindowsAuthenticationToken) request.getUserPrincipal();
+        WindowsAuthenticationToken principal = (WindowsAuthenticationToken) request.getUserPrincipal();
         LOGGER.trace("ROLES: " + Arrays.toString(principal.getAuthorities().toArray()));
 
         return isAdmin;

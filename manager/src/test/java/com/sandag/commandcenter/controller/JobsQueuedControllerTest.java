@@ -62,6 +62,7 @@ public class JobsQueuedControllerTest
         assertTrue(model.containsAttribute("jobAccessManager"));
         assertTrue(model.containsAttribute("moveUpIds"));
         assertTrue(model.containsAttribute("moveDownIds"));
+        assertTrue(model.containsAttribute("navbarSelection"));
         Object modelJobs = model.asMap().get("jobs");
         assertEquals(jobs, modelJobs);
     }

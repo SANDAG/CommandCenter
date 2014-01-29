@@ -20,7 +20,6 @@ public class ClusterControllerTest
 {
 
     private ClusterController controller;
-
     private Model model;
 
     @Before

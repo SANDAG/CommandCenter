@@ -32,8 +32,8 @@
     </div>
     <c:if test="${admin}">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="<c:url value="/jobs/queued" />">Queue</a></li>
-        <li><a href="<c:url value="/admin/clusters" />">Clusters</a></li>
+        <li<c:if test="${navbarSelection eq 'jobs'}"> class="active"</c:if>><a href="<c:url value="/jobs/queued" />">Queue</a></li>
+        <li<c:if test="${navbarSelection eq 'clusters'}"> class="active"</c:if>><a href="<c:url value="/admin/clusters" />">Clusters</a></li>
       </ul>
     </c:if>
   </div>
