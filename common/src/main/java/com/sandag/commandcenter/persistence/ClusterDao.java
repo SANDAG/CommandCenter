@@ -26,7 +26,7 @@ public class ClusterDao extends BaseDao<Cluster, Integer>
 
     public boolean isActive(String name)
     {
-        Criteria criteria = startQuery().add(Restrictions.eq("name", name.toLowerCase()));
+        Criteria criteria = startQuery().add(Restrictions.eq("name", name.toLowerCase())).add(Restrictions.eqOrIsNull("active", true));
         return null != criteria.setMaxResults(1).uniqueResult();
     }
 
