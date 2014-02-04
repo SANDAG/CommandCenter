@@ -57,7 +57,8 @@
 	opacity: .6;
 }
 
-.css-treeview input:checked:not(:disabled ) ~ ul {
+/* NOTE: autoformatting in Eclipse may break this (no spaces in ":not(:disabled)") */
+.css-treeview input:checked:not(:disabled) ~ ul {
 	display: block;
 }
 
