@@ -20,7 +20,7 @@
 	<mvc:annotation-driven conversion-service="conversionService" />
 	<sec:global-method-security
 		pre-post-annotations="enabled" />
-	<context:property-placeholder location="classpath:10251vm.properties"
+	<context:property-placeholder location="classpath:manager-webapp.properties"
 		ignore-unresolvable="true" />
 
 	<bean
