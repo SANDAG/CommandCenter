@@ -18,7 +18,7 @@
 	<context:component-scan base-package="com.sandag.commandcenter" />
 	<mvc:annotation-driven conversion-service="conversionService" />
 	<task:annotation-driven />
-	<context:property-placeholder location="classpath:10251vm.properties"
+	<context:property-placeholder location="classpath:runner-webapp.properties"
 		ignore-unresolvable="true" />
 
 	<import resource="classpath:node-client.xml" />
