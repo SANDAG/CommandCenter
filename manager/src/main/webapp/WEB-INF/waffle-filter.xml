@@ -33,7 +33,7 @@
 		<!-- prints all available roles (from a jsp file): <%=((waffle.spring.WindowsAuthenticationToken)(request.getUserPrincipal())).getAuthorities()%> 
 			or with spring security tags: <sec:authentication property="principal.authorities"/> -->
 		<sec:intercept-url pattern="/admin/**"
-			access="hasRole('ROLE_SANDAG\REGIONAL MODELS') or hasRole('ROLE_I-RSG\DEVELOPERS')" />
+			access="hasRole('ROLE_SANDAGNET\REGIONAL MODELS') or hasRole('ROLE_I-RSG\DEVELOPERS')" />
 		<!-- TODO check for roles here, too, so not everyone from attached trusted 
 			domains can get in? -->
 		<sec:intercept-url pattern="/**" access="isFullyAuthenticated()" />
