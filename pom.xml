@@ -202,5 +202,7 @@
 		<module>runner</module>
 		<module>manager</module>
 		<module>common</module>
+		<module>node</module>
+		<module>node-interface</module>
 	</modules>
 </project>
