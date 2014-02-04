@@ -44,7 +44,7 @@ public class DirectoryListerTest
     public void getsChildDirs()
     {
         File file = getFile("Dir0");
-        assertArrayEquals(new File[] {getFile("Dir0/Dir0_0"), getFile("Dir0/Dir0_1") }, lister.getChildDirs(file.getAbsolutePath()));
+        assertArrayEquals(new String[] {"Dir0_0", "Dir0_1"}, lister.getChildDirs(file.getAbsolutePath()));
     }
 
     // support

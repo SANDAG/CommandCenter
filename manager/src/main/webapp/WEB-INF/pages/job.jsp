@@ -16,6 +16,8 @@
             <t:input path="scenario" label="Scenario name" />
             <t:input path="study" label="Study name" />
             <t:input path="scenarioLocation" label="Scenario location" />
+            <%@ include file="directoryPicker.jspf"%>
+            <button id="scenarioLocationPicker" class="btn btn-default" data-toggle="modal" data-target="#modalDirPicker">Pick directory</button>
           </div>
           <div class="col-md-4">
             <t:input path="scenarioStartYear" label="Scenario start year" />
@@ -29,6 +31,5 @@
       </form:form>
     </div>
   </div>
-
 </body>
 </html>
