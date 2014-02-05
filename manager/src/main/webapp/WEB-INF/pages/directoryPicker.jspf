@@ -6,113 +6,89 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal title</h4>
+        <h4 class="modal-title">Choose a directory</h4>
       </div>
       <div class="modal-body">
         <div class="css-treeview">
           <ul>
-            <li><input type="checkbox" id="item-0" /><label for="item-0">This Folder is Closed By Default</label>
-              <ul>
-                <li><input type="checkbox" id="item-0-0" /><label for="item-0-0">Ooops! A Nested Folder</label>
-                  <ul>
-                    <li><input type="checkbox" id="item-0-0-0" /><label for="item-0-0-0">Look Ma - No
-                        Hands!</label>
-                      <ul>
-                        <li><a href="./">First Nested Item</a></li>
-                        <li><a href="./">Second Nested Item</a></li>
-                        <li><a href="./">Third Nested Item</a></li>
-                        <li><a href="./">Fourth Nested Item</a></li>
-                      </ul></li>
-                    <li><a href="./">Item 1</a></li>
-                    <li><a href="./">Item 2</a></li>
-                    <li><a href="./">Item 3</a></li>
-                  </ul></li>
-                <li><input type="checkbox" id="item-0-1" /><label for="item-0-1">Yet Another One</label>
-                  <ul>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                  </ul></li>
-                <li><input type="checkbox" id="item-0-2" disabled="disabled" /><label for="item-0-2">Disabled
-                    Nested Items</label>
-                  <ul>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                  </ul></li>
-                <li><a href="./">item</a></li>
-                <li><a href="./">item</a></li>
-                <li><a href="./">item</a></li>
-                <li><a href="./">item</a></li>
-              </ul></li>
-            <li><input type="checkbox" id="item-1" checked="checked" /><label for="item-1">This One is
-                Open by Default...</label>
-              <ul>
-                <li><input type="checkbox" id="item-1-0" /><label for="item-1-0">And Contains More Nested
-                    Items...</label>
-                  <ul>
-                    <li><a href="./">Look Ma - No Hands</a></li>
-                    <li><a href="./">Another Item</a></li>
-                    <li><a href="./">And Yet Another</a></li>
-                  </ul></li>
-                <li><a href="./">Lorem</a></li>
-                <li><a href="./">Ipsum</a></li>
-                <li><a href="./">Dolor</a></li>
-                <li><a href="./">Sit Amet</a></li>
-              </ul></li>
-            <li><input type="checkbox" id="item-2" /><label for="item-2">Can You Believe...</label>
-              <ul>
-                <li><input type="checkbox" id="item-2-0" /><label for="item-2-0">That This Treeview...</label>
-                  <ul>
-                    <li><input type="checkbox" id="item-2-2-0" /><label for="item-2-2-0">Does Not Use Any
-                        JavaScript...</label>
-                      <ul>
-                        <li><a href="./">But Relies Only</a></li>
-                        <li><a href="./">On the Power</a></li>
-                        <li><a href="./">Of CSS3</a></li>
-                      </ul></li>
-                    <li><a href="./">Item 1</a></li>
-                    <li><a href="./">Item 2</a></li>
-                    <li><a href="./">Item 3</a></li>
-                  </ul></li>
-                <li><input type="checkbox" id="item-2-1" /><label for="item-2-1">This is a Folder With...</label>
-                  <ul>
-                    <li><a href="./">Some Nested Items...</a></li>
-                    <li><a href="./">Some Nested Items...</a></li>
-                    <li><a href="./">Some Nested Items...</a></li>
-                    <li><a href="./">Some Nested Items...</a></li>
-                    <li><a href="./">Some Nested Items...</a></li>
-                  </ul></li>
-                <li><input type="checkbox" id="item-2-2" disabled="disabled" /><label for="item-2-2">Disabled
-                    Nested Items</label>
-                  <ul>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                    <li><a href="./">item</a></li>
-                  </ul></li>
-              </ul></li>
           </ul>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" id="dirPickerSubmitButton">Choose</button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+	var dirPicker = {
+		rootId: 'i0',
+		createLi: function(parentDir, dir, id) {
+    		var li = $([ '<li data-path="', parentDir, dir, '/">',
+    						'<input type="checkbox" id="', id, '"/>',
+    						'<label for="', id, '">', dir, '</label></li>' ].join(''));
+    		li.click(function(event) {
+    			var li = $(this);
+    			event.stopPropagation();
+    			console.log('handling click', id, event.target);
+    			// this gets triggered for the label and the input - only do it once for each click
+    			if (event.target.nodeName != 'LABEL') {
+    				return;
+    			}
+    			if (id != dirPicker.rootId) {
+    				$('.selected').removeClass('selected');
+    				li.children('label').addClass('selected');	
+    			}			
+    			if (li.find('ul').length == 0) {
+    				dirPicker.populateSubDirs(li);
+    			}
+    		});
+    		
+    		return li;
+    	},
+    	populateSubDirs: function(li) {
+    		var errorFunction = function() {
+    			alert("There was a problem reading the file system; please refresh to try again.");
+    		};
+    		var successFunction = function(dirs) {
+    			var ul = $('<ul>');
+    			var i;
+    			var parentId = li.children("input").attr("id");
+    			var parentPath = li.data("path");
+    			if (dirs.length == 0) {
+    				li.children('input').addClass('empty');
+    			} else {
+    				for (i = 0; i < dirs.length; i++) {
+    					ul.append(dirPicker.createLi(parentPath, dirs[i], parentId
+    							+ '_' + i));
+    				}
+    				li.append(ul);
+    			}
+    		};
+    		
+    		$.ajax({
+    			url : '<c:url value="/directories" />?parentDir='
+    					+ encodeURIComponent(li.data('path')),
+    			dataType : 'json',
+    			beforeSend: function () {$(".modal-body").addClass("busy");},
+    			success : successFunction,
+    			error : errorFunction,
+    			complete: function () {$(".modal-body").removeClass("busy");}
+    		});
+    	},
+    	onChosenCallback: function(path) {
+    		alert('default onChosenCallback impl called with "' + path + "'");
+    	}
+    };
+	
+	$(function() {
+		var rootUl = $('.css-treeview ul');
+		rootUl.append(dirPicker.createLi('', '${dirPickerRoot}', dirPicker.rootId));
+		$('#dirPickerSubmitButton').click(function() {
+			dirPicker.onChosenCallback($('.css-treeview .selected').parent().data('path'));
+			$('#modalDirPicker').modal('hide');
+		});
+	});
+	
+</script>

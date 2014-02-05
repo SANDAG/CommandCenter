@@ -49,3 +49,8 @@ table tr td.button {
     text-align: right;
     width: 1px;
 }
+
+.selected {
+	border: dotted black 1px;
+}
+

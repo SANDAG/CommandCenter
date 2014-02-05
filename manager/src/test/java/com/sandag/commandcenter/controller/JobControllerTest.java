@@ -27,11 +27,14 @@ public class JobControllerTest
 
     private Model model;
 
+    private String scenarioLocationRoot = "C:/inside/schrodingers/box";
+    
     @Before
     public void setUp()
     {
         model = new ExtendedModelMap();
         controller = new JobController();
+        controller.scenarioLocationRoot = scenarioLocationRoot;
     }
 
     @Test
@@ -41,6 +44,7 @@ public class JobControllerTest
         assertTrue(model.containsAttribute("job"));
         assertTrue(model.containsAttribute("modelNameMappings"));
         assertTrue(model.containsAttribute("message"));
+        assertEquals(scenarioLocationRoot, model.asMap().get("dirPickerRoot"));
     }
 
     @Test
@@ -51,6 +55,7 @@ public class JobControllerTest
 
         assertEquals("job", controller.addJob(null, result, model, null));
         assertTrue(model.containsAttribute("modelNameMappings"));
+        assertEquals(scenarioLocationRoot, model.asMap().get("dirPickerRoot"));
         assertTrue(((String) model.asMap().get("message")).matches(".*fix.*error.*"));
     }
 

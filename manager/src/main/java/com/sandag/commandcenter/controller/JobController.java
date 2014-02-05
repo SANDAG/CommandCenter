@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,12 +38,16 @@ public class JobController
     @Autowired
     protected JobAccessManager jobAccessManager;
 
+    @Value(value = "#{'${scenarioLocationRoot}'}")
+    protected String scenarioLocationRoot;
+    
     @RequestMapping(method = RequestMethod.GET)
     public String displayEmptyJobForm(Model model)
     {
         model.addAttribute("message", "Add a job to the queue");
         model.addAttribute("job", new Job());
         model.addAttribute("modelNameMappings", getModelNamesMap());
+        model.addAttribute("dirPickerRoot", scenarioLocationRoot);
         return "job";
     }
 
@@ -56,6 +61,7 @@ public class JobController
         if (result.hasErrors())
         {
             model.addAttribute("message", "Please fix the error(s) below and resubmit your job");
+            model.addAttribute("dirPickerRoot", scenarioLocationRoot);
         } else
         {
             User user = userDao.fetchOrCreate(principal.getName());

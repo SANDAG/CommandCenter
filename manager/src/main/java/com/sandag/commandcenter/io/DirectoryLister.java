@@ -24,6 +24,11 @@ public class DirectoryLister
             }
 
         });
+        // empty directory (instead of files and no subdirs)
+        if (dirs == null)
+        {
+            dirs = new File[0];
+        }
         String[] names = new String[dirs.length];
         for (int i = 0; i < dirs.length; i++)
         {

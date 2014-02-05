@@ -7,6 +7,7 @@
   <jsp:directive.attribute name="cssClass" required="false" type="java.lang.String" />
   <jsp:directive.attribute name="label" required="false" type="java.lang.String" />
   <jsp:directive.attribute name="required" required="false" type="java.lang.Boolean" />
+  <jsp:directive.attribute name="readonly" required="false" type="java.lang.Boolean" />
   <c:if test="${empty label}">
     <c:set var="label"
       value="${fn:toUpperCase(fn:substring(path, 0, 1))}${fn:toLowerCase(fn:substring(path, 1,fn:length(path)))}" />
@@ -17,7 +18,7 @@
           <span class="required">*</span>
         </c:if></label>
       <div class="controls">
-        <form:input path="${path}" cssClass="${empty cssClass ? 'form-control' : cssClass}" />
+        <form:input path="${path}" cssClass="${empty cssClass ? 'form-control' : cssClass}" readonly="${readonly}"/>
         <c:if test="${status.error}">
           <span class="help-inline text-danger">${status.errorMessage}</span>
         </c:if>

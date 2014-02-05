@@ -3,49 +3,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script>
-  	$(function () {
-  		appendLog();
-  	});
-  	
-  	function appendLog() {
+<script>
+	$(function() {
+		appendLog();
+	});
+
+	function appendLog() {
 		var startByte = 0;
 
-  		var fetch = function () {
-  	  		var errorFunction = function () {
-  	  			alert("There was a problem retrieving the log; please refresh to try again.");
-  	  		};
-  			var successFunction = function (data) {
-  				$('#logContents').append(data);
-  				startByte += data.length;
-  				if (data.length > 0) {
-  					fetch();
-  				} else {
-  					// more data may be written... pause a bit before trying again
-  					setTimeout(fetch, 3000);
-  				}
-  			};
-    		$.ajax({
-    			url : '${url}&startByte=' + startByte,
-    			dataType: 'text',
-    			success : successFunction,
-    			error : errorFunction
-    		});
-  		};
-  		fetch();
-  	}
-  </script>
-  <style>
-    #logContents {
-      white-space: pre;
-    }
-  </style>
+		var fetch = function() {
+			var errorFunction = function() {
+				alert("There was a problem retrieving the log; please refresh to try again.");
+			};
+			var successFunction = function(data) {
+				$('#logContents').append(data);
+				startByte += data.length;
+				if (data.length > 0) {
+					fetch();
+				} else {
+					// more data may be written... pause a bit before trying again
+					setTimeout(fetch, 3000);
+				}
+			};
+			$.ajax({
+				url : '${url}&startByte=' + startByte,
+				dataType : 'text',
+				success : successFunction,
+				error : errorFunction
+			});
+		};
+		fetch();
+	}
+</script>
+<style>
+#logContents {
+	white-space: pre;
+}
+</style>
 </head>
 <body>
   <div class="row">
     <div class="col-md-12">
-      <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info"><i class="glyphicon glyphicon-chevron-left"></i> Log files</a> 
-      <h3>Scenario <strong><a href="<c:url value="/jobs/${job.status eq 'RUNNING' ? 'running' : 'finished'}" />?highlight=${job.id}">${job.scenario}</a></strong>&#39;s log file <strong>${path}</strong></h3>
+      <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info"><i
+        class="glyphicon glyphicon-chevron-left"></i> Log files</a>
+      <h3>
+        Scenario <strong><a
+          href="<c:url value="/jobs/${job.status eq 'RUNNING' ? 'running' : 'finished'}" />?highlight=${job.id}">${job.scenario}</a></strong>&#39;s
+        log file <strong>${path}</strong>
+      </h3>
       <div id="logContents"></div>
     </div>
   </div>

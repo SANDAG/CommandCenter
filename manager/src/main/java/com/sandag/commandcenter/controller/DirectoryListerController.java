@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sandag.commandcenter.io.DirectoryLister;
 
 @Controller
-@RequestMapping("/directories")
 public class DirectoryListerController
 {
     @Autowired
     protected DirectoryLister dirLister;
 
     @ResponseBody
+    @RequestMapping("/directories")
     public String[] listDirectories(@RequestParam String parentDir)
     {
         return dirLister.getChildDirs(parentDir);

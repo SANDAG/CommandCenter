@@ -13,6 +13,12 @@
  * for the CSS3 Treeview, please, check this link:
  * http://experiments.wemakesites.net/miscellaneous/acidjs-css3-treeview/
  **/
+ 
+.css-treeview {
+	max-height: 400px;
+	overflow: auto;
+} 
+ 
 .css-treeview ul,.css-treeview li {
 	padding: 0;
 	margin: 0;
@@ -52,6 +58,10 @@
 	cursor: pointer;
 }
 
+.busy, .busy .css-treeview label, .busy .css-treeview label::before {
+	cursor: wait;
+}
+
 .css-treeview input:disabled+label {
 	cursor: default;
 	opacity: .6;
@@ -62,7 +72,8 @@
 	display: block;
 }
 
-.css-treeview label,.css-treeview label::before {
+.css-treeview label,
+.css-treeview label::before {
 	background: url("../img/icons.png") no-repeat;
 }
 
@@ -87,6 +98,10 @@
 
 .css-treeview input:checked+label::before {
 	background-position: 0 -16px;
+}
+
+.css-treeview input.empty+label::before {
+	background-position: 0 -48px;
 }
 
 /* webkit adjacent element selector bugfix */
