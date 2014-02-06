@@ -2,10 +2,14 @@ package com.sandag.commandcenter.node;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class Host
+public final class Host
 {
-    
-    @SuppressWarnings("resource") // closing the resource will stop the service...
+    private Host()
+    {
+    }
+
+    @SuppressWarnings("resource")
+    // closing the resource will stop the service...
     public static void main(String[] args)
     {
         new ClassPathXmlApplicationContext("applicationContext.xml");
