@@ -204,5 +204,6 @@
 		<module>common</module>
 		<module>node</module>
 		<module>node-interface</module>
+		<module>common-test</module>
 	</modules>
 </project>

@@ -1,0 +1,24 @@
+Git doesn't track empty directories, so including this file to get its parent in scm. 
+
+Maven doesn't copy empty directories by default, but this makes that work:
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>test</phase>
+            <goals>
+              <goal>testResources</goal>
+            </goals>
+            <configuration>
+              <includeEmptyDirs>true</includeEmptyDirs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>

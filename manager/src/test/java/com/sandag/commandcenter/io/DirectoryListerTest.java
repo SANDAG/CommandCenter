@@ -6,14 +6,22 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.sandag.commandcenter.testutils.TestUtils;
 
 public class DirectoryListerTest
 {
     private DirectoryLister lister = new DirectoryLister();
+
+    @BeforeClass
+    public static void removeHackFiles()
+    {
+        TestUtils.removeHackFiles("Dir0/Dir0_0");
+        TestUtils.removeHackFiles("Dir0/Dir0_1");
+    }
 
     @Test
     public void emptyForNotExists()
@@ -25,7 +33,7 @@ public class DirectoryListerTest
     @Test
     public void emptyForNonDirInput()
     {
-        File file = getFile("OuterFile");
+        File file = TestUtils.getFile("OuterFile");
         assertTrue(file.exists());
         assertFalse(file.isDirectory());
         assertEquals(0, lister.getChildDirs(file.getAbsolutePath()).length);
@@ -34,7 +42,7 @@ public class DirectoryListerTest
     @Test
     public void emptyForNoChildren()
     {
-        File file = getFile("Dir0/Dir0_1");
+        File file = TestUtils.getFile("Dir0/Dir0_1");
         assertTrue(file.exists());
         assertTrue(file.isDirectory());
         assertEquals(0, file.list().length);
@@ -44,21 +52,8 @@ public class DirectoryListerTest
     @Test
     public void getsChildDirs()
     {
-        File file = getFile("Dir0");
-        assertArrayEquals(new String[] {"Dir0_0", "Dir0_1"}, lister.getChildDirs(file.getAbsolutePath()));
-    }
-
-    // support
-    public File getFile(String path)
-    {
-        URL url = ClassLoader.getSystemResource(path);
-        try
-        {
-            return new File(url.toURI());
-        } catch (URISyntaxException e)
-        {
-            throw new RuntimeException("Shouldn't happen, but we'll still fail if it does");
-        }
+        File file = TestUtils.getFile("Dir0");
+        assertArrayEquals(new String[] {"Dir0_0", "Dir0_1" }, lister.getChildDirs(file.getAbsolutePath()));
     }
 
 }

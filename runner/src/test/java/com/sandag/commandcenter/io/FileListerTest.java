@@ -7,16 +7,17 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.sandag.commandcenter.model.Job;
+import com.sandag.commandcenter.testutils.TestUtils;
 
 public class FileListerTest
 {
@@ -26,11 +27,16 @@ public class FileListerTest
     private Job job;
     private String baseDir;
 
+    @BeforeClass
+    public static void removeHackFiles()
+    {
+        TestUtils.removeHackFiles("fileListTestDir/emptyScenarioNameDir");
+    }
+
     @Before
     public void setup() throws URISyntaxException
     {
-        URL rootUrl = ClassLoader.getSystemResource("fileListTestDir");
-        baseDir = new File(rootUrl.toURI()).getAbsolutePath();
+        baseDir = TestUtils.getFile("fileListTestDir").getAbsolutePath();
         job = new Job();
     }
 
