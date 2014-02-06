@@ -7,6 +7,5 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>node-interface</artifactId>
-    <name>Node Inteferace</name>
     <description>Interface for the Node server</description>
 </project>

@@ -1,7 +1,5 @@
 package com.sandag.commandcenter.testutils;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -28,8 +26,6 @@ public final class TestUtils
     public static void removeHackFiles(String path)
     {
         File file = getFile(path);
-        assertTrue(file.exists());
-        assertTrue(file.isDirectory());
         File[] children = file.listFiles();
         for (File f : children)
         {

@@ -7,7 +7,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>node</artifactId>
-	<name>Node</name>
 	<description>Node server implementation</description>
 	<dependencies>
 		<dependency>
