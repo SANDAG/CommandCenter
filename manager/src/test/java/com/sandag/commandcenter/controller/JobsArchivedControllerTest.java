@@ -16,16 +16,16 @@ import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Status;
 import com.sandag.commandcenter.persistence.JobDao;
 
-public class JobsFinishedControllerTest
+public class JobsArchivedControllerTest
 {
-    private JobsFinishedController controller;
+    private JobsArchivedController controller;
     private Model model;
 
     @Before
     public void setUp()
     {
         model = new ExtendedModelMap();
-        controller = new JobsFinishedController();
+        controller = new JobsArchivedController();
     }
 
     @Test
@@ -35,10 +35,10 @@ public class JobsFinishedControllerTest
         List<Job> jobs = new ArrayList<Job>();
         Job job = new Job();
         jobs.add(job);
-        when(dao.read(Status.FINISHED)).thenReturn(jobs);
+        when(dao.read(Status.ARCHIVED)).thenReturn(jobs);
         controller.jobDao = dao;
 
-        assertEquals("jobsFinished", controller.display(model));
+        assertEquals("jobsArchived", controller.display(model));
         Object modelJobs = model.asMap().get("jobs");
         assertEquals(jobs, modelJobs);
     }

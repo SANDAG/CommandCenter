@@ -13,7 +13,8 @@ import static com.sandag.commandcenter.model.Job.Status.RUNNING;
 import static com.sandag.commandcenter.model.Job.Status.QUEUED;
 import static com.sandag.commandcenter.model.Job.Status.CANCELLED;
 import static com.sandag.commandcenter.model.Job.Status.FINISHED;
-import static com.sandag.commandcenter.model.Job.Status.FAILED;
+import static com.sandag.commandcenter.model.Job.ExitStatus.SUCCESS;
+import static com.sandag.commandcenter.model.Job.ExitStatus.FAILURE;
 
 @Repository
 public class JobDao extends BaseDao<Job, Integer>
@@ -117,7 +118,8 @@ public class JobDao extends BaseDao<Job, Integer>
 
     public void updateAsFinished(Job job, boolean success)
     {
-        job.setStatus(success ? FINISHED : FAILED);
+        job.setStatus(FINISHED);
+        job.setExitStatus(success ? SUCCESS : FAILURE);
         job.setFinished(new Date());
         update(job);
     }

@@ -26,14 +26,16 @@ public class Job extends BaseEntity
 
     public enum Status
     {
-        // WARNING do not change this order - values are stored in the database using this order
-        //   add additional statuses to the end of the list
-        QUEUED, RUNNING, FINISHED, FAILED, ARCHIVED, DELETED, CANCELLED;
+        QUEUED, RUNNING, CANCELLED, DELETED, FINISHED, ARCHIVED;
     }
 
+    public enum ExitStatus
+    {
+        SUCCESS, FAILURE;
+    }
+    
     public enum Model
     {
-        // WARNING do not change this order - values are stored in the database using this order
         ABM, PECAS;
     }
 
@@ -46,21 +48,29 @@ public class Job extends BaseEntity
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Enumerated(EnumType.STRING)
     private Status status = Status.QUEUED;
 
-    // default to QUEUED (Status enum position 0)
-    @Column(name = "status", columnDefinition = "INT DEFAULT 0", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status", nullable = false)    
     public Status getStatus()
     {
         return status;
     }
 
+    @Enumerated(EnumType.STRING)
+    private ExitStatus exitStatus;
+
+    @Column(name = "exit_status")    
+    public ExitStatus getExitStatus()
+    {
+        return exitStatus;
+    }
+
+    @Enumerated(EnumType.STRING)
     private Model model;
 
     @NotNull
-    @Column(name = "model")
-    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "model")    
     public Model getModel()
     {
         return model;
@@ -106,6 +116,9 @@ public class Job extends BaseEntity
     @Column(name = "finished")
     private Date finished;
     
+    @Column(name = "archived_notes")
+    private String archivedNotes;
+
     // simple getters/setters below here
 
     public int getQueuePosition()
@@ -133,6 +146,11 @@ public class Job extends BaseEntity
         this.status = status;
     }
 
+    public void setExitStatus(ExitStatus exitStatus)
+    {
+        this.exitStatus = exitStatus;
+    }
+    
     public User getUser()
     {
         return user;
@@ -236,6 +254,16 @@ public class Job extends BaseEntity
     public void setFinished(Date finished)
     {
         this.finished = finished;
+    }
+
+    public String getArchivedNotes()
+    {
+        return archivedNotes;
+    }
+
+    public void setArchivedNotes(String archivedNotes)
+    {
+        this.archivedNotes = archivedNotes;
     };
 
 }

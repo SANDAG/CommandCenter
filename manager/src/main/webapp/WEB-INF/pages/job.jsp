@@ -15,7 +15,7 @@
             <t:select path="model" label="Model" options="${modelNameMappings}" />
             <t:input path="scenarioStartYear" label="Scenario start year" />
             <t:input path="scenarioEndYear" label="Scenario end year" />
-            <t:input path="schedulingInformation" label="Description" />
+            <t:input path="description" label="Description" />
           </div>
           <div class="col-md-8">
             <br />

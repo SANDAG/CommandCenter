@@ -19,8 +19,6 @@
 		$('.downButton').click(function() {
 			moveJob($(this), false);
 		});
-
-		addToggle('user-toggle', 'tr.unowned');
 	});
 
 	function deleteJob(button) {
@@ -110,17 +108,17 @@
               <td>${job.user.principal}</td>
               <td>${job.created}</td>
               <td><c:if test="${owned && moveUpIds.contains(job.id)}">
-                  <button type="button" class="btn btn-default btn-xs upButton" title="Move up the queue">
+                  <button type="button" class="btn btn-default btn-small upButton" title="Move up the queue">
                     <span class="glyphicon glyphicon-arrow-up"></span>
                   </button>
                 </c:if></td>
               <td><c:if test="${owned && moveDownIds.contains(job.id)}">
-                  <button type="button" class="btn btn-default btn-xs downButton" title="Move down the queue">
+                  <button type="button" class="btn btn-default btn-small downButton" title="Move down the queue">
                     <span class="glyphicon glyphicon-arrow-down"></span>
                   </button>
                 </c:if></td>
               <td><c:if test="${owned}">
-                  <button type="button" class="btn btn-danger btn-xs deleteButton" title="Remove from queue">
+                  <button type="button" class="btn btn-danger btn-small deleteButton" title="Remove from queue">
                     <span class="glyphicon glyphicon-trash"></span>
                   </button>
                 </c:if></td>

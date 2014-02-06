@@ -77,12 +77,12 @@
               <td>${job.runner}</td>
               <td>${job.started}</td>
               <td><c:if test="${owned}">
-                  <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-xs" title="View logs"> <span
+                  <a href="<c:url value="/logs/job/${job.id}" />" class="btn btn-info btn-small" title="View logs"> <span
                     class="glyphicon glyphicon-folder-open"></span>
                   </a>
                 </c:if></td>
               <td><c:if test="${owned}">
-                  <button type="button" class="btn btn-danger btn-xs cancelButton" title="Cancel running job">
+                  <button type="button" class="btn btn-danger btn-small cancelButton" title="Cancel running job">
                     <span class="glyphicon glyphicon-stop"></span>
                   </button>
                 </c:if></td>

@@ -32,6 +32,9 @@ import static com.sandag.commandcenter.model.Job.Status.ARCHIVED;
 import static com.sandag.commandcenter.model.Job.Status.DELETED;
 import static com.sandag.commandcenter.model.Job.Status.CANCELLED;
 
+import static com.sandag.commandcenter.model.Job.ExitStatus.FAILURE;
+import static com.sandag.commandcenter.model.Job.ExitStatus.SUCCESS;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/db.xml", "classpath:/autowire.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager")
@@ -243,13 +246,13 @@ public class JobDaoTest
     @Test
     public void statusUpdatesOnSuccess()
     {
-        checkStatusUpdatedWhenFinished(true, Job.Status.FINISHED);
+        checkStatusUpdatedWhenFinished(true, FINISHED, SUCCESS);
     }
 
     @Test
     public void statusUpdatesOnFailure()
     {
-        checkStatusUpdatedWhenFinished(false, Job.Status.FAILED);
+        checkStatusUpdatedWhenFinished(false, FINISHED, FAILURE);
     }
 
     @Test
@@ -311,14 +314,18 @@ public class JobDaoTest
     }
 
     // support
-    private void checkStatusUpdatedWhenFinished(boolean success, Job.Status status)
+    private void checkStatusUpdatedWhenFinished(boolean success, Job.Status status, Job.ExitStatus exitStatus)
     {
         Job job = getJobWithAUser();
         dao.create(job);
 
+        assertEquals(QUEUED, job.getStatus());
+        assertNull(job.getExitStatus());
+        
         dao.updateAsFinished(job, success);
         Job retrieved = dao.read(job.getId());
         assertEquals(status, retrieved.getStatus());
+        assertEquals(exitStatus, retrieved.getExitStatus());
         assertNotNull(retrieved.getFinished());
     }
 

@@ -1,24 +1,25 @@
 <ul class="nav nav-pills">
-  <li id="jobsNavQueued"><a href="<c:url value="/jobs/queued"/>">Queued</a></li>
-  <li id="jobsNavRunning"><a href="<c:url value="/jobs/running"/>">Running</a></li>
-  <li id="jobsNavFinished"><a href="<c:url value="/jobs/finished"/>">Finished</a></li>
+  <li id="jobsNav_queued"><a href="<c:url value="/jobs/queued"/>">Queued</a></li>
+  <li id="jobsNav_running"><a href="<c:url value="/jobs/running"/>">Running</a></li>
+  <li id="jobsNav_finished"><a href="<c:url value="/jobs/finished"/>">Finished</a></li>
+  <li id="jobsNav_archived"><a href="<c:url value="/jobs/archived"/>">Archived</a></li>
 </ul>
 <script>
 	$(function () {
-		var pathToLiId = {'jobs/queued': '#jobsNavQueued', 'jobs/running': '#jobsNavRunning', 'jobs/finished': '#jobsNavFinished'};
-		var urlPath = window.location.pathname;
-		var path;
+		var path = window.location.pathname.split('/');		
+		var page = path.pop();
+		var context;
 		
-		for (path in pathToLiId) {
-			if (urlPath.indexOf(path) > -1) {
-				$(pathToLiId[path]).addClass('active');
-				return;
-			}
+		if (page == '') { // trailing slash
+			page = path.pop();
 		}
-		// default page
-		if (urlPath.indexOf("jobs") == -1) {
-			$('#jobsNavQueued').addClass('active');
+		context = path.pop();		
+		if (context != 'jobs') {
+			$('#jobsNav_queued').addClass('active');
+		} else {
+			$('#jobsNav_' + page).addClass('active');
 		}
-			
+		
+		
 	});
 </script>
