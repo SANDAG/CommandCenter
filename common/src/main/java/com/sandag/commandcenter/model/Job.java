@@ -193,14 +193,14 @@ public class Job extends BaseEntity
         this.scenarioEndYear = scenarioEndYear;
     }
 
-    public String getSchedulingInformation()
+    public String getDescription()
     {
         return description;
     }
 
-    public void setSchedulingInformation(String schedulingInformation)
+    public void setDescription(String description)
     {
-        this.description = schedulingInformation;
+        this.description = description;
     }
 
     public void setModel(Model model)

@@ -1,14 +1,10 @@
 package com.sandag.commandcenter.io;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.sandag.commandcenter.model.Job;
@@ -18,23 +14,12 @@ public class FileLister
 
     protected Job.Model model;
     protected List<String> logFileNames;
-    protected String workingDir;
 
-    @Value(value = "${baseDir}")
-    protected String baseDir;
-    private URI base;
     private static final Logger LOGGER = Logger.getLogger(FileLister.class.getName());
-
-    @PostConstruct
-    public void initialize()
-    {
-        base = new File(baseDir).toURI();
-        LOGGER.debug(String.format("Have root path: '%s' ('%s')", baseDir, base));
-    }
 
     public List<String> listFiles(@PathVariable Job job)
     {
-        File scenarioDir = new File(String.format("%s/%s/%s", baseDir, workingDir, job.getScenario()));
+        File scenarioDir = new File(job.getScenarioLocation());
         LOGGER.debug(String.format("Listing files for: '%s'", scenarioDir.getPath()));
         return search(scenarioDir);
     }
@@ -59,7 +44,7 @@ public class FileLister
         {
             if (logFileNames.contains(f.getName()))
             {
-                files.add(base.relativize(f.toURI()).getPath());
+                files.add(f.getAbsolutePath());
             } else if (f.isDirectory())
             {
                 search(f, files);
@@ -80,11 +65,6 @@ public class FileLister
     public void setLogFileNames(List<String> logFileNames)
     {
         this.logFileNames = logFileNames;
-    }
-
-    public void setWorkingDir(String workingDir)
-    {
-        this.workingDir = workingDir;
     }
 
 }

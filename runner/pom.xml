@@ -22,7 +22,7 @@
 			<groupId>sandag</groupId>
 			<artifactId>node-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
@@ -36,5 +36,23 @@
 	</dependencies>
 	<build>
 		<finalName>runner</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>test</phase>
+						<goals>
+							<goal>testResources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>true</includeEmptyDirs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>

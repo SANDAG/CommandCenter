@@ -7,23 +7,18 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Model;
 
 public class Runner
 {
-    @Value(value = "${baseDir}")
-    protected String baseDir;
-
     @Autowired
     protected ProcessMap processMap;
 
     private static final Logger LOGGER = Logger.getLogger(Runner.class.getName());
 
     private Model model;
-    private String workingDir;
     private String commandLine;
 
     protected ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
@@ -43,7 +38,7 @@ public class Runner
     {
         // success means not failure - exit value not set consistently (expect false positives)
         boolean success = false;
-        File scenarioDir = new File(String.format("%s/%s/%s", baseDir, workingDir, job.getScenario()));
+        File scenarioDir = new File(job.getScenarioLocation());
         LOGGER.debug(String.format("'%s' run started in '%s'", model.name(), scenarioDir.getPath()));
         processBuilder.directory(scenarioDir);
         try
@@ -72,11 +67,6 @@ public class Runner
     public void setProcessBuilder(ProcessBuilderWrapper processBuilder)
     {
         this.processBuilder = processBuilder;
-    }
-
-    public void setWorkingDir(String workingDir)
-    {
-        this.workingDir = workingDir;
     }
 
     public void setCommandLine(String commandLine)

@@ -27,7 +27,7 @@ public class RunnerTest
     private String scenarioDir = "scenario0";
     private Job job = new Job();
     {
-        job.setScenario(scenarioDir);
+        job.setScenarioLocation(scenarioDir);
     }
 
     @Before
@@ -46,14 +46,8 @@ public class RunnerTest
     @Test
     public void runsSetsDirectory() throws IOException
     {
-        String baseDir = ".";  // cross-platform compatible
-        String dir = ".";
-                
-        runner.baseDir = baseDir;
-        runner.setWorkingDir(dir);
         runner.run(job);
-
-        verify(mockProcessBuilder).directory(new File(String.format("%s/%s/%s", baseDir, dir, scenarioDir)));
+        verify(mockProcessBuilder).directory(new File(scenarioDir));
     }
 
     @Test

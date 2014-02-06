@@ -5,7 +5,6 @@
     http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="nodeServer" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
-        <!-- TODO make url configurable -->
         <property name="serviceUrl" value="rmi://#{'${nodeHost}'}:1099/NodeService"></property>
         <property name="serviceInterface" value="com.sandag.commandcenter.node.Server"></property>
     </bean>

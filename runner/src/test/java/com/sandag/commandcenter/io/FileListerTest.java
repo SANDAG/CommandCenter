@@ -1,8 +1,12 @@
 package com.sandag.commandcenter.io;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -20,21 +24,20 @@ public class FileListerTest
 
     private FileLister lister = new FileLister();
     private Job job;
-    
+    private String baseDir;
+
     @Before
-    public void setup()
+    public void setup() throws URISyntaxException
     {
         URL rootUrl = ClassLoader.getSystemResource("fileListTestDir");
-        lister.baseDir = rootUrl.getPath();
-        lister.workingDir = "modelWorkingDir";
-        lister.initialize();
-
+        baseDir = new File(rootUrl.toURI()).getAbsolutePath();
         job = new Job();
     }
 
     @Test
     public void basicControllerFunctionalityWorks()
     {
+        job.setScenarioLocation("c:/Trenzalore/crack/Gallifrey");
         List<String> files = lister.listFiles(job);
         assertEquals(0, files.size());
     }
@@ -42,27 +45,31 @@ public class FileListerTest
     @Test
     public void filteredFilesFound()
     {
-        String scenarioNameDir = "scenarioNameDir";
-        job.setScenario(scenarioNameDir);
+        String scenarioNameDir = baseDir + "/modelWorkingDir/scenarioNameDir";
+        job.setScenarioLocation(scenarioNameDir);
         lister.logFileNames = Arrays.asList(new String[] {"file_top", "file_0_1_a" });
         List<String> files = lister.listFiles(job);
         assertEquals(2, files.size());
-        String prefix = lister.workingDir + "/" + scenarioNameDir + "/";
-        assertContained(new String[] {prefix + "file_top", prefix + "innerDirectory_0/innerDirectory_0_1/file_0_1_a" }, files);
+        assertContained(new String[] {scenarioNameDir + "/innerDirectory_0/innerDirectory_0_1/file_0_1_a", scenarioNameDir + "/file_top", }, files);
     }
 
     @Test
     public void emptyDirDoesNotFail()
     {
-        job.setScenario("emptyScenarioNameDir");
+        File emptyDir = new File(baseDir + "/emptyScenarioNameDir");
+        assertTrue(emptyDir.exists());
+        assertEquals(0, emptyDir.list().length);
+        job.setScenarioLocation(emptyDir.getAbsolutePath());
         List<String> files = lister.listFiles(job);
         assertEquals(0, files.size());
     }
 
     @Test
-    public void nonexistantDirDoesNotFail()
+    public void nonexistentDirDoesNotFail()
     {
-        job.setScenario("nonExistantScenarioNameDir");
+        File missingDir = new File(baseDir + "/nonExistentScenarioNameDir");
+        assertFalse(missingDir.exists());
+        job.setScenarioLocation(missingDir.getAbsolutePath());
         List<String> files = lister.listFiles(job);
         assertEquals(0, files.size());
     }
@@ -77,7 +84,7 @@ public class FileListerTest
         {
             for (String f : foundPaths)
             {
-                if (e.equals(f))
+                if (e.replace(File.separatorChar, '/').equals(f.replace(File.separatorChar, '/')))
                 {
                     notMatched.remove(f);
                 }

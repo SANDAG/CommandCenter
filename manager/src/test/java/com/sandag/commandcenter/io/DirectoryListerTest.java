@@ -37,6 +37,7 @@ public class DirectoryListerTest
         File file = getFile("Dir0/Dir0_1");
         assertTrue(file.exists());
         assertTrue(file.isDirectory());
+        assertEquals(0, file.list().length);
         assertEquals(0, lister.getChildDirs(file.getAbsolutePath()).length);
     }
 
