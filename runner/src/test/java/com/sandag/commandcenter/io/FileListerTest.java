@@ -30,7 +30,7 @@ public class FileListerTest
     @BeforeClass
     public static void removeHackFiles()
     {
-        TestUtils.removeHackFiles("fileListTestDir/emptyScenarioNameDir");
+        TestUtils.removeHackFile("fileListTestDir/emptyScenarioNameDir");
     }
 
     @Before

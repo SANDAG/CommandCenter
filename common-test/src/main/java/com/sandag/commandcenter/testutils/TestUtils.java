@@ -23,7 +23,7 @@ public final class TestUtils
         }
     }
 
-    public static void removeHackFiles(String path)
+    public static void removeHackFile(String path)
     {
         File file = getFile(path);
         File[] children = file.listFiles();

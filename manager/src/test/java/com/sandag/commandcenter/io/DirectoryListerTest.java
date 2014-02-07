@@ -19,8 +19,8 @@ public class DirectoryListerTest
     @BeforeClass
     public static void removeHackFiles()
     {
-        TestUtils.removeHackFiles("Dir0/Dir0_0");
-        TestUtils.removeHackFiles("Dir0/Dir0_1");
+        TestUtils.removeHackFile("Dir0/Dir0_0");
+        TestUtils.removeHackFile("Dir0/Dir0_1");
     }
 
     @Test
