@@ -104,7 +104,7 @@
               <td>${job.model}</td>
               <td>${job.scenario}</td>
               <td>${job.study}</td>
-              <td>${job.scenarioLocation}</td>
+              <td class='longUrl'>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
               <td>${job.created}</td>
               <td><c:if test="${owned && moveUpIds.contains(job.id)}">

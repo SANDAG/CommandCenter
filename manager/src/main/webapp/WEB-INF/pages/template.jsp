@@ -21,6 +21,15 @@
 				window.location.search);
 		return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 	}
+	
+  	$(function() {
+  		var fwdSlashRe = new RegExp('/', 'g');
+  		$('.longUrl').each(function () {
+  			var element = $(this);   			
+  			var allowBreaks = element.html().replace(fwdSlashRe, '/<wbr>');
+  			element.html(allowBreaks);
+  		});
+  	});	
 </script>
 <decorator:head />
 </head>

@@ -7,18 +7,20 @@
 </head>
 <body>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
       <h3>Job details</h3>
       <dl class="dl-horizontal" class="well">
         <dt>Study years</dt>
         <dd>${job.scenarioStartYear} to ${job.scenarioEndYear}</dd>
         <dt>Scenario location</dt>
-        <dd>${job.scenarioLocation}</dd>
+        <dd class='longUrl'>${job.scenarioLocation}</dd>
         <dt>Description</dt>
         <dd>${job.description}</dd>
       </dl>
     </div>
-    <div class="col-md-8">
+  </div>
+  <div class="row">
+    <div class="col-md-12">
       <h3 id="message">${message}</h3>
       <form:form method="post" class="form-horizontal" modelAttribute="job">
         <div class="row">

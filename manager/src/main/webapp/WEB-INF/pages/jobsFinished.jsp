@@ -56,7 +56,7 @@
               <td>${job.model}</td>
               <td>${job.scenario}</td>
               <td>${job.study}</td>
-              <td>${job.scenarioLocation}</td>
+              <td class='longUrl'>${job.scenarioLocation}</td>
               <td>${job.user.principal}</td>
               <td>${job.runner}</td>
               <td>${job.finished}</td>

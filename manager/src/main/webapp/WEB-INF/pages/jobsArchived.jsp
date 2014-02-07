@@ -74,7 +74,7 @@ function unarchiveJob(button) {
               <td>${job.user.principal}</td>
               <c:if test="${admin}">
                 <td><button type="button" class="btn btn-success btn-small unarchiveButton" title="Unarchive">
-                    <span class="glyphicon glyphicon-floppy-save"></span>
+                    <span class="glyphicon glyphicon-floppy-open"></span>
                 </button></td>
               </c:if>
             </tr>
