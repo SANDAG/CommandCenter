@@ -17,16 +17,7 @@ public class DirectoryListerController
     @ResponseBody
     @RequestMapping("/directories")
     public String[] listDirectories(@RequestParam String parentDir)
-    {
-        try
-        {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
+    {        
         return dirLister.getChildDirs(parentDir);
     }
 
