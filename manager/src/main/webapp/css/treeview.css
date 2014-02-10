@@ -14,9 +14,9 @@
  * http://experiments.wemakesites.net/miscellaneous/acidjs-css3-treeview/
  **/
  
-.css-treeview {
+.modal-body {
 	max-height: 400px;
-	overflow: auto;
+	overflow-y: auto;
 } 
  
 .css-treeview ul,.css-treeview li {
