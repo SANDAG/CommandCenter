@@ -74,7 +74,7 @@ public class JobController
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{job}")
     @ResponseBody
-    @PreAuthorize("@jobAccessManager.canUpdate(#request, @jobDao.read(#id), #principal)")
+    @PreAuthorize("@jobAccessManager.canUpdate(#request, #job, #principal)")
     public String deleteQueuedJob(@PathVariable Job job, Principal principal, HttpServletRequest request)
     {
         return jobDao.deleteIfQueued(job) ? "Job deleted" : "Job was no longer queued";
