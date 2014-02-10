@@ -58,8 +58,8 @@
 	cursor: pointer;
 }
 
-.busy, .busy .css-treeview label, .busy .css-treeview label::before {
-	cursor: wait;
+.busy, .busy .css-treeview input, .busy .css-treeview label, .busy .css-treeview label::before {
+	cursor: wait !important;
 }
 
 .css-treeview input:disabled+label {

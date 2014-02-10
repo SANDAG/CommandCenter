@@ -24,6 +24,7 @@
 <script>
 	var dirPicker = {
 		rootId: 'i0',
+		pickedIds: [],
 		createLi: function(parentDir, dir, id) {
     		var li = $([ '<li data-path="', parentDir, dir, '/">',
     						'<input type="checkbox" id="', id, '"/>',
@@ -31,11 +32,11 @@
     		li.click(function(event) {
     			var li = $(this);
     			event.stopPropagation();
-    			console.log('handling click', id, event.target);
-    			// this gets triggered for the label and the input - only do it once for each click
-    			if (event.target.nodeName != 'LABEL') {
+    			if ($.inArray(id, dirPicker.pickedIds) >= 0) {
     				return;
     			}
+    			dirPicker.pickedIds.push(id);
+    			console.log('handling click', id, event.target);
     			if (id != dirPicker.rootId) {
     				$('.selected').removeClass('selected');
     				li.children('label').addClass('selected');	
@@ -71,10 +72,10 @@
     			url : '<c:url value="/directories" />?parentDir='
     					+ encodeURIComponent(li.data('path')),
     			dataType : 'json',
-    			beforeSend: function () {$(".modal-body").addClass("busy");},
+    			beforeSend: function () {$("body").addClass("busy");},
     			success : successFunction,
     			error : errorFunction,
-    			complete: function () {$(".modal-body").removeClass("busy");}
+    			complete: function () {$("body").removeClass("busy");}
     		});
     	},
     	onChosenCallback: function(path) {
