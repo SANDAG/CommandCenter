@@ -21,8 +21,6 @@
 	<context:property-placeholder location="classpath:runner-webapp.properties"
 		ignore-unresolvable="true" />
 
-	<import resource="classpath:node-client.xml" />
-
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">

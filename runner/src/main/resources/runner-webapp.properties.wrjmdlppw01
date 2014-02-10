@@ -1,8 +1,9 @@
+# out of date - see runner-webapp.properties for full config example
+
 crossOriginHosts=http://localhost:8080,http://10251vm:8080
 runDelayMs=5000
 smtpHost=smtp1.rsgmailer.com
 smtpFrom=csabbey@rsginc.com
 
-PECAS_workingDir=PECAS Integration/WorkingFolder
 PECAS_cmdLine=python RunPECAS.py
 PECAS_logFileNames=event.log,aa-event.log,sd-event.log,run.log

@@ -6,8 +6,6 @@ smtpHost=smtp1.rsgmailer.com
 smtpFrom=csabbey@rsginc.com
 smtpToDomain=rsginc.com
 
-nodeHost=10251vm
-
 PECAS_cmdLine=python successfulExit.py
 PECAS_logFileNames=logFile.log,successfulExit.py
 
