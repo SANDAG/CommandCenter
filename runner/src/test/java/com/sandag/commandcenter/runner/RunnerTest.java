@@ -25,6 +25,8 @@ public class RunnerTest
     private Process mockProcess;
     private Job.Model model = Model.PECAS;
     private String scenarioDir = "scenario0";
+    private CommandReplacer mockCommandReplacer;
+    private String replacedCommand = "Command with replacements";
     private Job job = new Job();
     {
         job.setScenarioLocation(scenarioDir);
@@ -34,31 +36,27 @@ public class RunnerTest
     public void setup() throws IOException
     {
         runner = new Runner();
+        runner.commandLine = "Command without replacements";
         mockProcessMap = mock(ProcessMap.class);
         runner.processMap = mockProcessMap;
         mockProcessBuilder = mock(ProcessBuilderWrapper.class);
         runner.processBuilder = mockProcessBuilder;
         mockProcess = mock(Process.class);
+        mockCommandReplacer = mock(CommandReplacer.class);
+        runner.commandReplacer = mockCommandReplacer;
+        when(mockCommandReplacer.replace(runner.commandLine, job)).thenReturn(replacedCommand);
         when(mockProcessBuilder.start()).thenReturn(mockProcess);
         runner.setModel(model);
     }
-    
+
     @Test
-    public void runsSetsDirectory() throws IOException
+    public void runsSetsUpProcessBuilder() throws IOException
     {
         runner.run(job);
+        verify(mockProcessBuilder).command(replacedCommand);
         verify(mockProcessBuilder).directory(new File(scenarioDir));
     }
 
-    @Test
-    public void initSetsCommand()
-    {
-        String command = "Command!";
-        runner.setCommandLine(command);
-        runner.initialize();
-        verify(mockProcessBuilder).command(command);
-    }
-    
     @Test
     public void supportsReturnsModel()
     {

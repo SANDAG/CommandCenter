@@ -3,8 +3,6 @@ package com.sandag.commandcenter.runner;
 import java.io.File;
 import java.io.IOException;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,18 +14,15 @@ public class Runner
     @Autowired
     protected ProcessMap processMap;
 
+    @Autowired
+    protected CommandReplacer commandReplacer;
+
     private static final Logger LOGGER = Logger.getLogger(Runner.class.getName());
 
     private Model model;
-    private String commandLine;
+    protected String commandLine;
 
     protected ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
-
-    @PostConstruct
-    public void initialize()
-    {
-        processBuilder.command(commandLine);
-    }
 
     public Model supports()
     {
@@ -39,7 +34,9 @@ public class Runner
         // success means not failure - exit value not set consistently (expect false positives)
         boolean success = false;
         File scenarioDir = new File(job.getScenarioLocation());
-        LOGGER.debug(String.format("'%s' run started in '%s'", model.name(), scenarioDir.getPath()));
+        String commandWithContext = commandReplacer.replace(commandLine, job);
+        processBuilder.command(commandWithContext);
+        LOGGER.debug(String.format("'%s' run started in '%s' with commandLine '%s'", model.name(), scenarioDir.getPath(), commandWithContext));
         processBuilder.directory(scenarioDir);
         try
         {

@@ -9,5 +9,5 @@ smtpToDomain=rsginc.com
 PECAS_cmdLine=python successfulExit.py
 PECAS_logFileNames=logFile.log,successfulExit.py
 
-ABM_cmdLine=python successfulExit.py
+ABM_cmdLine=python successfulExit.py SCENARIO_LOCATION
 ABM_logFileNames=logFile.log,successfulExit.py
