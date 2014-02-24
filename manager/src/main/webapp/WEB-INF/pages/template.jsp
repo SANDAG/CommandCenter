@@ -30,6 +30,9 @@
   			element.html(allowBreaks);
   		});
   	});	
+
+  	// no-op console.log if it isn't available so it doesn't error out
+  	console = window.console || {log: function (){}};
 </script>
 <decorator:head />
 </head>
