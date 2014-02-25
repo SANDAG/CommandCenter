@@ -26,8 +26,9 @@
 	var dirPicker = {
 		rootId: 'i0',
 		pickedIds: [],
+		separator: null,
 		createLi: function(parentDir, dir, id) {
-    		var li = $([ '<li data-path="', parentDir, dir, '/">',
+    		var li = $([ '<li data-path="', parentDir, dir, dirPicker.separator, '">',
     						'<input type="checkbox" id="', id, '"/>',
     						'<label for="', id, '">', dir, '</label></li>' ].join(''));
     		li.click(function(event) {
@@ -81,16 +82,21 @@
     	},
     	onChosenCallback: function(path) {
     		alert('default onChosenCallback impl called with "' + path + "'");
+    	},
+    	init: function() {
+    		var rootDir = '${fn:replace(dirPickerRoot, '\\', '\\\\')}';
+			// backslash if starts with drive letter or UNC path, else forward slash
+			this.separator = /^([A-Z]:|\\\\)/i.test(rootDir) ? '\\' : '/';
+    		$('.css-treeview ul').append(dirPicker.createLi('', rootDir, dirPicker.rootId));
+    		$('#dirPickerSubmitButton').click(function() {
+    			dirPicker.onChosenCallback($('.css-treeview .selected').parent().data('path'));
+    			$('#modalDirPicker').modal('hide');
+    		});    		
     	}
     };
 	
-	$(function() {
-		var rootUl = $('.css-treeview ul');
-		rootUl.append(dirPicker.createLi('', '${fn:replace(dirPickerRoot, '\\', '\\\\')}', dirPicker.rootId));
-		$('#dirPickerSubmitButton').click(function() {
-			dirPicker.onChosenCallback($('.css-treeview .selected').parent().data('path'));
-			$('#modalDirPicker').modal('hide');
-		});
+	$(function() {		
+		dirPicker.init();
 	});
 	
 </script>
