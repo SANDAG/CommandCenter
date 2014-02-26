@@ -20,6 +20,7 @@ public class ProcessBuilderWrapper
 
     public Process start() throws IOException
     {
+        processBuilder.inheritIO();
         return processBuilder.start();
     }
 
