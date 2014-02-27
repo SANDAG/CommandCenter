@@ -17,6 +17,10 @@ public class JobAccessManager
 
     public boolean canUpdate(HttpServletRequest request, Job job, Principal principal)
     {
+        if (job == null)
+        {
+            return false;
+        }
         return roleChecker.isAdmin(request) || principal.getName().equals(job.getUser().getPrincipal());
     }
 }

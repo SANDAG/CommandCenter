@@ -173,12 +173,10 @@ public class JobsQueuedControllerTest
     @Test
     public void moveUpForDeletedJob()
     {
-        int deletedJobId = 1234134;
         JobDao dao = mock(JobDao.class);
-        when(dao.read(deletedJobId)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(deletedJobId, true, null, null);
+        controller.move(null, true, null, null);
         verify(dao, never()).getMoveableJobBefore((Job) anyObject());
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -186,16 +184,12 @@ public class JobsQueuedControllerTest
     @Test
     public void moveUpForUnswappableJob()
     {
-        // in case someone else changed queue
-
-        int jobId = 1234134;
         Job job = new Job();
         JobDao dao = mock(JobDao.class);
-        when(dao.read(jobId)).thenReturn(job);
         when(dao.getMoveableJobBefore(job)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(jobId, true, null, null);
+        controller.move(job, true, null, null);
         verify(dao).getMoveableJobBefore(job);
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -203,15 +197,13 @@ public class JobsQueuedControllerTest
     @Test
     public void moveUpWorks()
     {
-        int jobId = 1234134;
         Job jobA = new Job();
         Job jobB = new Job();
         JobDao dao = mock(JobDao.class);
-        when(dao.read(jobId)).thenReturn(jobA);
         when(dao.getMoveableJobBefore(jobA)).thenReturn(jobB);
         controller.jobDao = dao;
 
-        controller.move(jobId, true, null, null);
+        controller.move(jobA, true, null, null);
         verify(dao).getMoveableJobBefore(jobA);
         verify(dao).updateWithSwappedQueuePositions(jobA, jobB);
     }
@@ -219,12 +211,10 @@ public class JobsQueuedControllerTest
     @Test
     public void moveDownForDeletedJob()
     {
-        int deletedJobId = 1234134;
         JobDao dao = mock(JobDao.class);
-        when(dao.read(deletedJobId)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(deletedJobId, false, null, null);
+        controller.move(null, false, null, null);
         verify(dao, never()).getMoveableJobAfter((Job) anyObject());
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -234,14 +224,12 @@ public class JobsQueuedControllerTest
     {
         // in case someone else changed queue
 
-        int jobId = 1234134;
         Job job = new Job();
         JobDao dao = mock(JobDao.class);
-        when(dao.read(jobId)).thenReturn(job);
         when(dao.getMoveableJobAfter(job)).thenReturn(null);
         controller.jobDao = dao;
 
-        controller.move(jobId, false, null, null);
+        controller.move(job, false, null, null);
         verify(dao).getMoveableJobAfter(job);
         verify(dao, never()).updateWithSwappedQueuePositions((Job) anyObject(), (Job) anyObject());
     }
@@ -249,15 +237,13 @@ public class JobsQueuedControllerTest
     @Test
     public void moveDownWorks()
     {
-        int jobId = 1234134;
         Job jobA = new Job();
         Job jobB = new Job();
         JobDao dao = mock(JobDao.class);
-        when(dao.read(jobId)).thenReturn(jobA);
         when(dao.getMoveableJobAfter(jobA)).thenReturn(jobB);
         controller.jobDao = dao;
 
-        controller.move(jobId, false, null, null);
+        controller.move(jobA, false, null, null);
         verify(dao).getMoveableJobAfter(jobA);
         verify(dao).updateWithSwappedQueuePositions(jobA, jobB);
     }

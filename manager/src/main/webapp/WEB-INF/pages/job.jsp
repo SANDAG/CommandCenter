@@ -27,7 +27,7 @@
             <%@ include file="directoryPicker.jspf"%>
             <script>
             	dirPicker.onChosenCallback = function(path) {
-            		var pathParts = path.split('/');
+            		var pathParts = path.split(/[\\/]/);
             		var endOffset = pathParts[pathParts.length - 1] == '' ? -2 : -1;
             		$('#scenarioLocation').val(path);
             		$('#study').val(pathParts[pathParts.length + endOffset - 1]);

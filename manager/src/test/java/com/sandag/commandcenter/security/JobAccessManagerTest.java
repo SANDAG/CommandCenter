@@ -10,6 +10,7 @@ import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.User;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +27,14 @@ public class JobAccessManagerTest
         checkCanUpdate(name0, name1, true, true); // admin w/o matching names
     }
 
+    // in case access checked after job deleted...
+    @Test
+    public void nullJobReturnsFalse()
+    {
+        JobAccessManager manager = new JobAccessManager();
+        assertFalse(manager.canUpdate(null, null, null));
+    }
+    
     // support
     public void checkCanUpdate(String principalUsername, String jobUsername, boolean hasAdminRole, boolean accesses)
     {

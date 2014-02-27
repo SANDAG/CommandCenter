@@ -58,12 +58,6 @@ public class RunnerTest
     }
 
     @Test
-    public void supportsReturnsModel()
-    {
-        assertEquals(model, runner.supports());
-    }
-
-    @Test
     public void checkExitValues() throws InterruptedException, IOException
     {
         checkExitValues(-56345624, false);

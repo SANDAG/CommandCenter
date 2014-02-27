@@ -4,30 +4,21 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Model;
 
 public class Runner
 {
-    @Autowired
-    protected ProcessMap processMap;
-
-    @Autowired
-    protected CommandReplacer commandReplacer;
-
+    protected ProcessMap processMap = new ProcessMap();
+    protected CommandReplacer commandReplacer = new CommandReplacer();
+    
     private static final Logger LOGGER = Logger.getLogger(Runner.class.getName());
 
-    private Model model;
+    protected Model model;
     protected String commandLine;
 
     protected ProcessBuilderWrapper processBuilder = new ProcessBuilderWrapper();
-
-    public Model supports()
-    {
-        return model;
-    }
 
     public boolean run(Job job)
     {

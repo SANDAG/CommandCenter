@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.sandag.commandcenter.model.Job;
@@ -50,23 +51,24 @@ public class JobsQueuedController
         return "jobsQueued";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}/move")
-    @PreAuthorize("@jobAccessManager.canUpdate(#request, @jobDao.read(#id), #principal)")
-    public void move(@PathVariable Integer id, @RequestParam(defaultValue = "true") boolean moveUp, Principal principal, HttpServletRequest request)
+    @RequestMapping(method = RequestMethod.GET, value = "/{job}/move", produces="text/plain")
+    @ResponseBody // used for debugging only
+    @PreAuthorize("@jobAccessManager.canUpdate(#request, #job, #principal)")
+    public String move(@PathVariable Job job, @RequestParam(defaultValue = "true") boolean moveUp, Principal principal, HttpServletRequest request)
     {
         // no-op if either is null (someone else changed the queue order or deleted a job?)
-        Job chosen = jobDao.read(id);
-        if (chosen == null)
+        if (job == null)
         {
-            return;
+            return "not swapped - selected job was null";
         }
-        Job other = moveUp ? jobDao.getMoveableJobBefore(chosen) : jobDao.getMoveableJobAfter(chosen);
+        Job other = moveUp ? jobDao.getMoveableJobBefore(job) : jobDao.getMoveableJobAfter(job);
         if (other == null)
         {
-            return;
+            return "not swapped - no job to swap with";
         }
 
-        jobDao.updateWithSwappedQueuePositions(chosen, other);
+        jobDao.updateWithSwappedQueuePositions(job, other);
+        return "swapped";
     }
 
     protected List<Integer> getCanMoveUpJobIds(List<Job> jobs, Principal principal)
