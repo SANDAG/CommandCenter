@@ -1,27 +1,31 @@
 package com.sandag.commandcenter.runner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 
 import com.sandag.commandcenter.model.Job;
 import com.sandag.commandcenter.model.Job.Model;
+
+import static com.sandag.commandcenter.model.Job.Model.ABM;
+import static com.sandag.commandcenter.model.Job.Model.PECAS;
+
 import com.sandag.commandcenter.notification.RunNotifier;
 import com.sandag.commandcenter.persistence.ClusterDao;
 import com.sandag.commandcenter.persistence.JobDao;
+import com.sandag.commandcenter.testutils.TestUtils;
 
 public class HandlerTest
 {
@@ -30,34 +34,31 @@ public class HandlerTest
     public void initsOk() throws UnknownHostException
     {
         String serviceName = "Server host";
-
-        Map<String, Runner> runners = new HashMap<String, Runner>();
-        Runner abm = mock(Runner.class);
-        Runner pecas = mock(Runner.class);
-        when(abm.supports()).thenReturn(Job.Model.ABM);
-        when(pecas.supports()).thenReturn(Job.Model.PECAS);
-        runners.put("ignored", abm);
-        runners.put("ignored too", pecas);
-
         ServiceNameRetriever retriever = mock(ServiceNameRetriever.class);
         when(retriever.retrieve()).thenReturn(serviceName);
 
-        ApplicationContext context = mock(ApplicationContext.class);
-        when(context.getBeansOfType(Runner.class)).thenReturn(runners);
-
         Handler handler = new Handler();
         handler.serviceNameRetriever = retriever;
-        handler.context = context;
+        
+        String pecasCmd = "PECAS command line";
+        String abmCmd = "ABM command line";
+        handler.runnerProperties = TestUtils.getProperties("PECAS_cmdLine", pecasCmd, "ABM_cmdLine", abmCmd);
 
+        RunnerFactory runnerFactory = mock(RunnerFactory.class); 
+        handler.runnerFactory = runnerFactory;
+        Runner pecasRunner = new Runner();
+        Runner abmRunner = new Runner();
+        when(runnerFactory.getRunner(pecasCmd, PECAS)).thenReturn(pecasRunner);
+        when(runnerFactory.getRunner(abmCmd, ABM)).thenReturn(abmRunner);        
+        
         handler.initialize();
-
         assertEquals(2, handler.runners.size());
-        assertEquals(abm, handler.runners.get(Job.Model.ABM));
-        assertEquals(pecas, handler.runners.get(Job.Model.PECAS));
-
+        assertSame(pecasRunner, handler.runners.get(PECAS));
+        assertSame(abmRunner, handler.runners.get(ABM));
+        
         assertEquals(2, handler.supportedModels.length);
-        assertContains(handler.supportedModels, Job.Model.ABM);
-        assertContains(handler.supportedModels, Job.Model.PECAS);
+        assertContains(handler.supportedModels, ABM);
+        assertContains(handler.supportedModels, PECAS);
 
         assertEquals(serviceName, handler.serviceName);
     }
@@ -69,10 +70,10 @@ public class HandlerTest
         JobDao dao = mock(JobDao.class);
         Handler handler = new Handler();
         handler.serviceName = "name";
-        handler.supportedModels = new Job.Model[] {Job.Model.ABM, Job.Model.PECAS };
+        handler.supportedModels = new Job.Model[] {ABM, PECAS };
         addMockClusterDao(handler, true);
         
-        Job.Model jobModel = Job.Model.ABM;
+        Job.Model jobModel = ABM;
         Job job = mock(Job.class);
         when(job.getModel()).thenReturn(jobModel);
 

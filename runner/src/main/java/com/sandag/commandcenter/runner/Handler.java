@@ -2,16 +2,17 @@ package com.sandag.commandcenter.runner;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.sandag.commandcenter.model.Job;
+import com.sandag.commandcenter.model.Job.Model;
 import com.sandag.commandcenter.notification.RunNotifier;
 import com.sandag.commandcenter.persistence.ClusterDao;
 import com.sandag.commandcenter.persistence.JobDao;
@@ -19,9 +20,6 @@ import com.sandag.commandcenter.persistence.JobDao;
 @Service
 public class Handler
 {
-    @Autowired
-    protected ApplicationContext context;
-
     @Autowired
     protected JobDao jobDao;
 
@@ -34,6 +32,12 @@ public class Handler
     @Autowired
     protected RunNotifier runNotifier;
 
+    @Autowired
+    protected Properties runnerProperties;
+
+    @Autowired
+    protected RunnerFactory runnerFactory;
+    
     private static final Logger LOGGER = Logger.getLogger(Handler.class.getName());
 
     protected Map<Job.Model, Runner> runners = new HashMap<Job.Model, Runner>();
@@ -45,11 +49,18 @@ public class Handler
     @PostConstruct
     public void initialize()
     {
-        Map<String, Runner> runnerBeans = context.getBeansOfType(Runner.class);
-        for (Runner runner : runnerBeans.values())
+        for (Model model : Job.Model.values())
         {
-            runners.put(runner.supports(), runner);
+            String commandLine = runnerProperties.getProperty(model.toString() + "_cmdLine");
+            if (commandLine != null)
+            {
+                runners.put(model, runnerFactory.getRunner(commandLine, model));
+            } else
+            {
+                LOGGER.warn("No command line defined for model " + model);
+            }
         }
+
         supportedModels = runners.keySet().toArray(new Job.Model[0]);
         serviceName = serviceNameRetriever.retrieve();
         initialized = true;
@@ -67,7 +78,7 @@ public class Handler
             LOGGER.info(String.format("Not running - no active cluster with name '%s'.", serviceName));
             return;
         }
-        
+
         LOGGER.debug("runNext started");
         Job next = jobDao.startNextInQueue(serviceName, supportedModels);
         if (next != null)
@@ -79,6 +90,6 @@ public class Handler
             runNotifier.sendFinishedMessage(next);
         }
         LOGGER.debug("runNext finished");
-    }    
-    
+    }
+
 }

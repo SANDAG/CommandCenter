@@ -1,21 +1,24 @@
 package com.sandag.commandcenter.controller;
 
+import static com.sandag.commandcenter.model.Job.Model.ABM;
+import static com.sandag.commandcenter.model.Job.Model.PECAS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyObject;
 
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 
 import com.sandag.commandcenter.io.FileLister;
+import com.sandag.commandcenter.io.FileListerFactory;
 import com.sandag.commandcenter.model.Job;
+import com.sandag.commandcenter.testutils.TestUtils;
 
 public class LogFilesControllerTest
 {
@@ -25,23 +28,21 @@ public class LogFilesControllerTest
     @Test
     public void initsOk() throws UnknownHostException
     {
-        Map<String, FileLister> listers = new HashMap<String, FileLister>();
-        FileLister abm = mock(FileLister.class);
-        FileLister pecas = mock(FileLister.class);
-        when(abm.getModel()).thenReturn(Job.Model.ABM);
-        when(pecas.getModel()).thenReturn(Job.Model.PECAS);
-        listers.put("ignored", abm);
-        listers.put("ignored too", pecas);
+        String pecasFiles = "file0,file1";
+        String abmFiles = "file2,file3,file4";
+        controller.runnerProperties = TestUtils.getProperties("PECAS_logFileNames", pecasFiles, "ABM_logFileNames", abmFiles);
+        
+        FileListerFactory fileListerFactory = mock(FileListerFactory.class); 
+        controller.fileListerFactory = fileListerFactory;
+        FileLister pecasFileLister = new FileLister();
+        FileLister abmFileLister = new FileLister();
+        when(fileListerFactory.getFileLister(PECAS, pecasFiles)).thenReturn(pecasFileLister);
+        when(fileListerFactory.getFileLister(ABM, abmFiles)).thenReturn(abmFileLister);        
 
-        ApplicationContext context = mock(ApplicationContext.class);
-        when(context.getBeansOfType(FileLister.class)).thenReturn(listers);
-
-        controller.context = context;
         controller.initialize();
-
         assertEquals(2, controller.listers.size());
-        assertEquals(abm, controller.listers.get(Job.Model.ABM));
-        assertEquals(pecas, controller.listers.get(Job.Model.PECAS));
+        assertSame(pecasFileLister, controller.listers.get(PECAS));
+        assertSame(abmFileLister, controller.listers.get(ABM));        
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.sandag.commandcenter.io;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -62,9 +63,9 @@ public class FileLister
         this.model = model;
     }
 
-    public void setLogFileNames(List<String> logFileNames)
+    public void setLogFileNames(String logFileNames)
     {
-        this.logFileNames = logFileNames;
+        this.logFileNames = Arrays.asList(logFileNames.split(","));
     }
 
 }
