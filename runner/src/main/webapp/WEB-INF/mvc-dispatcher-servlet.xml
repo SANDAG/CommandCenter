@@ -46,6 +46,11 @@
 		<property name="logFileNames" value="#{'${PECAS_logFileNames}'.split(',')}" />
 	</bean>
 
+	<bean id="abmLogLister" class="com.sandag.commandcenter.io.FileLister">
+		<property name="model" value="ABM" />
+		<property name="logFileNames" value="#{'${ABM_logFileNames}'.split(',')}" />
+	</bean>
+
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="#{'${smtpHost}'}" />
 	</bean>
