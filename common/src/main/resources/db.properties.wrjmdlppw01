@@ -1,0 +1,5 @@
+JDBC_host=localhost\\sqlexpress
+JDBC_port=1435
+JDBC_database=sandag
+JDBC_username=dev_user
+JDBC_password=dev
